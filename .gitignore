@@ -1,0 +1,5 @@
+# IDE files and directories
+.idea/
+
+# Build system
+cmake*/
