@@ -1,5 +1,5 @@
 add_library(Engine STATIC
-    Source/test.cpp
+    Source/Core/Types.hpp
 )
 
 target_include_directories(Engine PUBLIC

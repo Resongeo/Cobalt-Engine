@@ -1,6 +1,6 @@
-#include "test.hpp"
-#include <print>
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2025 Somogyvári Benedek
 
+// TODO: Process arguments
 auto main() -> int {
-    std::println("Test from engine: {}", add(10, 2));
 }
