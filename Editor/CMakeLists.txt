@@ -7,5 +7,5 @@ target_link_libraries(Editor PRIVATE
 )
 
 target_include_directories(Editor PRIVATE
-    Source/Editor
+    Source
 )
