@@ -5,12 +5,16 @@
 
 namespace Cobalt::Engine
 {
-    class Application final
+    class Application
     {
     public:
-        explicit Application();
+        virtual ~Application() = default;
 
         auto run() -> void;
+
+        virtual auto on_begin() -> void {}
+        virtual auto on_update() -> void {}
+        virtual auto on_end() -> void {}
 
     private:
         auto initialize() -> void;

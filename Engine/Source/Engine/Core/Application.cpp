@@ -6,23 +6,17 @@
 
 namespace Cobalt::Engine
 {
-    Application::Application() = default;
-
     auto Application::run() -> void {
-        Logger::trace("test", "message");
-        Logger::warn("test", "message");
-        Logger::error("test", "message");
-        Logger::fatal("test", "message");
-
         initialize();
+        on_begin();
         main_loop();
+        on_end();
     }
 
     auto Application::initialize() -> void {
-        Logger::trace("Application", "initialize");
     }
 
     auto Application::main_loop() -> void {
-        Logger::trace("Application", "main loop");
+        on_update();
     }
 }
