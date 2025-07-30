@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 
 namespace Cobalt
 {
@@ -18,4 +19,6 @@ namespace Cobalt
     typedef size_t   usize;
     typedef float    f32;
     typedef double   f64;
+
+    using String = std::string;
 }
