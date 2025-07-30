@@ -2,7 +2,6 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/Core/Application.hpp"
-#include "Engine/Core/Logger.hpp"
 
 namespace Cobalt::Engine
 {
