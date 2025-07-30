@@ -1,7 +1,7 @@
 add_library(Engine STATIC
-    Source/Core/Types.hpp
+    Source/Engine/Core/Types.hpp
 )
 
 target_include_directories(Engine PUBLIC
-    Source
+    Source/Engine
 )

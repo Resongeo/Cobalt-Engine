@@ -1,5 +1,5 @@
 add_executable(Editor
-    Source/main.cpp
+    Source/Editor/main.cpp
 )
 
 target_link_libraries(Editor PRIVATE
@@ -7,5 +7,5 @@ target_link_libraries(Editor PRIVATE
 )
 
 target_include_directories(Editor PRIVATE
-    Source
+    Source/Editor
 )
