@@ -8,14 +8,11 @@
 namespace Cobalt::Editor
 {
     auto EditorApplication::on_begin() -> void {
-        Engine::Logger::trace("Editor", "called on_attach");
     }
 
     auto EditorApplication::on_update() -> void {
-        Engine::Logger::trace("Editor", "called on_update");
     }
 
     auto EditorApplication::on_end() -> void {
-        Engine::Logger::trace("Editor", "called on_end");
     }
 }

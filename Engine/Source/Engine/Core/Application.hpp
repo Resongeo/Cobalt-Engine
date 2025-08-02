@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Engine/Core/Window.hpp"
+
 namespace Cobalt::Engine
 {
     class Application
@@ -19,5 +21,9 @@ namespace Cobalt::Engine
     private:
         auto initialize() -> void;
         auto main_loop() -> void;
+        auto cleanup() const -> void;
+
+    private:
+        Window m_window;
     };
 }
