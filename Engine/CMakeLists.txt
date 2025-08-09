@@ -6,7 +6,7 @@ add_library(Engine STATIC
     Source/Engine/Core/Defines.hpp
     Source/Engine/Core/Window.hpp
     Source/Engine/Platform/Linux/LinuxWindow.cpp
-        Source/Engine/Platform/Windows/WindowsWindow.cpp
+    Source/Engine/Platform/Windows/WindowsWindow.cpp
 )
 
 target_link_libraries(Engine PUBLIC
@@ -16,3 +16,9 @@ target_link_libraries(Engine PUBLIC
 target_include_directories(Engine PUBLIC
     Source
 )
+
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|Intel")
+    target_compile_options(Engine PRIVATE -fno-exceptions)
+elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    target_compile_options(Engine PRIVATE /EHsc-)
+endif()
