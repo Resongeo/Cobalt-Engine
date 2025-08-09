@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Vendor libraries
 add_subdirectory(Vendor/GLFW)
+add_subdirectory(Vendor/TOML)
 
 add_subdirectory(Engine)
 add_subdirectory(Editor)

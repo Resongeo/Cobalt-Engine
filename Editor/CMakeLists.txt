@@ -6,6 +6,7 @@ add_executable(Editor
 
 target_link_libraries(Editor PRIVATE
     Engine
+    tomlplusplus::tomlplusplus
 )
 
 target_include_directories(Editor PRIVATE
