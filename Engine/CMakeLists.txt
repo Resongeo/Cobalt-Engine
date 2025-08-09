@@ -6,6 +6,7 @@ add_library(Engine STATIC
     Source/Engine/Core/Defines.hpp
     Source/Engine/Core/Window.hpp
     Source/Engine/Platform/Linux/LinuxWindow.cpp
+        Source/Engine/Platform/Windows/WindowsWindow.cpp
 )
 
 target_link_libraries(Engine PUBLIC

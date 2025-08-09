@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types.hpp"
+#include "Engine/Core/Defines.hpp"
 
 #include <format>
 #include <chrono>
@@ -75,8 +76,11 @@ namespace Cobalt::Engine
             const auto time = std::chrono::system_clock::to_time_t(now);
             auto tm = std::tm{};
 
-            // TODO: Make this cross platform
+#ifdef PLATFORM_LINUX
             localtime_r(&time, &tm);
+#elifdef PLATFORM_WINDOWS
+            localtime_s(&tm, &time);
+#endif
 
             std::ostringstream oss;
             oss << std::put_time(&tm, "%H:%M:%S");
