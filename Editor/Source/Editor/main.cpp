@@ -3,8 +3,7 @@
 
 #include "Editor/Core/EditorApplication.hpp"
 
-// TODO: Process arguments
-auto main() -> int {
-    auto app = Cobalt::Editor::EditorApplication();
+auto main(const int argc, char* argv[]) -> int {
+    auto app = Cobalt::Editor::EditorApplication(argc, argv);
     app.run();
 }

@@ -5,6 +5,8 @@
 
 #include <cstdint>
 #include <string>
+#include <filesystem>
+#include <vector>
 
 namespace Cobalt
 {
@@ -21,4 +23,8 @@ namespace Cobalt
     typedef double   f64;
 
     using String = std::string;
+    using Filepath = std::filesystem::path;
+
+    template<typename T>
+    using Vector = std::vector<T>;
 }
