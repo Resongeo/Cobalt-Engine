@@ -3,6 +3,7 @@
 
 #include "Editor/Core/Project.hpp"
 #include "Engine/Core/Logger.hpp"
+
 #define TOML_EXCEPTIONS 0
 #include <toml++/toml.hpp>
 
