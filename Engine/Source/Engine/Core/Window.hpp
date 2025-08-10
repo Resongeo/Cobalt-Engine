@@ -12,6 +12,7 @@ namespace Cobalt::Engine
     public:
         auto create() -> void;
         auto close_requested() const -> bool;
+        auto poll_events() const -> void;
         auto swap_buffers() const -> void;
         auto destroy() const -> void;
 

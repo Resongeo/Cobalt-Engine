@@ -2,8 +2,7 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/Core/Application.hpp"
-
-#include <GLFW/glfw3.h>
+#include "Engine/Platform/Platform.hpp"
 
 namespace Cobalt::Engine
 {
@@ -16,12 +15,14 @@ namespace Cobalt::Engine
     }
 
     auto Application::initialize() -> void {
+        Platform::init_glfw();
         m_window.create();
+        Platform::init_opengl();
     }
 
     auto Application::main_loop() -> void {
         while (!m_window.close_requested()) {
-            glfwPollEvents();
+            m_window.poll_events();
             on_update();
             m_window.swap_buffers();
         }
