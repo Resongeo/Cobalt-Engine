@@ -7,6 +7,10 @@
 
 #include "Engine/Core/Window.hpp"
 #include "Engine/Core/Logger.hpp"
+#define GLAD_GL_IMPLEMENTATION
+#include "Engine/Platform/OpenGL/gl.h"
+
+#include <GLFW/glfw3.h>
 
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
@@ -20,6 +24,9 @@ namespace Cobalt::Engine
         }
         Logger::trace("Window", "Glfw initialized");
 
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 
         // TODO: Create window hints when we are implementing OpenGL
@@ -47,6 +54,12 @@ namespace Cobalt::Engine
             WINDOW_WIDTH, WINDOW_HEIGHT,
             GLFW_DONT_CARE
         );
+
+        const auto version = gladLoadGL(glfwGetProcAddress);
+        auto major = GLAD_VERSION_MAJOR(version);
+        auto minor = GLAD_VERSION_MINOR(version);
+
+        Logger::trace("Window", "Loaded OpenGL {}.{}", major, minor);
 
         glfwShowWindow(m_handle);
     }

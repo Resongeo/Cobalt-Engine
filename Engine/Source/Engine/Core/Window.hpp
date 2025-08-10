@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <GLFW/glfw3.h>
+struct GLFWwindow;
 
 namespace Cobalt::Engine
 {
