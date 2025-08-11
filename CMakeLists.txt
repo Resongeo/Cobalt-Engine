@@ -7,6 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Vendor libraries
 add_subdirectory(Vendor/GLFW)
 add_subdirectory(Vendor/TOML)
+file(GLOB IMGUI_SOURCES
+    "Vendor/IMGUI/*.cpp"
+    "Vendor/IMGUI/*.h"
+)
+add_library(imgui STATIC ${IMGUI_SOURCES})
+target_include_directories(imgui PUBLIC "Vendor/IMGUI")
 
 add_subdirectory(Engine)
 add_subdirectory(Editor)
