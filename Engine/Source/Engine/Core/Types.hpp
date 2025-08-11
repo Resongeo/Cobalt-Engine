@@ -7,6 +7,7 @@
 #include <string>
 #include <filesystem>
 #include <vector>
+#include <random>
 
 namespace Cobalt
 {
@@ -27,4 +28,37 @@ namespace Cobalt
 
     template<typename T>
     using Vector = std::vector<T>;
+
+    struct UUID {
+        u64 value;
+
+        explicit UUID() : value(0) {}
+        explicit UUID(const u64 val) : value(val) {}
+
+        auto is_valid() const -> bool {
+            return value != 0;
+        }
+
+        static auto generate() -> UUID {
+            static std::random_device rd;
+            static std::mt19937_64 gen(rd());
+            return UUID(gen());
+        }
+
+        auto operator==(const UUID& other) const -> bool {
+            return value == other.value;
+        }
+        auto operator!=(const UUID& other) const -> bool {
+            return value != other.value;
+        }
+    };
+}
+
+/* UUID hashing needed for std::unordered_map */
+namespace std {
+    template<> struct hash<Cobalt::UUID> {
+        auto operator()(const Cobalt::UUID& id) const -> Cobalt::usize {
+            return hash<uint64_t>()(id.value);
+        }
+    };
 }
