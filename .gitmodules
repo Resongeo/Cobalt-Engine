@@ -8,3 +8,6 @@
 	path = Vendor/IMGUI
 	url = https://github.com/ocornut/imgui
 	branch = docking
+[submodule "Vendor/CATCH2"]
+	path = Vendor/CATCH2
+	url = https://github.com/catchorg/Catch2.git
