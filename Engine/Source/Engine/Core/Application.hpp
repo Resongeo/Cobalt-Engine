@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Window.hpp"
+#include "Engine/Scene/SceneManager.hpp"
 
 namespace Cobalt::Engine
 {
@@ -25,5 +26,6 @@ namespace Cobalt::Engine
 
     protected:
         Window p_window;
+        SceneManager p_scene_manager;
     };
 }

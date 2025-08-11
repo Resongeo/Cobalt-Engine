@@ -90,7 +90,7 @@ namespace Cobalt::Engine
         static auto log_level(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "TRACE";
-                case LogLevel::Warn: return "WARN";
+                case LogLevel::Warn:  return "WARN";
                 case LogLevel::Error: return "ERROR";
                 case LogLevel::Fatal: return "FATAL";
             }
@@ -99,7 +99,7 @@ namespace Cobalt::Engine
         static auto log_color(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "\033[94m";
-                case LogLevel::Warn: return "\033[93m";
+                case LogLevel::Warn:  return "\033[93m";
                 case LogLevel::Error: return "\033[91m";
                 case LogLevel::Fatal: return "\033[31m";
             }

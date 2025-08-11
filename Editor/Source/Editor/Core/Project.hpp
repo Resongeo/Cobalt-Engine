@@ -13,12 +13,15 @@ namespace Cobalt::Editor
         Project(i32 argc, char* argv[]);
 
         auto parse() -> void;
+        auto name() -> String;
+        auto version() -> String;
+        auto startup_scene() const -> UUID;
 
     private:
         Vector<String> m_args;
         Filepath m_project_path;
-
         String m_name = {};
         String m_version = {};
+        UUID m_startup_scene;
     };
 }

@@ -9,6 +9,9 @@ add_library(Engine STATIC
     Source/Engine/Platform/Windows/WindowsWindow.cpp
     Source/Engine/Platform/Platform.cpp
     Source/Engine/Platform/Platform.hpp
+    Source/Engine/Scene/SceneManager.cpp
+    Source/Engine/Scene/SceneManager.hpp
+    Source/Engine/Scene/Scene.hpp
 )
 
 target_link_libraries(Engine PUBLIC

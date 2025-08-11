@@ -69,9 +69,22 @@ namespace Cobalt::Editor
         auto table = result.table();
         m_name = table["project"]["name"].value_or<String>("Default");
         m_version = table["project"]["version"].value_or<String>("0.0.0");
+        m_startup_scene = UUID(table["project"]["startup-scene"].value_or<u64>(0));
 
         Engine::Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}",
             m_name, m_version
         );
+    }
+
+    auto Project::name() -> String {
+        return m_name;
+    }
+
+    auto Project::version() -> String {
+        return m_version;
+    }
+
+    auto Project::startup_scene() const -> UUID {
+        return m_startup_scene;
     }
 }

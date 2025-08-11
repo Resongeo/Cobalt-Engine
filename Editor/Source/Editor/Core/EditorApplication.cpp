@@ -4,6 +4,7 @@
 #include "Editor/Core/EditorApplication.hpp"
 #include "Editor/Gui/Gui.hpp"
 #include "Engine/Core/Logger.hpp"
+#include "Engine/Scene/Scene.hpp"
 
 #include <imgui.h>
 
@@ -21,7 +22,23 @@ namespace Cobalt::Editor
 
     auto EditorApplication::on_update() -> void {
         Gui::begin_frame();
-        ImGui::ShowDemoWindow();
+        {
+            ImGui::Begin("Project");
+            ImGui::Text("Name: %s", m_project.name().c_str());
+            ImGui::Text("Version: %s", m_project.version().c_str());
+            ImGui::End();
+
+            ImGui::Begin("Scenes");
+            if (const auto* scene = p_scene_manager.active_scene(); scene == nullptr) {
+                ImGui::Text("Default scene");
+            } else {
+                const auto scenes = p_scene_manager.scenes();
+                for (usize i = 0; i < scenes.size(); i++) {
+                    ImGui::Text("%d %s", i, scenes[i].name.c_str());
+                }
+            }
+            ImGui::End();
+        }
         Gui::end_frame();
     }
 
