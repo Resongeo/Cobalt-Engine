@@ -58,14 +58,14 @@ namespace Cobalt::Engine
             constexpr auto RESET = "\033[0m";
             constexpr auto GRAY = "\033[37m";
 
-            const auto final_msg = std::format("({}) {}[{} - {}]{} {}{}",
+            const auto final_msg = std::format("{}({}) {}[{} - {}]{} {}",
+                GRAY,
                 time_str,
                 color_str,
                 level_str,
                 loc,
-                GRAY,
-                msg,
-                RESET
+                RESET,
+                msg
             );
 
             std::cout << final_msg << "\n";
