@@ -23,7 +23,7 @@ namespace Cobalt::Engine
         auto main_loop() -> void;
         auto cleanup() const -> void;
 
-    private:
-        Window m_window;
+    protected:
+        Window p_window;
     };
 }

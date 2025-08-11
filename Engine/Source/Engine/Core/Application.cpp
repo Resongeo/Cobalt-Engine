@@ -16,19 +16,19 @@ namespace Cobalt::Engine
 
     auto Application::initialize() -> void {
         Platform::init_glfw();
-        m_window.create();
+        p_window.create();
         Platform::init_opengl();
     }
 
     auto Application::main_loop() -> void {
-        while (!m_window.close_requested()) {
-            m_window.poll_events();
+        while (!p_window.close_requested()) {
+            p_window.poll_events();
             on_update();
-            m_window.swap_buffers();
+            p_window.swap_buffers();
         }
     }
 
     auto Application::cleanup() const -> void {
-        m_window.destroy();
+        p_window.destroy();
     }
 }

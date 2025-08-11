@@ -2,8 +2,10 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
-
+#include "Editor/Gui/Gui.hpp"
 #include "Engine/Core/Logger.hpp"
+
+#include <imgui.h>
 
 namespace Cobalt::Editor
 {
@@ -13,9 +15,14 @@ namespace Cobalt::Editor
 
     auto EditorApplication::on_begin() -> void {
         m_project.parse();
+
+        Gui::init(p_window);
     }
 
     auto EditorApplication::on_update() -> void {
+        Gui::begin_frame();
+        ImGui::ShowDemoWindow();
+        Gui::end_frame();
     }
 
     auto EditorApplication::on_end() -> void {

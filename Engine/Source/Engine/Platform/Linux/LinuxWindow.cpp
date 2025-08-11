@@ -63,6 +63,10 @@ namespace Cobalt::Engine
         glfwDestroyWindow(m_handle);
         glfwTerminate();
     }
+
+    auto Window::handle() const -> GLFWwindow* {
+        return m_handle;
+    }
 }
 
 #endif

@@ -16,6 +16,8 @@ namespace Cobalt::Engine
         auto swap_buffers() const -> void;
         auto destroy() const -> void;
 
+        auto handle() const -> GLFWwindow*;
+
     private:
         GLFWwindow* m_handle = nullptr;
     };

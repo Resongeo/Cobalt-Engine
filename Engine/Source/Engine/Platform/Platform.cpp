@@ -43,6 +43,11 @@ namespace Cobalt::Engine
         [](const GLenum source, GLenum type, GLuint id, const GLenum severity,
            GLsizei length, const GLchar* message, const void* userParam
            ) {
+                if (severity != GL_DEBUG_SEVERITY_HIGH_ARB &&
+                    severity != GL_DEBUG_SEVERITY_MEDIUM_ARB) {
+                    return;
+                }
+
                 auto src = String{};
                 switch (source) {
                     case GL_DEBUG_SOURCE_API_ARB: src = "API"; break;
