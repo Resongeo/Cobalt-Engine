@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(Vendor/GLFW)
 add_subdirectory(Vendor/TOML)
 add_subdirectory(Vendor/CATCH2)
+add_subdirectory(Vendor/ENTT)
 file(GLOB IMGUI_SOURCES
     "Vendor/IMGUI/*.cpp"
     "Vendor/IMGUI/*.h"

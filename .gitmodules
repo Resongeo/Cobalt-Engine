@@ -11,3 +11,6 @@
 [submodule "Vendor/CATCH2"]
 	path = Vendor/CATCH2
 	url = https://github.com/catchorg/Catch2.git
+[submodule "Vendor/ENTT"]
+	path = Vendor/ENTT
+	url = https://github.com/skypjack/entt.git

@@ -12,10 +12,12 @@ add_library(Engine STATIC
     Source/Engine/Scene/SceneManager.cpp
     Source/Engine/Scene/SceneManager.hpp
     Source/Engine/Scene/Scene.hpp
+        Source/Engine/ECS/Components/TagComponent.hpp
 )
 
 target_link_libraries(Engine PUBLIC
     glfw
+    EnTT::EnTT
 )
 
 target_include_directories(Engine PUBLIC
