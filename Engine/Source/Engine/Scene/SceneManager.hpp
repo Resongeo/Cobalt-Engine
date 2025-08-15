@@ -12,7 +12,7 @@ namespace Cobalt::Engine
     public:
         ~SceneManager() = default;
 
-        auto scenes() -> Vector<std::unique_ptr<Scene>>&;
+        auto scenes() -> Vector<Box<Scene>>&;
         auto active_scene() const -> Scene*;
         auto create_default_scene() -> void;
 

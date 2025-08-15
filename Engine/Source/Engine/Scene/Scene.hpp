@@ -8,12 +8,17 @@
 
 namespace Cobalt::Engine
 {
-    struct Scene
+    class Scene final
     {
-        String name = "Default";
-        entt::registry registry;
-
+    public:
         explicit Scene() = default;
-        explicit Scene(const String& name) : name(name) {}
+        explicit Scene(const String& name);
+
+        auto name() -> String&;
+        auto registry() -> entt::registry&;
+
+    private:
+        String m_name = {};
+        entt::registry m_registry = {};
     };
 }

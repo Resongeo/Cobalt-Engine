@@ -53,12 +53,12 @@ namespace Cobalt::Editor
 
     auto EditorApplication::draw_scenes_window() -> void {
         if (ImGui::CollapsingHeader("Scenes")) {
-            if (const auto* scene = p_scene_manager.active_scene(); scene != nullptr) {
-                ImGui::Text("Scene: %s", scene->name.c_str());
+            if (auto* scene = p_scene_manager.active_scene(); scene != nullptr) {
+                ImGui::Text("Scene: %s", scene->name().c_str());
 
                 const auto& scenes = p_scene_manager.scenes();
                 for (auto i = 0; i < scenes.size(); i++) {
-                    ImGui::Text("%d %s", i, scenes[i]->name.c_str());
+                    ImGui::Text("%d %s", i, scenes[i]->name().c_str());
                 }
             }
         }
@@ -72,8 +72,8 @@ namespace Cobalt::Editor
 
         if (ImGui::CollapsingHeader("Entities")) {
             if (ImGui::Button("Create")) {
-                const auto entity = scene->registry.create();
-                auto& [name, uuid] = scene->registry.emplace<Engine::TagComponent>(entity);
+                const auto entity = scene->registry().create();
+                auto& [name, uuid] = scene->registry().emplace<Engine::TagComponent>(entity);
                 name = std::format("Entity {}", static_cast<u32>(entity) + 1);
                 uuid = UUID::generate();
             }
@@ -85,7 +85,7 @@ namespace Cobalt::Editor
                 }
             }
 
-            for (const auto entity : scene->registry.view<entt::entity>()) {
+            for (const auto entity : scene->registry().view<entt::entity>()) {
                 auto label = std::format("Entity id: {}", static_cast<u32>(entity));
 
                 if (m_selected_entity == entity) {
@@ -103,12 +103,12 @@ namespace Cobalt::Editor
         }
     }
 
-    auto EditorApplication::draw_components_window() -> void {
+    auto EditorApplication::draw_components_window() const -> void {
         if (m_selected_entity == entt::null) {
             return;
         }
 
-        const auto* scene = p_scene_manager.active_scene();
+        auto* scene = p_scene_manager.active_scene();
 
         if (scene == nullptr) {
             return;
@@ -116,8 +116,8 @@ namespace Cobalt::Editor
 
         ImGui::Begin("Components");
         {
-            if (scene->registry.any_of<Engine::TagComponent>(m_selected_entity)) {
-                auto& [name, uuid] = scene->registry.get<Engine::TagComponent>(m_selected_entity);
+            if (scene->registry().any_of<Engine::TagComponent>(m_selected_entity)) {
+                auto& [name, uuid] = scene->registry().get<Engine::TagComponent>(m_selected_entity);
                 ImGui::Text("Name: %s", name.c_str());
                 ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
             }

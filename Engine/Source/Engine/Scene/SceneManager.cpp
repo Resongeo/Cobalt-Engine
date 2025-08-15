@@ -5,7 +5,7 @@
 
 namespace Cobalt::Engine
 {
-    auto SceneManager::scenes() -> Vector<std::unique_ptr<Scene>>& {
+    auto SceneManager::scenes() -> Vector<Box<Scene>>& {
         return m_scenes;
     }
 

@@ -13,6 +13,7 @@ add_library(Engine STATIC
     Source/Engine/Scene/SceneManager.hpp
     Source/Engine/Scene/Scene.hpp
         Source/Engine/ECS/Components/TagComponent.hpp
+        Source/Engine/Scene/Scene.cpp
 )
 
 target_link_libraries(Engine PUBLIC
