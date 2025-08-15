@@ -15,7 +15,7 @@ namespace Cobalt::Engine
 
     auto SceneManager::create_default_scene() -> void {
         const auto& default_scene = m_scenes.emplace_back(
-            std::make_unique<Scene>("Default")
+            Memory::make_box<Scene>("Default")
         );
         m_active_scene = default_scene.get();
     }

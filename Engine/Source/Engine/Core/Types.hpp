@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <vector>
 #include <random>
+#include <memory>
 
 namespace Cobalt
 {
@@ -28,6 +29,29 @@ namespace Cobalt
 
     template<typename T>
     using Vector = std::vector<T>;
+
+    template<typename T>
+    using Unique = std::unique_ptr<T>;
+
+    // TODO: Implement custom smart pointers
+    template<typename T>
+    using Box = std::unique_ptr<T>;
+
+    template<typename T>
+    using Rc = std::shared_ptr<T>;
+
+    namespace Memory
+    {
+        template<typename T, typename ... Args>
+        constexpr auto make_box(Args&& ... args) -> Box<T> {
+            return std::make_unique<T>(std::forward<Args>(args)...);
+        }
+
+        template<typename T, typename ... Args>
+        constexpr auto make_rc(Args&& ... args) -> Rc<T> {
+            return std::make_shared<T>(std::forward<Args>(args)...);
+        }
+    }
 
     struct UUID {
         u64 value;
