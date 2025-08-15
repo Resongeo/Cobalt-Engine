@@ -14,6 +14,9 @@ namespace Cobalt::Editor
     }
 
     auto Project::parse() -> void {
+        m_name = "No Project";
+        m_version = "0.0.0";
+
         if (m_args.size() < 2) {
             Engine::Logger::warn(
                 "Editor::Project",
@@ -59,9 +62,6 @@ namespace Cobalt::Editor
                 "{} is not a valid project file",
                 m_project_path.string()
             );
-
-            m_name = "No Project";
-            m_version = "0.0.0";
 
             return;
         }
