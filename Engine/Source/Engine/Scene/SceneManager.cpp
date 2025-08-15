@@ -5,15 +5,7 @@
 
 namespace Cobalt::Engine
 {
-    SceneManager::~SceneManager() {
-        delete m_default_scene;
-    }
-
-    auto SceneManager::init() -> void {
-        m_default_scene = new Scene("Default");
-    }
-
-    auto SceneManager::scenes() -> Vector<Scene> {
+    auto SceneManager::scenes() -> Vector<std::unique_ptr<Scene>>& {
         return m_scenes;
     }
 
@@ -21,7 +13,10 @@ namespace Cobalt::Engine
         return m_active_scene;
     }
 
-    auto SceneManager::default_scene() const -> Scene* {
-        return m_default_scene;
+    auto SceneManager::create_default_scene() -> void {
+        const auto& default_scene = m_scenes.emplace_back(
+            std::make_unique<Scene>("Default")
+        );
+        m_active_scene = default_scene.get();
     }
 }

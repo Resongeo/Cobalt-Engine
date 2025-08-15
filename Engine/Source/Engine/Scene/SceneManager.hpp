@@ -5,21 +5,21 @@
 
 #include "Engine/Scene/Scene.hpp"
 
+#include <memory>
+
 namespace Cobalt::Engine
 {
     class SceneManager final
     {
     public:
-        ~SceneManager();
+        ~SceneManager() = default;
 
-        auto init() -> void;
-        auto scenes() -> Vector<Scene>;
+        auto scenes() -> Vector<std::unique_ptr<Scene>>&;
         auto active_scene() const -> Scene*;
-        auto default_scene() const -> Scene*;
+        auto create_default_scene() -> void;
 
     private:
-        Vector<Scene> m_scenes;
+        Vector<std::unique_ptr<Scene>> m_scenes;
         Scene* m_active_scene = nullptr;
-        Scene* m_default_scene = nullptr;
     };
 }

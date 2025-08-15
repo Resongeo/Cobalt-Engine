@@ -6,6 +6,8 @@
 #include "Engine/Core/Application.hpp"
 #include "Editor/Core/Project.hpp"
 
+#include <entt/entt.hpp>
+
 namespace Cobalt::Editor
 {
     class EditorApplication final : public Engine::Application
@@ -18,6 +20,13 @@ namespace Cobalt::Editor
         auto on_end() -> void override;
 
     private:
+        auto draw_project_window() -> void;
+        auto draw_scenes_window() -> void;
+        auto draw_entities_window() -> void;
+        auto draw_components_window() -> void;
+
+    private:
         Project m_project;
+        entt::entity m_selected_entity = entt::null;
     };
 }
