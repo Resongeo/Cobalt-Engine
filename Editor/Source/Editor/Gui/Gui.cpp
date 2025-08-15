@@ -2,8 +2,8 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
-#include "Engine/Platform/OpenGL/gl.h"
 
+#include <glad/gl.h>
 #include <backends/imgui_impl_glfw.h>
 #include <backends/imgui_impl_opengl3.h>
 #include <imgui.h>

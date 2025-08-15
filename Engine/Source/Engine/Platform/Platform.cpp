@@ -5,8 +5,7 @@
 #include "Engine/Core/Logger.hpp"
 
 #define GLAD_GL_IMPLEMENTATION
-#include "Engine/Platform/OpenGL/gl.h"
-
+#include <glad/gl.h>
 #include <GLFW/glfw3.h>
 
 namespace Cobalt::Engine

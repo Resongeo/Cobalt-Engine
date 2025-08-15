@@ -20,6 +20,7 @@ target_link_libraries(Engine PUBLIC
 
 target_include_directories(Engine PUBLIC
     Source
+    ${CMAKE_SOURCE_DIR}/Vendor/GLAD
 )
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|Intel")
