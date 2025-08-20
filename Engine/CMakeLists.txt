@@ -14,6 +14,10 @@ add_library(Engine STATIC
     Source/Engine/Scene/Scene.hpp
         Source/Engine/ECS/Components/TagComponent.hpp
         Source/Engine/Scene/Scene.cpp
+        Source/Engine/Core/Types/Base.hpp
+        Source/Engine/Core/Types/Containers.hpp
+        Source/Engine/Core/Types/Memory.hpp
+        Source/Engine/Core/Types/UUID.hpp
 )
 
 target_link_libraries(Engine PUBLIC
