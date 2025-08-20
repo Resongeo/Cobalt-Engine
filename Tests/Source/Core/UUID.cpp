@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2025 Somogyvári Benedek
 
-#include "Engine/Core/Types.hpp"
+#include "Engine/Core/Types/UUID.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 

@@ -1,5 +1,6 @@
 add_executable(Tests
     Source/Core/UUID.cpp
+        Source/Core/Color.cpp
 )
 
 target_link_libraries(Tests PRIVATE
