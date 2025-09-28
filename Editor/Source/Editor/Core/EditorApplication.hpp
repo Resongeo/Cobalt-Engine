@@ -23,7 +23,7 @@ namespace Cobalt::Editor
         auto draw_project_window() -> void;
         auto draw_scenes_window() -> void;
         auto draw_entities_window() -> void;
-        auto draw_components_window()const -> void;
+        auto draw_components_window() const -> void;
 
     private:
         Project m_project;
