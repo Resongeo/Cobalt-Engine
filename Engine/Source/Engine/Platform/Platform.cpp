@@ -26,14 +26,10 @@ namespace Cobalt::Engine
 
     auto Platform::init_opengl() -> void {
         const auto version = gladLoadGL(glfwGetProcAddress);
-        auto major = GLAD_VERSION_MAJOR(version);
-        auto minor = GLAD_VERSION_MINOR(version);
 
-        Logger::trace(
-            "Engine::Platform",
-            "Loaded OpenGL {}.{}",
-            major, minor
-        );
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         if (GLAD_GL_ARB_debug_output) {
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
@@ -77,5 +73,14 @@ namespace Cobalt::Engine
         nullptr
             );
         }
+
+        auto major = GLAD_VERSION_MAJOR(version);
+        auto minor = GLAD_VERSION_MINOR(version);
+
+        Logger::trace(
+            "Engine::Platform",
+            "Loaded OpenGL {}.{}",
+            major, minor
+        );
     }
 }

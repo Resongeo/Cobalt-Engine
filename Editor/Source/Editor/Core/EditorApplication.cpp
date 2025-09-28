@@ -31,10 +31,10 @@ namespace Cobalt::Editor
         {
             ImGui::Begin("Debug");
             {
-                draw_project_window();
-                draw_scenes_window();
-                draw_entities_window();
-                draw_components_window();
+                _draw_project_window();
+                _draw_scenes_window();
+                _draw_entities_window();
+                _draw_components_window();
             }
             ImGui::End();
         }
@@ -44,14 +44,14 @@ namespace Cobalt::Editor
     auto EditorApplication::on_end() -> void {
     }
 
-    auto EditorApplication::draw_project_window() -> void {
+    auto EditorApplication::_draw_project_window() -> void {
         if (ImGui::CollapsingHeader("Project")) {
             ImGui::Text("Name: %s", m_project.name().c_str());
             ImGui::Text("Version: %s", m_project.version().c_str());
         }
     }
 
-    auto EditorApplication::draw_scenes_window() -> void {
+    auto EditorApplication::_draw_scenes_window() -> void {
         if (ImGui::CollapsingHeader("Scenes")) {
             if (auto* scene = p_scene_manager.active_scene(); scene != nullptr) {
                 ImGui::Text("Scene: %s", scene->name().c_str());
@@ -64,7 +64,7 @@ namespace Cobalt::Editor
         }
     }
 
-    auto EditorApplication::draw_entities_window() -> void {
+    auto EditorApplication::_draw_entities_window() -> void {
         auto* scene = p_scene_manager.active_scene();
         if (scene == nullptr) {
             return;
@@ -103,7 +103,7 @@ namespace Cobalt::Editor
         }
     }
 
-    auto EditorApplication::draw_components_window() const -> void {
+    auto EditorApplication::_draw_components_window() const -> void {
         if (m_selected_entity == entt::null) {
             return;
         }

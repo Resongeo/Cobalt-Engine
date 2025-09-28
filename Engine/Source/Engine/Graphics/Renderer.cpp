@@ -1,0 +1,9 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2025 Somogyvári Benedek
+
+#include "Engine/Graphics/Renderer.hpp"
+
+namespace Cobalt::Engine
+{
+
+}

@@ -7,20 +7,20 @@
 namespace Cobalt::Engine
 {
     auto Application::run() -> void {
-        initialize();
+        _initialize();
         on_begin();
-        main_loop();
+        _main_loop();
         on_end();
-        cleanup();
+        _cleanup();
     }
 
-    auto Application::initialize() -> void {
+    auto Application::_initialize() -> void {
         Platform::init_glfw();
         p_window.create();
         Platform::init_opengl();
     }
 
-    auto Application::main_loop() -> void {
+    auto Application::_main_loop() -> void {
         while (!p_window.close_requested()) {
             p_window.poll_events();
             on_update();
@@ -28,7 +28,7 @@ namespace Cobalt::Engine
         }
     }
 
-    auto Application::cleanup() const -> void {
+    auto Application::_cleanup() const -> void {
         p_window.destroy();
     }
 }

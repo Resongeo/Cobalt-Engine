@@ -20,10 +20,10 @@ namespace Cobalt::Editor
         auto on_end() -> void override;
 
     private:
-        auto draw_project_window() -> void;
-        auto draw_scenes_window() -> void;
-        auto draw_entities_window() -> void;
-        auto draw_components_window() const -> void;
+        auto _draw_project_window() -> void;
+        auto _draw_scenes_window() -> void;
+        auto _draw_entities_window() -> void;
+        auto _draw_components_window() const -> void;
 
     private:
         Project m_project;

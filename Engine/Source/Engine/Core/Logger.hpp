@@ -50,10 +50,10 @@ namespace Cobalt::Engine
         }
 
     private:
-        static auto log(const LogLevel level, const String& loc, const String& msg) -> void {
-            const auto time_str = timestamp();
-            const auto level_str = log_level(level);
-            const auto color_str = log_color(level);
+        static auto _log(const LogLevel level, const String& loc, const String& msg) -> void {
+            const auto time_str = _timestamp();
+            const auto level_str = _log_level(level);
+            const auto color_str = _log_color(level);
 
             constexpr auto RESET = "\033[0m";
             constexpr auto GRAY = "\033[37m";
@@ -71,7 +71,7 @@ namespace Cobalt::Engine
             std::cout << final_msg << "\n";
         }
 
-        static auto timestamp() -> String {
+        static auto _timestamp() -> String {
             const auto now = std::chrono::system_clock::now();
             const auto time = std::chrono::system_clock::to_time_t(now);
             auto tm = std::tm{};
@@ -87,7 +87,7 @@ namespace Cobalt::Engine
             return oss.str();
         }
 
-        static auto log_level(const LogLevel level) -> String {
+        static auto _log_level(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "TRACE";
                 case LogLevel::Warn:  return "WARN";
@@ -96,7 +96,7 @@ namespace Cobalt::Engine
             }
         }
 
-        static auto log_color(const LogLevel level) -> String {
+        static auto _log_color(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "\033[94m";
                 case LogLevel::Warn:  return "\033[93m";

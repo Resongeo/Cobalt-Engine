@@ -20,9 +20,9 @@ namespace Cobalt::Engine
         virtual auto on_end() -> void {}
 
     private:
-        auto initialize() -> void;
-        auto main_loop() -> void;
-        auto cleanup() const -> void;
+        auto _initialize() -> void;
+        auto _main_loop() -> void;
+        auto _cleanup() const -> void;
 
     protected:
         Window p_window;

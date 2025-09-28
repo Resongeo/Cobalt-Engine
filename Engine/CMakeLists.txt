@@ -19,6 +19,8 @@ add_library(Engine STATIC
         Source/Engine/Core/Types/Memory.hpp
         Source/Engine/Core/Types/UUID.hpp
         Source/Engine/Core/Types/Color.hpp
+        Source/Engine/Graphics/Renderer.cpp
+        Source/Engine/Graphics/Renderer.hpp
 )
 
 target_link_libraries(Engine PUBLIC
