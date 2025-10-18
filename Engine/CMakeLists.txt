@@ -38,10 +38,14 @@ add_library(Engine STATIC
     Source/Engine/Graphics/Camera.cpp
     Source/Engine/Graphics/Camera.hpp
     Source/Engine/ECS/Systems/ISystem.hpp
-    Source/Engine/ECS/Systems/TestSystem.cpp
-    Source/Engine/ECS/Systems/TestSystem.hpp
+        Source/Engine/ECS/Systems/EditorRenderSystem.cpp
+        Source/Engine/ECS/Systems/EditorRenderSystem.hpp
     Source/Engine/ECS/Systems/Schedule.hpp
     Source/Engine/Scene/SceneState.hpp
+        Source/Engine/Core/Fwd.hpp
+        Source/Engine/Graphics/Fwd.hpp
+        Source/Engine/ECS/Components/SpriteComponent.hpp
+        Source/Engine/ECS/Components/TransformComponent.hpp
 )
 
 target_link_libraries(Engine PUBLIC

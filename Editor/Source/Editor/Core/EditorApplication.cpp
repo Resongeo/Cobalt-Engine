@@ -2,12 +2,14 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
-#include "Engine/ECS/Components/TagComponent.hpp"
-#include "Engine/ECS/Systems/TestSystem.hpp"
-#include "Engine/ECS/Systems/Schedule.hpp"
-#include "Engine/Core/Logger.hpp"
-#include "Engine/Scene/Scene.hpp"
 #include "Editor/Gui/Gui.hpp"
+#include "Engine/Core/Logger.hpp"
+#include "Engine/ECS/Components/SpriteComponent.hpp"
+#include "Engine/ECS/Components/TransformComponent.hpp"
+#include "Engine/ECS/Components/TagComponent.hpp"
+#include "Engine/ECS/Systems/EditorRenderSystem.hpp"
+#include "Engine/ECS/Systems/Schedule.hpp"
+#include "Engine/Scene/Scene.hpp"
 
 #include <imgui.h>
 
@@ -35,19 +37,14 @@ namespace Cobalt::Editor
 
         m_renderer.init(100, shader);
 
-        p_scene_manager.add_system<Engine::TestSystem>(Engine::Schedule::RuntimeStart);
+        // TODO: Give it a Framebuffer later
+        p_scene_manager.add_system<Engine::EditorRenderSystem>(
+            Engine::Schedule::EditorUpdate,
+            &m_renderer, &p_window, &m_camera
+        );
     }
 
     auto EditorApplication::on_update() -> void {
-        const auto viewport_size = p_window.size();
-        m_renderer.set_viewport_size(viewport_size);
-        m_renderer.begin_frame(m_camera);
-        m_renderer.submit_quad(
-            {0, 0, 0},
-            {1, 1},
-            {0.8, 0.3, 0.3, 1.0});
-        m_renderer.end_frame();
-
         p_scene_manager.update();
 
         Gui::begin_frame();
@@ -58,6 +55,13 @@ namespace Cobalt::Editor
                 _draw_scenes_window();
                 _draw_entities_window();
                 _draw_components_window();
+
+                if (ImGui::CollapsingHeader("Camera")) {
+                    ImGui::DragFloat2("Position", &m_camera.position[0], 0.1);
+                    ImGui::SliderFloat("Size", &m_camera.size, 0.1, 20);
+                    ImGui::DragFloat("Rotation", &m_camera.rotation, 0.1);
+                    ImGui::ColorEdit3("Clear Color", &m_camera.clear_color.r);
+                }
 
                 switch (p_scene_manager.state()) {
                     case Engine::SceneState::None: {
@@ -73,13 +77,6 @@ namespace Cobalt::Editor
                         }
                         break;
                     }
-                }
-
-                if (ImGui::CollapsingHeader("Camera")) {
-                    ImGui::DragFloat2("Position", &m_camera.position[0], 0.1);
-                    ImGui::SliderFloat("Size", &m_camera.size, 0.1, 20);
-                    ImGui::DragFloat("Rotation", &m_camera.rotation, 0.1);
-                    ImGui::ColorEdit3("Clear Color", &m_camera.clear_color.r);
                 }
             }
             ImGui::End();
@@ -122,6 +119,8 @@ namespace Cobalt::Editor
                 auto& [name, uuid] = scene->registry().emplace<Engine::TagComponent>(entity);
                 name = std::format("Entity {}", static_cast<u32>(entity) + 1);
                 uuid = UUID::generate();
+                scene->registry().emplace<Engine::SpriteComponent>(entity);
+                scene->registry().emplace<Engine::TransformComponent>(entity);
             }
 
             if (m_selected_entity != entt::null) {
@@ -166,6 +165,17 @@ namespace Cobalt::Editor
                 auto& [name, uuid] = scene->registry().get<Engine::TagComponent>(m_selected_entity);
                 ImGui::Text("Name: %s", name.c_str());
                 ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
+            }
+
+            if (scene->registry().any_of<Engine::TransformComponent>(m_selected_entity)) {
+                auto& [pos, scale] = scene->registry().get<Engine::TransformComponent>(m_selected_entity);
+                ImGui::DragFloat2("Position", &pos[0], 0.1f);
+                ImGui::DragFloat2("Scale", &scale[0], 0.1f);
+            }
+
+            if (scene->registry().any_of<Engine::SpriteComponent>(m_selected_entity)) {
+                auto& [tint] = scene->registry().get<Engine::SpriteComponent>(m_selected_entity);
+                ImGui::ColorEdit4("Tint", &tint.r);
             }
         }
         ImGui::End();

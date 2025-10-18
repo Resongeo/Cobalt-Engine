@@ -3,10 +3,9 @@
 
 #pragma once
 
+#include "Engine/Core/Types/Math.hpp"
+
 #include <algorithm>
-
-
-#include "Engine/Core/Types/Base.hpp"
 #include <cmath>
 
 namespace Cobalt
@@ -110,6 +109,10 @@ namespace Cobalt
             b = std::clamp(b, 0.0f, 1.0f);
 
             return {r, g, b, alpha};
+        }
+
+        operator Vec4() {
+            return {r, g, b, a};
         }
     };
 }
