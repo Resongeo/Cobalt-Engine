@@ -10,6 +10,7 @@
 #include "Engine/Graphics/Shader.hpp"
 #include "Engine/Graphics/VertexArray.hpp"
 #include "Engine/Graphics/VertexBuffer.hpp"
+#include "Engine/Graphics/Camera.hpp"
 
 namespace Cobalt::Engine
 {
@@ -17,11 +18,11 @@ namespace Cobalt::Engine
     {
     public:
         auto init(u32 max_quads, const Rc<Shader>& shader) -> void;
-        auto begin_frame() -> void;
+        auto begin_frame(Camera& camera) -> void;
         auto submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
         auto submit_quad(const QuadDrawCommand& draw_command) -> void;
         auto end_frame() -> void;
-        auto destroy() -> void;
+        auto set_viewport_size(const Vec<2, i32>& size) -> void;
 
     private:
         auto _start_batch() -> void;

@@ -5,6 +5,7 @@
 
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Renderer.hpp"
+#include "Engine/Graphics/Camera.hpp"
 #include "Editor/Core/Project.hpp"
 
 #include <entt/entt.hpp>
@@ -29,6 +30,7 @@ namespace Cobalt::Editor
     private:
         Project m_project;
         Engine::Renderer m_renderer = {};
+        Engine::Camera m_camera = {};
         entt::entity m_selected_entity = entt::null;
     };
 }

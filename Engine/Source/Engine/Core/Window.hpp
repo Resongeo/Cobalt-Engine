@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Engine/Core/Types/Math.hpp"
+
 struct GLFWwindow;
 
 namespace Cobalt::Engine
@@ -15,8 +17,8 @@ namespace Cobalt::Engine
         auto poll_events() const -> void;
         auto swap_buffers() const -> void;
         auto destroy() const -> void;
-
         auto handle() const -> GLFWwindow*;
+        auto size() const -> Vec<2, i32>;
 
     private:
         GLFWwindow* m_handle = nullptr;

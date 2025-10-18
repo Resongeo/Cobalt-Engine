@@ -35,7 +35,9 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::on_update() -> void {
-        m_renderer.begin_frame();
+        const auto viewport_size = p_window.size();
+        m_renderer.set_viewport_size(viewport_size);
+        m_renderer.begin_frame(m_camera);
         m_renderer.submit_quad(
             {0, 0, 0},
             {1, 1},
@@ -44,16 +46,21 @@ namespace Cobalt::Editor
 
         Gui::begin_frame();
         {
-            /*
             ImGui::Begin("Debug");
             {
                 _draw_project_window();
                 _draw_scenes_window();
                 _draw_entities_window();
                 _draw_components_window();
+
+                if (ImGui::CollapsingHeader("Camera")) {
+                    ImGui::DragFloat2("Position", &m_camera.position[0], 0.1);
+                    ImGui::SliderFloat("Size", &m_camera.size, 0.1, 20);
+                    ImGui::DragFloat("Rotation", &m_camera.rotation, 0.1);
+                    ImGui::ColorEdit3("Clear Color", &m_camera.clear_color.r);
+                }
             }
             ImGui::End();
-            */
         }
         Gui::end_frame();
     }

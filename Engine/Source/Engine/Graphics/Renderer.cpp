@@ -10,8 +10,6 @@ namespace Cobalt::Engine
     auto Renderer::init(const u32 max_quads, const Rc<Shader>& shader) -> void {
         m_max_quads = max_quads;
         m_draw_commands.reserve(m_max_quads);
-        m_viewport_size = {1280, 720};
-        // TODO: Temp
         m_default_shader = shader;
 
         const auto max_vertices = m_max_quads * 4;
@@ -55,42 +53,19 @@ namespace Cobalt::Engine
         delete[] indices;
     }
 
-    auto Renderer::begin_frame() -> void {
+    auto Renderer::begin_frame(Camera& camera) -> void {
         // TODO: Reset renderer stats
         m_draw_commands.clear();
 
-        glViewport(0, 0, m_viewport_size.x, m_viewport_size.y);
-
-        // TODO: Get clear color from style config
-        glClearColor(0.113, 0.113, 0.125, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        //////////////////
-        // -- Camera -- //
-        //////////////////
-
-        // -- View --
-        auto transform = Mat4(1.0f);
-        transform = glm::translate(transform, {0, 0, -1});
-        auto view = glm::inverse(transform);
-
-        // -- Projection --
-        constexpr f32 ar = 1280.0f / 720.0f;
-        constexpr f32 size = 2.0f;
-        constexpr auto left = -(ar / 2.0f) * size;
-        constexpr auto right = (ar / 2.0f) * size;
-        constexpr auto bottom = -size / 2.0f;
-        constexpr auto top = size / 2.0f;
-
-        const auto proj = glm::ortho(
-            left, right, bottom, top, -1.0f, 1.0f
-        );
-
-        // -- Combined --
-        auto view_proj = proj * view;
+        const auto col = camera.clear_color;
+        const auto view_proj = camera.view_projection(m_viewport_size);
 
         m_default_shader->bind();
         m_default_shader->set_mat4("u_ViewProjection", view_proj);
+
+        glViewport(0, 0, m_viewport_size.x, m_viewport_size.y);
+        glClearColor(col.r, col.g, col.b, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
 
         _start_batch();
     }
@@ -133,24 +108,23 @@ namespace Cobalt::Engine
 
     auto Renderer::end_frame() -> void {
         _flush_batch();
-        //m_default_shader->unbind();
+    }
+
+    auto Renderer::set_viewport_size(const Vec<2, i32>& size) -> void {
+        m_viewport_size = size;
     }
 
     auto Renderer::_flush_batch() -> void {
         uint32_t data_size = (uint8_t*)m_vertex_buffer_ptr - (uint8_t*)m_vertex_buffer_base;
 		m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
 
-        u32 count = m_quad_index_count == 0 ? m_vertex_array->index_buffer()->count() : m_quad_index_count;
+        const u32 count = m_quad_index_count == 0 ? m_vertex_array->index_buffer()->count() : m_quad_index_count;
 
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 
     auto Renderer::_is_batch_full() const -> bool {
         return m_draw_commands.size() >= m_max_quads;
-    }
-
-    auto Renderer::destroy() -> void {
-
     }
 
     auto Renderer::_start_batch() -> void {
