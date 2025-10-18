@@ -2,10 +2,12 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
-#include "Editor/Gui/Gui.hpp"
+#include "Engine/ECS/Components/TagComponent.hpp"
+#include "Engine/ECS/Systems/TestSystem.hpp"
+#include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Core/Logger.hpp"
 #include "Engine/Scene/Scene.hpp"
-#include "Engine/ECS/Components/TagComponent.hpp"
+#include "Editor/Gui/Gui.hpp"
 
 #include <imgui.h>
 
@@ -32,6 +34,8 @@ namespace Cobalt::Editor
         );
 
         m_renderer.init(100, shader);
+
+        p_scene_manager.add_system<Engine::TestSystem>(Engine::Schedule::RuntimeStart);
     }
 
     auto EditorApplication::on_update() -> void {
@@ -44,6 +48,8 @@ namespace Cobalt::Editor
             {0.8, 0.3, 0.3, 1.0});
         m_renderer.end_frame();
 
+        p_scene_manager.update();
+
         Gui::begin_frame();
         {
             ImGui::Begin("Debug");
@@ -52,6 +58,22 @@ namespace Cobalt::Editor
                 _draw_scenes_window();
                 _draw_entities_window();
                 _draw_components_window();
+
+                switch (p_scene_manager.state()) {
+                    case Engine::SceneState::None: {
+                        if (ImGui::Button("Start Scene")) {
+                            p_scene_manager.set_state(Engine::SceneState::Start);
+                        }
+                        break;
+                    }
+                    case Engine::SceneState::Start:
+                    case Engine::SceneState::Update: {
+                        if (ImGui::Button("Stop Scene")) {
+                            p_scene_manager.set_state(Engine::SceneState::None);
+                        }
+                        break;
+                    }
+                }
 
                 if (ImGui::CollapsingHeader("Camera")) {
                     ImGui::DragFloat2("Position", &m_camera.position[0], 0.1);

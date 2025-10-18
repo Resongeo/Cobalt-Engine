@@ -2,10 +2,11 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/ECS/Systems/TestSystem.hpp"
+#include "Engine/Core/Logger.hpp"
 
 namespace Cobalt::Engine
 {
     auto TestSystem::update(entt::registry& registry) -> void {
-
+        Logger::warn("Test System", "system is called");
     }
 }

@@ -37,6 +37,11 @@ add_library(Engine STATIC
     Source/Engine/Graphics/IndexBuffer.hpp
     Source/Engine/Graphics/Camera.cpp
     Source/Engine/Graphics/Camera.hpp
+    Source/Engine/ECS/Systems/ISystem.hpp
+    Source/Engine/ECS/Systems/TestSystem.cpp
+    Source/Engine/ECS/Systems/TestSystem.hpp
+    Source/Engine/ECS/Systems/Schedule.hpp
+    Source/Engine/Scene/SceneState.hpp
 )
 
 target_link_libraries(Engine PUBLIC

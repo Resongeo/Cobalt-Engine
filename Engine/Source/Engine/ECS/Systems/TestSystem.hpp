@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include <entt/entity/registry.hpp>
+#include "Engine/ECS/Systems/ISystem.hpp"
 
 namespace Cobalt::Engine
 {
-    class TestSystem final
+    class TestSystem final : public ISystem
     {
     public:
-        auto update(entt::registry& registry) -> void;
+        auto update(entt::registry& registry) -> void override;
     };
 }
