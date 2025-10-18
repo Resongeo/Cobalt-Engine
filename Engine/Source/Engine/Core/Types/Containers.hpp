@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <unordered_map>
+#include <initializer_list>
 
 namespace Cobalt
 {
@@ -14,4 +16,10 @@ namespace Cobalt
 
     template<typename T>
     using Vector = std::vector<T>;
+
+    template<typename T>
+    using InitializerList = std::initializer_list<T>;
+
+    template<typename K, typename V>
+    using HashMap = std::unordered_map<K, V>;
 }

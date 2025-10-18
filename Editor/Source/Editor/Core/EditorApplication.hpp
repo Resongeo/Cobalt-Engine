@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Application.hpp"
+#include "Engine/Graphics/Renderer.hpp"
 #include "Editor/Core/Project.hpp"
 
 #include <entt/entt.hpp>
@@ -27,6 +28,7 @@ namespace Cobalt::Editor
 
     private:
         Project m_project;
+        Engine::Renderer m_renderer = {};
         entt::entity m_selected_entity = entt::null;
     };
 }

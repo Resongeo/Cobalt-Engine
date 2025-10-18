@@ -3,7 +3,8 @@
 
 #pragma once
 
-#include "Engine/Core/Types.hpp"
+#include "Engine/Core/Types/Base.hpp"
+#include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Defines.hpp"
 
 #include <format>
@@ -28,25 +29,25 @@ namespace Cobalt::Engine
         template<typename... Args>
         static auto trace(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
-            log(LogLevel::Trace, location, msg);
+            _log(LogLevel::Trace, location, msg);
         }
 
         template<typename... Args>
         static auto warn(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
-            log(LogLevel::Warn, location, msg);
+            _log(LogLevel::Warn, location, msg);
         }
 
         template<typename... Args>
         static auto error(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
-            log(LogLevel::Error, location, msg);
+            _log(LogLevel::Error, location, msg);
         }
 
         template<typename... Args>
         static auto fatal(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
-            log(LogLevel::Fatal, location, msg);
+            _log(LogLevel::Fatal, location, msg);
         }
 
     private:

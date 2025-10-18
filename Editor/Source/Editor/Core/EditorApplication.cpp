@@ -24,11 +24,27 @@ namespace Cobalt::Editor
         }
 
         Gui::init(p_window);
+
+        const auto shader = Memory::make_rc<Engine::Shader>();
+        shader->create(
+            "Assets\\Shaders\\DefaultQuad.vert",
+            "Assets\\Shaders\\DefaultQuad.frag"
+        );
+
+        m_renderer.init(100, shader);
     }
 
     auto EditorApplication::on_update() -> void {
+        m_renderer.begin_frame();
+        m_renderer.submit_quad(
+            {0, 0, 0},
+            {1, 1},
+            {0.8, 0.3, 0.3, 1.0});
+        m_renderer.end_frame();
+
         Gui::begin_frame();
         {
+            /*
             ImGui::Begin("Debug");
             {
                 _draw_project_window();
@@ -37,6 +53,7 @@ namespace Cobalt::Editor
                 _draw_components_window();
             }
             ImGui::End();
+            */
         }
         Gui::end_frame();
     }

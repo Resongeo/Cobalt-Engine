@@ -5,5 +5,6 @@
 
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/Math.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"

@@ -33,10 +33,6 @@ namespace Cobalt::Editor
     auto Gui::end_frame() -> void {
         ImGui::Render();
 
-        // TODO: Get clear color from style config
-        glClearColor(0.113, 0.113, 0.125, 1.0);
-        glClear(GL_COLOR_BUFFER_BIT);
-
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (const auto& io = ImGui::GetIO(); io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {

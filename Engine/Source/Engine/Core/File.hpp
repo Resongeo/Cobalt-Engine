@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "Engine/Core/Types.hpp"
+#include "Engine/Core/Types/Containers.hpp"
 
 namespace Cobalt::Engine
 {
-    struct TagComponent
+    class File final
     {
-        String name;
-        UUID   uuid;
+    public:
+        static auto read(const Filepath& path) -> String;
     };
 }

@@ -14,3 +14,6 @@
 [submodule "Vendor/ENTT"]
 	path = Vendor/ENTT
 	url = https://github.com/skypjack/entt.git
+[submodule "Vendor/GLM"]
+	path = Vendor/GLM
+	url = https://github.com/g-truc/glm.git
