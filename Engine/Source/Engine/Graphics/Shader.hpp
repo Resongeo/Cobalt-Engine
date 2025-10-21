@@ -13,14 +13,15 @@ namespace Cobalt::Engine
     public:
         Shader() = default;
 
-        auto create(const char* vertex_path, const char* fragment_path) -> void;
-
         auto bind() const -> void;
-        auto unbind() -> void;
+        auto unbind() const -> void;
 
+        auto create_from_file(const char* vertex_path, const char* fragment_path) -> bool;
+        auto create_fallback() -> bool;
         auto set_mat4(const char* name, const Mat4& value) -> void;
 
     private:
+        auto _create(const String& vertex_source, const String& fragment_source) -> bool;
         auto _uniform_location(const char* name) -> i32;
 
     private:

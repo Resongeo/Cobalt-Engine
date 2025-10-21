@@ -2,15 +2,30 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/Graphics/Renderer.hpp"
+#include "Engine/Core/Logger.hpp"
 
 #include <glad/gl.h>
 
 namespace Cobalt::Engine
 {
-    auto Renderer::init(const u32 max_quads, const Rc<Shader>& shader) -> void {
+    auto Renderer::init(const u32 max_quads) -> void {
         m_max_quads = max_quads;
         m_draw_commands.reserve(m_max_quads);
-        m_default_shader = shader;
+
+        // TODO: Get proper binary path
+        m_default_shader = Memory::make_rc<Shader>();
+        auto result = m_default_shader->create_from_file(
+            "Assets\\Shaders\\DefaultQuad.vert",
+            "Assets\\Shaders\\DefaultQuad.frag"
+        );
+        if (!result) {
+            Logger::error("Engine::Shader", "Failed to create default quad shader.");
+            result = m_default_shader->create_fallback();
+            if (!result) {
+                Logger::fatal("Engine::Shader", "Failed to create fallback default quad shader.");
+                std::exit(1);
+            }
+        }
 
         const auto max_vertices = m_max_quads * 4;
         const auto max_indices = m_max_quads * 6;

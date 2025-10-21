@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <string_view>
 #include <vector>
 #include <filesystem>
 #include <unordered_map>
@@ -12,6 +13,7 @@
 namespace Cobalt
 {
     using String = std::string;
+    using StringView = std::string_view;
     using Filepath = std::filesystem::path;
 
     template<typename T>

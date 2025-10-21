@@ -29,13 +29,7 @@ namespace Cobalt::Editor
 
         Gui::init(p_window);
 
-        const auto shader = Memory::make_rc<Engine::Shader>();
-        shader->create(
-            "Assets\\Shaders\\DefaultQuad.vert",
-            "Assets\\Shaders\\DefaultQuad.frag"
-        );
-
-        m_renderer.init(100, shader);
+        m_renderer.init(100);
 
         // TODO: Give it a Framebuffer later
         p_scene_manager.add_system<Engine::EditorRenderSystem>(

@@ -11,5 +11,6 @@ namespace Cobalt::Engine
     {
     public:
         static auto read(const Filepath& path) -> String;
+        static auto exists(const Filepath& path) -> bool;
     };
 }
