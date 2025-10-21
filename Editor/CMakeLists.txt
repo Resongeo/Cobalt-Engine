@@ -19,8 +19,16 @@ target_include_directories(Editor PRIVATE
     Source
 )
 
+# -- Disable exceptions --
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang|Intel")
     target_compile_options(Engine PRIVATE -fno-exceptions)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
     target_compile_options(Engine PRIVATE /EHsc-)
 endif()
+
+# -- Copy Engine assets to Editor build output --
+add_custom_command(TARGET Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    "${CMAKE_SOURCE_DIR}/Engine/Assets"
+    "${CMAKE_BINARY_DIR}/Editor/Assets"
+)
