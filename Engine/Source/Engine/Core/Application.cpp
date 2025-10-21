@@ -6,6 +6,12 @@
 
 namespace Cobalt::Engine
 {
+    Application* Application::s_instance;
+
+    Application::Application() {
+        s_instance = this;
+    }
+
     auto Application::run() -> void {
         _initialize();
         on_begin();
@@ -14,21 +20,29 @@ namespace Cobalt::Engine
         _cleanup();
     }
 
+    auto Application::get_window() -> Window& {
+        return s_instance->m_window;
+    }
+
+    auto Application::get_scene_manager() -> SceneManager& {
+        return s_instance->m_scene_manager;
+    }
+
     auto Application::_initialize() -> void {
         Platform::init_glfw();
-        p_window.create();
+        m_window.create();
         Platform::init_opengl();
     }
 
     auto Application::_main_loop() -> void {
-        while (!p_window.close_requested()) {
-            p_window.poll_events();
+        while (!m_window.close_requested()) {
+            m_window.poll_events();
             on_update();
-            p_window.swap_buffers();
+            m_window.swap_buffers();
         }
     }
 
     auto Application::_cleanup() const -> void {
-        p_window.destroy();
+        m_window.destroy();
     }
 }

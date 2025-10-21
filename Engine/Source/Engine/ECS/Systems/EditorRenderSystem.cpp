@@ -4,16 +4,18 @@
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
-#include "Engine/Core/Window.hpp"
+#include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
 namespace Cobalt::Engine
 {
-    EditorRenderSystem::EditorRenderSystem(Renderer* renderer, Window* window, Camera* camera)
-        : m_renderer(renderer), m_window(window), m_camera(camera) { }
+    EditorRenderSystem::EditorRenderSystem(Renderer* renderer, Camera* camera)
+        : m_renderer(renderer), m_camera(camera) { }
 
     auto EditorRenderSystem::update(entt::registry& registry) -> void {
-        const auto viewport_size = m_window->size();
+        const auto& window = Application::get_window();
+
+        const auto viewport_size = window.size();
         m_renderer->set_viewport_size(viewport_size);
         m_renderer->begin_frame(*m_camera);
 

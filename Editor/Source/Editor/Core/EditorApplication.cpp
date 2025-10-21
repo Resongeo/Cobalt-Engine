@@ -20,26 +20,30 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::on_begin() -> void {
+        auto& scene_manager = Application::get_scene_manager();
+        const auto& window = Application::get_window();
+
         m_project.parse();
         if (m_project.startup_scene().is_valid()) {
             // TODO: Load scene from UUID
         } else {
-            p_scene_manager.create_default_scene();
+            scene_manager.create_default_scene();
         }
 
-        Gui::init(p_window);
+        Gui::init(window);
 
         m_renderer.init(100);
 
         // TODO: Give it a Framebuffer later
-        p_scene_manager.add_system<Engine::EditorRenderSystem>(
+        scene_manager.add_system<Engine::EditorRenderSystem>(
             Engine::Schedule::EditorUpdate,
-            &m_renderer, &p_window, &m_camera
+            &m_renderer, &m_camera
         );
     }
 
     auto EditorApplication::on_update() -> void {
-        p_scene_manager.update();
+        auto& scene_manager = Application::get_scene_manager();
+        scene_manager.update();
 
         Gui::begin_frame();
         {
@@ -57,17 +61,17 @@ namespace Cobalt::Editor
                     ImGui::ColorEdit3("Clear Color", &m_camera.clear_color.r);
                 }
 
-                switch (p_scene_manager.state()) {
+                switch (scene_manager.state()) {
                     case Engine::SceneState::None: {
                         if (ImGui::Button("Start Scene")) {
-                            p_scene_manager.set_state(Engine::SceneState::Start);
+                            scene_manager.set_state(Engine::SceneState::Start);
                         }
                         break;
                     }
                     case Engine::SceneState::Start:
                     case Engine::SceneState::Update: {
                         if (ImGui::Button("Stop Scene")) {
-                            p_scene_manager.set_state(Engine::SceneState::None);
+                            scene_manager.set_state(Engine::SceneState::None);
                         }
                         break;
                     }
@@ -88,12 +92,14 @@ namespace Cobalt::Editor
         }
     }
 
-    auto EditorApplication::_draw_scenes_window() -> void {
+    auto EditorApplication::_draw_scenes_window() const -> void {
+        auto& scene_manager = Application::get_scene_manager();
+
         if (ImGui::CollapsingHeader("Scenes")) {
-            if (auto* scene = p_scene_manager.active_scene(); scene != nullptr) {
+            if (auto* scene = scene_manager.active_scene(); scene != nullptr) {
                 ImGui::Text("Scene: %s", scene->name().c_str());
 
-                const auto& scenes = p_scene_manager.scenes();
+                const auto& scenes = scene_manager.scenes();
                 for (auto i = 0; i < scenes.size(); i++) {
                     ImGui::Text("%d %s", i, scenes[i]->name().c_str());
                 }
@@ -102,7 +108,8 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::_draw_entities_window() -> void {
-        auto* scene = p_scene_manager.active_scene();
+        const auto& scene_manager = Application::get_scene_manager();
+        auto* scene = scene_manager.active_scene();
         if (scene == nullptr) {
             return;
         }
@@ -143,11 +150,12 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::_draw_components_window() const -> void {
+        const auto& scene_manager = Application::get_scene_manager();
         if (m_selected_entity == entt::null) {
             return;
         }
 
-        auto* scene = p_scene_manager.active_scene();
+        auto* scene = scene_manager.active_scene();
 
         if (scene == nullptr) {
             return;

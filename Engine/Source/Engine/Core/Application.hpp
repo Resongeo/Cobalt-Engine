@@ -12,6 +12,7 @@ namespace Cobalt::Engine
     {
     public:
         virtual ~Application() = default;
+        Application();
 
         auto run() -> void;
 
@@ -19,13 +20,18 @@ namespace Cobalt::Engine
         virtual auto on_update() -> void {}
         virtual auto on_end() -> void {}
 
+        static auto get_window() -> Window&;
+        static auto get_scene_manager() -> SceneManager&;
+
     private:
         auto _initialize() -> void;
         auto _main_loop() -> void;
         auto _cleanup() const -> void;
 
-    protected:
-        Window p_window;
-        SceneManager p_scene_manager;
+    private:
+        static Application* s_instance;
+
+        Window m_window;
+        SceneManager m_scene_manager;
     };
 }
