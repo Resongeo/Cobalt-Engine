@@ -20,13 +20,12 @@ namespace Cobalt::Engine
         auto init(u32 max_quads, const Filepath& base_assets_path) -> void;
         auto begin_frame(Camera& camera) -> void;
         auto submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
-        auto submit_quad(const QuadDrawCommand& draw_command) -> void;
-        auto end_frame() -> void;
+        auto end_frame() const -> void;
         auto set_viewport_size(const Vec<2, i32>& size) -> void;
 
     private:
         auto _start_batch() -> void;
-        auto _flush_batch() -> void;
+        auto _flush_batch() const -> void;
         auto _is_batch_full() const -> bool;
 
     private:
@@ -38,6 +37,5 @@ namespace Cobalt::Engine
         QuadVertexData* m_vertex_buffer_base = nullptr;
         QuadVertexData* m_vertex_buffer_ptr = nullptr;
         Vec<2, u32> m_viewport_size = {};
-        Vector<QuadDrawCommand> m_draw_commands = {};
     };
 }

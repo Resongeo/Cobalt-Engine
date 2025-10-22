@@ -10,7 +10,6 @@ namespace Cobalt::Engine
 {
     auto Renderer::init(const u32 max_quads, const Filepath& base_assets_path) -> void {
         m_max_quads = max_quads;
-        m_draw_commands.reserve(m_max_quads);
 
         m_default_shader = Memory::make_rc<Shader>();
         const auto shaders_path = base_assets_path / "Shaders";
@@ -72,7 +71,6 @@ namespace Cobalt::Engine
 
     auto Renderer::begin_frame(Camera& camera) -> void {
         // TODO: Reset renderer stats
-        m_draw_commands.clear();
 
         const auto col = camera.clear_color;
         const auto view_proj = camera.view_projection(m_viewport_size);
@@ -114,16 +112,7 @@ namespace Cobalt::Engine
         m_quad_index_count += 6;
     }
 
-    auto Renderer::submit_quad(const QuadDrawCommand& draw_command) -> void {
-        if (_is_batch_full()) {
-            _flush_batch();
-            m_draw_commands.clear();
-        }
-
-        m_draw_commands.push_back(draw_command);
-    }
-
-    auto Renderer::end_frame() -> void {
+    auto Renderer::end_frame() const -> void {
         _flush_batch();
     }
 
@@ -131,8 +120,8 @@ namespace Cobalt::Engine
         m_viewport_size = size;
     }
 
-    auto Renderer::_flush_batch() -> void {
-        uint32_t data_size = (uint8_t*)m_vertex_buffer_ptr - (uint8_t*)m_vertex_buffer_base;
+    auto Renderer::_flush_batch() const -> void {
+        const u32 data_size = reinterpret_cast<uint8_t*>(m_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(m_vertex_buffer_base);
 		m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
 
         const u32 count = m_quad_index_count == 0 ? m_vertex_array->index_buffer()->count() : m_quad_index_count;
@@ -141,7 +130,7 @@ namespace Cobalt::Engine
     }
 
     auto Renderer::_is_batch_full() const -> bool {
-        return m_draw_commands.size() >= m_max_quads;
+        return m_quad_index_count >= m_max_quads * 6;
     }
 
     auto Renderer::_start_batch() -> void {

@@ -27,7 +27,7 @@ namespace Cobalt::Editor
 
         Application::get_scene_manager().create_default_scene();
 
-        m_renderer.init(100, Project::get_editor_assets_path());
+        m_renderer.init(3, Project::get_editor_assets_path());
 
         // TODO: Give it a Framebuffer later
         Application::get_scene_manager().add_system<Engine::EditorRenderSystem>(
@@ -116,12 +116,14 @@ namespace Cobalt::Editor
 
         if (ImGui::CollapsingHeader("Entities")) {
             if (ImGui::Button("Create")) {
-                const auto entity = scene->registry().create();
-                auto& [name, uuid] = scene->registry().emplace<Engine::TagComponent>(entity);
-                name = std::format("Entity {}", static_cast<u32>(entity) + 1);
-                uuid = UUID::generate();
-                scene->registry().emplace<Engine::SpriteComponent>(entity);
-                scene->registry().emplace<Engine::TransformComponent>(entity);
+                for (auto i = 0; i < 10; i++) {
+                    const auto entity = scene->registry().create();
+                    auto& [name, uuid] = scene->registry().emplace<Engine::TagComponent>(entity);
+                    name = std::format("Entity {}", static_cast<u32>(entity) + 1);
+                    uuid = UUID::generate();
+                    scene->registry().emplace<Engine::SpriteComponent>(entity);
+                    scene->registry().emplace<Engine::TransformComponent>(entity);
+                }
             }
 
             if (m_selected_entity != entt::null) {
