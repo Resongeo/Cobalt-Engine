@@ -15,8 +15,8 @@ namespace Cobalt::Engine
         // TODO: Get proper binary path
         m_default_shader = Memory::make_rc<Shader>();
         auto result = m_default_shader->create_from_file(
-            "Assets\\Shaders\\DefaultQuad.vert",
-            "Assets\\Shaders\\DefaultQuad.frag"
+            "Assets/Shaders/DefaultQuad.vert",
+            "Assets/Shaders/DefaultQuad.frag"
         );
         if (!result) {
             Logger::error("Engine::Shader", "Failed to create default quad shader.");

@@ -67,6 +67,13 @@ namespace Cobalt::Engine
     auto Window::handle() const -> GLFWwindow* {
         return m_handle;
     }
+
+    auto Window::size() const -> Vec<2, i32> {
+        i32 width, height = {};
+        glfwGetWindowSize(m_handle, &width, &height);
+
+        return {width, height};
+    }
 }
 
 #endif

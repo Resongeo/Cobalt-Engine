@@ -8,7 +8,7 @@
 namespace Cobalt::Engine
 {
     auto File::read(const Filepath& path) -> String {
-        if (std::ifstream stream(path, std::ios::in); stream)
+        if (std::ifstream stream(path, std::ios::in | std::ios::binary); stream)
         {
             String result = {};
 
