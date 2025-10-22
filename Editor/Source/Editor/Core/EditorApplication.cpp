@@ -84,6 +84,11 @@ namespace Cobalt::Editor
         if (ImGui::CollapsingHeader("Project")) {
             ImGui::Text("Name: %s", Project::get_name().c_str());
             ImGui::Text("Version: %s", Project::get_version().c_str());
+            ImGui::Text("Version: %s", Project::get_version().c_str());
+            ImGui::Separator();
+            ImGui::Text("Asset paths");
+            ImGui::Text("Editor: %s", Project::get_editor_assets_path().c_str());
+            ImGui::Text("Project: %s", Project::get_project_assets_path().c_str());
         }
     }
 

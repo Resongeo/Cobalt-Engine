@@ -21,9 +21,12 @@ namespace Cobalt::Editor
         auto& name = s_instance->m_name;
         auto& version = s_instance->m_version;
         auto& project_path = s_instance->m_project_path;
+        auto& editor_path = s_instance->m_editor_path;
 
         name = "No Project";
         version = "0.0.0";
+
+        editor_path = Filepath(args[0]);
 
         if (args.size() < 2) {
             Engine::Logger::warn(
@@ -45,7 +48,7 @@ namespace Cobalt::Editor
         // TODO: Load a Default level if no project is provided
 
         auto valid_file = true;
-        project_path = Filepath(args[1]);
+        project_path = Filepath(args[1]).parent_path();
 
         if (project_path.extension() != ".cbproj") {
             valid_file = false;
@@ -90,4 +93,12 @@ namespace Cobalt::Editor
     auto Project::get_version() -> String& {
         return s_instance->m_version;
     }
-}
+
+    auto Project::get_editor_assets_path() -> Filepath {
+        return s_instance->m_editor_path / "Assets";
+    }
+
+    auto Project::get_project_assets_path() -> Filepath {
+        return s_instance->m_project_path / "Assets";
+    }
+} // namespace Cobalt::Editor

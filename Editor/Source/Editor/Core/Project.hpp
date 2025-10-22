@@ -14,11 +14,14 @@ namespace Cobalt::Editor
         static auto parse(i32 argc, char* argv[]) -> void;
         static auto get_name() -> String&;
         static auto get_version() -> String&;
+        static auto get_editor_assets_path() -> Filepath;
+        static auto get_project_assets_path() -> Filepath;
 
     private:
         static Project* s_instance;
         Vector<String> m_args = {};
         Filepath m_project_path = {};
+        Filepath m_editor_path = {};
         String m_name = {};
         String m_version = {};
     };
