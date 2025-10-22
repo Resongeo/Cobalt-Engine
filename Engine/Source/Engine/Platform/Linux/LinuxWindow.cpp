@@ -17,8 +17,10 @@ namespace Cobalt::Engine
 {
     auto Window::create() -> void {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-        // TODO: Create window hints when we are implementing OpenGL
         // TODO: Load window size from config
         m_handle = glfwCreateWindow(
             1280, 720,
