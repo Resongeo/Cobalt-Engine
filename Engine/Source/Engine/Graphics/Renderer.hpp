@@ -17,7 +17,7 @@ namespace Cobalt::Engine
     class Renderer final
     {
     public:
-        auto init(u32 max_quads) -> void;
+        auto init(u32 max_quads, const Filepath& base_assets_path) -> void;
         auto begin_frame(Camera& camera) -> void;
         auto submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
         auto submit_quad(const QuadDrawCommand& draw_command) -> void;

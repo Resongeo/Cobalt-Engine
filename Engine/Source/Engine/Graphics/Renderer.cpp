@@ -8,15 +8,17 @@
 
 namespace Cobalt::Engine
 {
-    auto Renderer::init(const u32 max_quads) -> void {
+    auto Renderer::init(const u32 max_quads, const Filepath& base_assets_path) -> void {
         m_max_quads = max_quads;
         m_draw_commands.reserve(m_max_quads);
 
-        // TODO: Get proper binary path
         m_default_shader = Memory::make_rc<Shader>();
+        const auto shaders_path = base_assets_path / "Shaders";
+        const auto vertex_path = shaders_path / "DefaultQuad.vert";
+        const auto fragment_path = shaders_path / "DefaultQuad.frag";
         auto result = m_default_shader->create_from_file(
-            "Assets/Shaders/DefaultQuad.vert",
-            "Assets/Shaders/DefaultQuad.frag"
+            vertex_path.c_str(),
+            fragment_path.c_str()
         );
         if (!result) {
             Logger::error("Engine::Shader", "Failed to create default quad shader.");

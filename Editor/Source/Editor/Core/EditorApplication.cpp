@@ -27,7 +27,7 @@ namespace Cobalt::Editor
 
         Application::get_scene_manager().create_default_scene();
 
-        m_renderer.init(100);
+        m_renderer.init(100, Project::get_editor_assets_path());
 
         // TODO: Give it a Framebuffer later
         Application::get_scene_manager().add_system<Engine::EditorRenderSystem>(
