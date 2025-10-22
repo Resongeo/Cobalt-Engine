@@ -26,7 +26,7 @@ namespace Cobalt::Editor
         name = "No Project";
         version = "0.0.0";
 
-        editor_path = Filepath(args[0]);
+        editor_path = Filepath(args[0]).parent_path();
 
         if (args.size() < 2) {
             Engine::Logger::warn(
@@ -48,13 +48,14 @@ namespace Cobalt::Editor
         // TODO: Load a Default level if no project is provided
 
         auto valid_file = true;
-        project_path = Filepath(args[1]).parent_path();
+        const auto project_file_path = Filepath(args[1]);
+        project_path = project_file_path.parent_path();
 
-        if (project_path.extension() != ".cbproj") {
+        if (project_file_path.extension() != ".cbproj") {
             valid_file = false;
         }
 
-        const auto result = toml::parse_file(project_path.string());
+        const auto result = toml::parse_file(project_file_path.string());
 
         if (!result) {
             auto error_msg = std::ostringstream();
@@ -62,7 +63,7 @@ namespace Cobalt::Editor
             Engine::Logger::error(
                 "Editor::Project",
                 "Error while parsing {}: {}",
-                project_path.string(), error_msg.str()
+                project_file_path.string(), error_msg.str()
             );
             valid_file = false;
         }
@@ -71,7 +72,7 @@ namespace Cobalt::Editor
             Engine::Logger::error(
                 "Editor::Project",
                 "{} is not a valid project file",
-                project_path.string()
+                project_file_path.string()
             );
 
             return;
