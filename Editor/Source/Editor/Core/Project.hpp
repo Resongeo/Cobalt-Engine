@@ -10,18 +10,16 @@ namespace Cobalt::Editor
     class Project final
     {
     public:
-        Project(i32 argc, char* argv[]);
-
-        auto parse() -> void;
-        auto name() -> String;
-        auto version() -> String;
-        auto startup_scene() const -> UUID;
+        static auto init() -> void;
+        static auto parse(i32 argc, char* argv[]) -> void;
+        static auto get_name() -> String&;
+        static auto get_version() -> String&;
 
     private:
-        Vector<String> m_args;
-        Filepath m_project_path;
+        static Project* s_instance;
+        Vector<String> m_args = {};
+        Filepath m_project_path = {};
         String m_name = {};
         String m_version = {};
-        UUID m_startup_scene;
     };
 }

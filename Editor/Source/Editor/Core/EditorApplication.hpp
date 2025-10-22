@@ -6,7 +6,6 @@
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Graphics/Camera.hpp"
-#include "Editor/Core/Project.hpp"
 
 #include <entt/entt.hpp>
 
@@ -22,15 +21,16 @@ namespace Cobalt::Editor
         auto on_end() -> void override;
 
     private:
-        auto _draw_project_window() -> void;
+        auto _draw_project_window() const -> void;
         auto _draw_scenes_window() const -> void;
         auto _draw_entities_window() -> void;
         auto _draw_components_window() const -> void;
 
     private:
-        Project m_project;
         Engine::Renderer m_renderer = {};
         Engine::Camera m_camera = {};
         entt::entity m_selected_entity = entt::null;
+        int m_argc = {};
+        char** m_argv = {};
     };
 }

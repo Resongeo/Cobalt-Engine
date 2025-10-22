@@ -2,6 +2,7 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
+#include "Editor/Core/Project.hpp"
 #include "Editor/Gui/Gui.hpp"
 #include "Engine/Core/Logger.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
@@ -16,26 +17,20 @@
 namespace Cobalt::Editor
 {
     EditorApplication::EditorApplication(const i32 argc, char* argv[])
-        : m_project(argc, argv) {
+        : m_argc(argc), m_argv(argv) {
     }
 
     auto EditorApplication::on_begin() -> void {
-        auto& scene_manager = Application::get_scene_manager();
-        const auto& window = Application::get_window();
+        Project::init();
+        Project::parse(m_argc, m_argv);
+        Gui::init(Application::get_window());
 
-        m_project.parse();
-        if (m_project.startup_scene().is_valid()) {
-            // TODO: Load scene from UUID
-        } else {
-            scene_manager.create_default_scene();
-        }
-
-        Gui::init(window);
+        Application::get_scene_manager().create_default_scene();
 
         m_renderer.init(100);
 
         // TODO: Give it a Framebuffer later
-        scene_manager.add_system<Engine::EditorRenderSystem>(
+        Application::get_scene_manager().add_system<Engine::EditorRenderSystem>(
             Engine::Schedule::EditorUpdate,
             &m_renderer, &m_camera
         );
@@ -85,10 +80,10 @@ namespace Cobalt::Editor
     auto EditorApplication::on_end() -> void {
     }
 
-    auto EditorApplication::_draw_project_window() -> void {
+    auto EditorApplication::_draw_project_window() const -> void {
         if (ImGui::CollapsingHeader("Project")) {
-            ImGui::Text("Name: %s", m_project.name().c_str());
-            ImGui::Text("Version: %s", m_project.version().c_str());
+            ImGui::Text("Name: %s", Project::get_name().c_str());
+            ImGui::Text("Version: %s", Project::get_version().c_str());
         }
     }
 

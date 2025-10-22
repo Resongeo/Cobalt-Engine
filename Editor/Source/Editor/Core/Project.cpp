@@ -9,15 +9,23 @@
 
 namespace Cobalt::Editor
 {
-    Project::Project(const i32 argc, char* argv[]) {
-        m_args = Vector<String>(argv, argv + argc);
+    Project* Project::s_instance;
+
+    auto Project::init() -> void {
+        s_instance = new Project();
     }
 
-    auto Project::parse() -> void {
-        m_name = "No Project";
-        m_version = "0.0.0";
+    auto Project::parse(const i32 argc, char* argv[]) -> void {
+        s_instance->m_args = Vector<String>(argv, argv + argc);
+        auto& args = s_instance->m_args;
+        auto& name = s_instance->m_name;
+        auto& version = s_instance->m_version;
+        auto& project_path = s_instance->m_project_path;
 
-        if (m_args.size() < 2) {
+        name = "No Project";
+        version = "0.0.0";
+
+        if (args.size() < 2) {
             Engine::Logger::warn(
                 "Editor::Project",
                 "No project file is provided. Please provide a valid path to a .cbproj file"
@@ -25,11 +33,11 @@ namespace Cobalt::Editor
             return;
         }
 
-        if (!std::filesystem::exists(m_args[1])) {
+        if (!std::filesystem::exists(args[1])) {
             Engine::Logger::error(
                 "Editor::Project",
                 "Project file path does not exists: {}",
-                m_args[1]
+                args[1]
             );
             return;
         }
@@ -37,13 +45,13 @@ namespace Cobalt::Editor
         // TODO: Load a Default level if no project is provided
 
         auto valid_file = true;
-        m_project_path = Filepath(m_args[1]);
+        project_path = Filepath(args[1]);
 
-        if (m_project_path.extension() != ".cbproj") {
+        if (project_path.extension() != ".cbproj") {
             valid_file = false;
         }
 
-        const auto result = toml::parse_file(m_project_path.string());
+        const auto result = toml::parse_file(project_path.string());
 
         if (!result) {
             auto error_msg = std::ostringstream();
@@ -51,7 +59,7 @@ namespace Cobalt::Editor
             Engine::Logger::error(
                 "Editor::Project",
                 "Error while parsing {}: {}",
-                m_project_path.string(), error_msg.str()
+                project_path.string(), error_msg.str()
             );
             valid_file = false;
         }
@@ -60,31 +68,26 @@ namespace Cobalt::Editor
             Engine::Logger::error(
                 "Editor::Project",
                 "{} is not a valid project file",
-                m_project_path.string()
+                project_path.string()
             );
 
             return;
         }
 
         auto table = result.table();
-        m_name = table["project"]["name"].value_or<String>("Default");
-        m_version = table["project"]["version"].value_or<String>("0.0.0");
-        m_startup_scene = UUID(table["project"]["startup-scene"].value_or<u64>(0));
+        name = table["project"]["name"].value_or<String>("Default");
+        version = table["project"]["version"].value_or<String>("0.0.0");
 
         Engine::Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}",
-            m_name, m_version
+            name, version
         );
     }
 
-    auto Project::name() -> String {
-        return m_name;
+    auto Project::get_name() -> String& {
+        return s_instance->m_name;
     }
 
-    auto Project::version() -> String {
-        return m_version;
-    }
-
-    auto Project::startup_scene() const -> UUID {
-        return m_startup_scene;
+    auto Project::get_version() -> String& {
+        return s_instance->m_version;
     }
 }
