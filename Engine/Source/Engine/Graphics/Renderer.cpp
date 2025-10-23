@@ -16,8 +16,8 @@ namespace Cobalt::Engine
         const auto vertex_path = shaders_path / "DefaultQuad.vert";
         const auto fragment_path = shaders_path / "DefaultQuad.frag";
         auto result = m_default_shader->create_from_file(
-            vertex_path.c_str(),
-            fragment_path.c_str()
+            reinterpret_cast<const char*>(vertex_path.c_str()),
+            reinterpret_cast<const char*>(fragment_path.c_str())
         );
         if (!result) {
             Logger::error("Engine::Shader", "Failed to create default quad shader.");
