@@ -18,7 +18,6 @@ namespace Cobalt::Editor
         static auto get_project_assets_path() -> Filepath;
 
     private:
-        static Project* s_instance;
         Vector<String> m_args = {};
         Filepath m_project_path = {};
         Filepath m_editor_path = {};

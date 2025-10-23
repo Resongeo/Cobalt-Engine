@@ -29,8 +29,6 @@ namespace Cobalt::Engine
         auto _cleanup() const -> void;
 
     private:
-        static Application* s_instance;
-
         Window m_window;
         SceneManager m_scene_manager;
     };

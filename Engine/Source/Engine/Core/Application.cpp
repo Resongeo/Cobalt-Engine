@@ -6,7 +6,7 @@
 
 namespace Cobalt::Engine
 {
-    Application* Application::s_instance;
+    static Application* s_instance = nullptr;
 
     Application::Application() {
         s_instance = this;

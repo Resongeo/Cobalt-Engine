@@ -9,7 +9,7 @@
 
 namespace Cobalt::Editor
 {
-    Project* Project::s_instance;
+    static Project* s_instance = nullptr;
 
     auto Project::init() -> void {
         s_instance = new Project();
@@ -102,4 +102,4 @@ namespace Cobalt::Editor
     auto Project::get_project_assets_path() -> Filepath {
         return s_instance->m_project_path / "Assets";
     }
-} // namespace Cobalt::Editor
+}
