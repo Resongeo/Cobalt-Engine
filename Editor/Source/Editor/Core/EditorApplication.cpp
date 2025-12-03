@@ -126,25 +126,25 @@ namespace Cobalt::Editor
                 }
             }
 
-            if (m_selected_entity != entt::null) {
+            if (m_state.selected_entity != entt::null) {
                 ImGui::SameLine();
                 if (ImGui::Button("Deselect")) {
-                    m_selected_entity = entt::null;
+                    m_state.selected_entity = entt::null;
                 }
             }
 
             for (const auto entity : scene->registry().view<entt::entity>()) {
                 auto label = std::format("Entity id: {}", static_cast<u32>(entity));
 
-                if (m_selected_entity == entity) {
+                if (m_state.selected_entity == entity) {
                     ImGui::PushStyleColor(ImGuiCol_Button, {0.8, 0.3, 0.3, 1.0});
                     if (ImGui::Button(label.c_str())) {
-                        m_selected_entity = entity;
+                        m_state.selected_entity = entity;
                     }
                     ImGui::PopStyleColor();
                 } else {
                     if (ImGui::Button(label.c_str())) {
-                        m_selected_entity = entity;
+                        m_state.selected_entity = entity;
                     }
                 }
             }
@@ -153,7 +153,7 @@ namespace Cobalt::Editor
 
     auto EditorApplication::_draw_components_window() const -> void {
         const auto& scene_manager = Application::get_scene_manager();
-        if (m_selected_entity == entt::null) {
+        if (m_state.selected_entity == entt::null) {
             return;
         }
 
@@ -165,20 +165,20 @@ namespace Cobalt::Editor
 
         ImGui::Begin("Components");
         {
-            if (scene->registry().any_of<Engine::TagComponent>(m_selected_entity)) {
-                auto& [name, uuid] = scene->registry().get<Engine::TagComponent>(m_selected_entity);
+            if (scene->registry().any_of<Engine::TagComponent>(m_state.selected_entity)) {
+                auto& [name, uuid] = scene->registry().get<Engine::TagComponent>(m_state.selected_entity);
                 ImGui::Text("Name: %s", name.c_str());
                 ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
             }
 
-            if (scene->registry().any_of<Engine::TransformComponent>(m_selected_entity)) {
-                auto& [pos, scale] = scene->registry().get<Engine::TransformComponent>(m_selected_entity);
+            if (scene->registry().any_of<Engine::TransformComponent>(m_state.selected_entity)) {
+                auto& [pos, scale] = scene->registry().get<Engine::TransformComponent>(m_state.selected_entity);
                 ImGui::DragFloat2("Position", &pos[0], 0.1f);
                 ImGui::DragFloat2("Scale", &scale[0], 0.1f);
             }
 
-            if (scene->registry().any_of<Engine::SpriteComponent>(m_selected_entity)) {
-                auto& [tint] = scene->registry().get<Engine::SpriteComponent>(m_selected_entity);
+            if (scene->registry().any_of<Engine::SpriteComponent>(m_state.selected_entity)) {
+                auto& [tint] = scene->registry().get<Engine::SpriteComponent>(m_state.selected_entity);
                 ImGui::ColorEdit4("Tint", &tint.r);
             }
         }

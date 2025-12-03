@@ -6,8 +6,7 @@
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Graphics/Camera.hpp"
-
-#include <entt/entt.hpp>
+#include "Editor/Core/EditorState.hpp"
 
 namespace Cobalt::Editor
 {
@@ -29,7 +28,7 @@ namespace Cobalt::Editor
     private:
         Engine::Renderer m_renderer = {};
         Engine::Camera m_camera = {};
-        entt::entity m_selected_entity = entt::null;
+        EditorState m_state = {};
         int m_argc = {};
         char** m_argv = {};
     };
