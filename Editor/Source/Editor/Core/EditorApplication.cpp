@@ -39,7 +39,7 @@ namespace Cobalt::Editor
         
         Application::get_scene_manager().add_system<Engine::EditorRenderSystem>(
             Engine::Schedule::EditorUpdate,
-            &m_renderer, &m_camera, &m_state.framebuffer
+            &m_renderer, &m_state.editor_camera, &m_state.framebuffer
         );
 
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());

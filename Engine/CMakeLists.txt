@@ -46,8 +46,8 @@ add_library(Engine STATIC
     Source/Engine/Graphics/Fwd.hpp
     Source/Engine/ECS/Components/SpriteComponent.hpp
     Source/Engine/ECS/Components/TransformComponent.hpp
-        Source/Engine/Graphics/Framebuffer.cpp
-        Source/Engine/Graphics/Framebuffer.hpp
+    Source/Engine/Graphics/Framebuffer.cpp
+    Source/Engine/Graphics/Framebuffer.hpp
 )
 
 target_link_libraries(Engine PUBLIC

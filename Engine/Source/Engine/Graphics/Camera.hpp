@@ -15,6 +15,8 @@ namespace Cobalt::Engine
         f32 size = 5.0f;
         Color clear_color = Color::from_scalar(0.0f);
 
+        auto view() -> Mat4;
+        auto projection(const Vec<2, i32>& viewport_size) const -> Mat4;
         auto view_projection(const Vec<2, i32>& viewport_size) -> Mat4;
     };
 }
