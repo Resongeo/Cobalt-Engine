@@ -7,19 +7,20 @@ add_executable(Editor
     Source/Editor/Gui/ImGuiBuild.cpp
     Source/Editor/Gui/Gui.cpp
     Source/Editor/Gui/Gui.hpp
-        Source/Editor/Gui/IPanel.hpp
-        Source/Editor/Core/EditorState.hpp
-        Source/Editor/Gui/Panels/SceneHierarchyPanel.cpp
-        Source/Editor/Gui/Panels/SceneHierarchyPanel.hpp
-        Source/Editor/Gui/Panels/ViewportPanel.cpp
-        Source/Editor/Gui/Panels/ViewportPanel.hpp
-        Source/Editor/Gui/Panels/EntityComponentsPanel.cpp
-        Source/Editor/Gui/Panels/EntityComponentsPanel.hpp
+    Source/Editor/Gui/IPanel.hpp
+    Source/Editor/Core/EditorState.hpp
+    Source/Editor/Gui/Panels/SceneHierarchyPanel.cpp
+    Source/Editor/Gui/Panels/SceneHierarchyPanel.hpp
+    Source/Editor/Gui/Panels/ViewportPanel.cpp
+    Source/Editor/Gui/Panels/ViewportPanel.hpp
+    Source/Editor/Gui/Panels/EntityComponentsPanel.cpp
+    Source/Editor/Gui/Panels/EntityComponentsPanel.hpp
 )
 
 target_link_libraries(Editor PRIVATE
     Engine
     imgui
+    imguizmo
     tomlplusplus::tomlplusplus
 )
 

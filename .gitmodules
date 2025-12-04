@@ -17,3 +17,6 @@
 [submodule "Vendor/GLM"]
 	path = Vendor/GLM
 	url = https://github.com/g-truc/glm.git
+[submodule "Vendor/IMGUIZMO"]
+	path = Vendor/IMGUIZMO
+	url = https://github.com/CedricGuillemet/ImGuizmo
