@@ -1,4 +1,4 @@
-#version 330 core
+#version 450 core
 
 // -- Attribute data --
 layout(location = 0) in vec2 a_Position;

@@ -17,8 +17,8 @@ namespace Cobalt::Engine
         }
         Logger::trace("Engine::Platform", "Glfw initialized");
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         // TODO: Disable OpenGL debug in Release builds
         glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
@@ -79,7 +79,7 @@ namespace Cobalt::Engine
 
         Logger::trace(
             "Engine::Platform",
-            "Loaded OpenGL {}.{}",
+            "OpenGL version: {}",
             major, minor
         );
     }
