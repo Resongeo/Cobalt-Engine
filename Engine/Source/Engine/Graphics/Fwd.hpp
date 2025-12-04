@@ -11,4 +11,5 @@ namespace Cobalt::Engine
     class IndexBuffer;
     class VertexArray;
     class VertexBuffer;
+    class Framebuffer;
 }
