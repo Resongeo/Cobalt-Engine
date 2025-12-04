@@ -75,7 +75,12 @@ namespace Cobalt::Engine
         if (m_renderer_id == 0) {
             _create();
         }
-        
+
+        if (m_is_resized) {
+            _reallocate_textures();
+            m_is_resized = false;
+        }
+
         glBindFramebuffer(GL_FRAMEBUFFER, m_renderer_id);
         glViewport(0, 0, static_cast<i32>(m_size.x), static_cast<i32>(m_size.y));
     }
@@ -103,8 +108,7 @@ namespace Cobalt::Engine
 
         m_size.x = width;
         m_size.y = height;
-
-        _reallocate_textures();
+        m_is_resized = true;
     }
 
     auto Framebuffer::get_size() const -> Vec<2, u32> {

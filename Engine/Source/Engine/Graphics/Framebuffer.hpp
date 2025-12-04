@@ -40,5 +40,6 @@ namespace Cobalt::Engine
         Vec<2, u32> m_size = {};
         u32 m_renderer_id = 0;
         u32 m_samples = 0;
+        bool m_is_resized = false;
     };
 }
