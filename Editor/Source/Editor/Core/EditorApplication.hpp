@@ -7,6 +7,7 @@
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Editor/Core/EditorState.hpp"
+#include "Editor/Gui/IPanel.hpp"
 
 namespace Cobalt::Editor
 {
@@ -20,15 +21,10 @@ namespace Cobalt::Editor
         auto on_end() -> void override;
 
     private:
-        auto _draw_project_window() const -> void;
-        auto _draw_scenes_window() const -> void;
-        auto _draw_entities_window() -> void;
-        auto _draw_components_window() const -> void;
-
-    private:
         Engine::Renderer m_renderer = {};
         Engine::Camera m_camera = {};
         EditorState m_state = {};
+        Vector<Box<IPanel>> m_panels = {};
         int m_argc = {};
         char** m_argv = {};
     };

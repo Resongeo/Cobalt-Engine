@@ -21,7 +21,7 @@ namespace Cobalt::Editor
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         ImGui_ImplGlfw_InitForOpenGL(window.handle(), true);
-        ImGui_ImplOpenGL3_Init("#version 330 core");
+        ImGui_ImplOpenGL3_Init("#version 450 core");
     }
 
     auto Gui::begin_frame() -> void {
@@ -31,6 +31,8 @@ namespace Cobalt::Editor
     }
 
     auto Gui::end_frame() -> void {
+        glClearColor(0.08, 0.08, 0.08, 1.0);
+        glClear(GL_COLOR_BUFFER_BIT);
         ImGui::Render();
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
