@@ -21,8 +21,13 @@ namespace Cobalt::Engine
 
         for (const auto entity : registry.view<SpriteComponent>()) {
             auto [tint] = registry.get<SpriteComponent>(entity);
-            auto [pos, scale] = registry.get<TransformComponent>(entity);
-            m_renderer->submit_quad({pos.x, pos.y, 0}, scale, tint);
+            auto [pos, scale, rotation] = registry.get<TransformComponent>(entity);
+            if (rotation == 0) {
+                m_renderer->submit_quad({pos.x, pos.y, 0}, scale, tint);    
+            } else {
+                m_renderer->submit_quad({pos.x, pos.y, 0}, scale, rotation, tint);
+            }
+            
         }
 
         m_renderer->end_frame();

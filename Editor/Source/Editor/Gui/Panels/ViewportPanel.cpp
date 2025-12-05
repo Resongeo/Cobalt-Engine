@@ -6,8 +6,8 @@
 
 #include <imgui.h>
 #include <ImGuizmo.h>
-
-#include "glm/gtx/matrix_decompose.hpp"
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/matrix_decompose.hpp>
 
 namespace Cobalt::Editor
 {
@@ -16,6 +16,8 @@ namespace Cobalt::Editor
         {
             static auto operation = ImGuizmo::TRANSLATE;
             static auto mode = ImGuizmo::LOCAL;
+            static auto should_snap = false;
+            f32 snap_amount = 0.0f;
 
             if (ImGui::IsWindowFocused()) {
                 if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
@@ -24,6 +26,12 @@ namespace Cobalt::Editor
                     operation = ImGuizmo::ROTATE;
                 } else if (ImGui::IsKeyPressed(ImGuiKey_E)) {
                     operation = ImGuizmo::SCALE;
+                }
+
+                if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
+                    should_snap = true;
+                } else if (ImGui::IsKeyReleased(ImGuiKey_LeftShift)) {
+                    should_snap = false;
                 }
             }
 
@@ -65,34 +73,55 @@ namespace Cobalt::Editor
                     ImGui::GetWindowHeight()
                 );
                 
-                auto& [p, s] = state.active_scene->registry().get<Engine::TransformComponent>(state.selected_entity);
-                auto transform = glm::translate(Mat4(1.0f), {p.x, p.y, 0.0})
-                    * glm::scale(Mat4(1.0f), {s.x, s.y, 1.0f});
+                auto& transform_component = state.active_scene->registry().get<Engine::TransformComponent>(state.selected_entity);
+                auto transform_matrix = transform_component.get_transform_matrix();
+
+                if (should_snap) {
+                    switch (operation) {
+                        case ImGuizmo::TRANSLATE:
+                            snap_amount = 0.5f;
+                            break;
+                        case ImGuizmo::ROTATE:
+                            snap_amount = 15.0f;
+                            break;
+                        case ImGuizmo::SCALE:
+                            snap_amount = 0.1f;
+                            break;
+                        default: break;
+                    }
+                } else {
+                    snap_amount = 0.0f;
+                }
                 
                 ImGuizmo::Manipulate(
                     glm::value_ptr(state.editor_camera.view()),
                     glm::value_ptr(state.editor_camera.projection(state.framebuffer.get_size())),
                     operation,
                     mode,
-                    glm::value_ptr(transform)
+                    glm::value_ptr(transform_matrix),
+                    nullptr,
+                    &snap_amount
                 );
 
                 if (ImGuizmo::IsUsing())
                 {
                     Vec3 scale;
                     Quat rotation;
-                    Vec3 translation;
+                    Vec3 position;
                     Vec3 skew;
                     Vec4 perspective;
-                    glm::decompose(transform, scale, rotation, translation, skew, perspective);
+                    glm::decompose(transform_matrix, scale, rotation, position, skew, perspective);
 
                     switch (operation)
                     {
                         case ImGuizmo::OPERATION::TRANSLATE:
-                            p = {translation.x, translation.y};
+                            transform_component.position = {position.x, position.y};
+                            break;
+                        case ImGuizmo::ROTATE:
+                            transform_component.rotation = glm::degrees(glm::eulerAngles(rotation)).z;
                             break;
                         case ImGuizmo::OPERATION::SCALE:
-                            s = {scale.x, scale.y};
+                            transform_component.scale = {scale.x, scale.y};
                             break;
                         default:;
                     }

@@ -20,6 +20,7 @@ namespace Cobalt::Engine
         auto init(u32 max_quads, const Filepath& base_assets_path) -> void;
         auto begin_frame(Camera& camera) -> void;
         auto submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
+        auto submit_quad(const Vec3& pos, const Vec2& scale, const f32 rotation, const Vec4& color) -> void;
         auto end_frame() const -> void;
         auto set_viewport_size(const Vec<2, i32>& size) -> void;
 

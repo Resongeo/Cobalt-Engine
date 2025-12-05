@@ -92,7 +92,7 @@ namespace Cobalt::Engine
         }
 
         const Vec2 offset{ scale.x * 0.5f, scale.y * 0.5f };
-
+        
         m_vertex_buffer_ptr->position = { pos.x - offset.x, pos.y - offset.y };
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
@@ -108,6 +108,32 @@ namespace Cobalt::Engine
         m_vertex_buffer_ptr->position = { pos.x - offset.x, pos.y + offset.y };
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
+
+        m_quad_index_count += 6;
+    }
+    
+    auto Renderer::submit_quad(const Vec3& pos, const Vec2& scale, const f32 rotation, const Vec4& color) -> void {
+        if (_is_batch_full()) {
+            _flush_batch();
+            _start_batch();
+        }
+
+        static Vec4 vertex_positions[4] = {
+            {-0.5, -0.5, 0.0, 1.0},
+            { 0.5, -0.5, 0.0, 1.0},
+            { 0.5,  0.5, 0.0, 1.0},
+            {-0.5,  0.5, 0.0, 1.0},
+        };
+
+        const auto transform = glm::translate(Mat4(1), pos)
+            * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1})
+            * glm::scale(Mat4(1), {scale.x, scale.y, 1});
+
+        for (auto i = 0; i < 4; i++) {
+            m_vertex_buffer_ptr->position = transform * vertex_positions[i];
+            m_vertex_buffer_ptr->color = color;
+            m_vertex_buffer_ptr++;    
+        }
 
         m_quad_index_count += 6;
     }

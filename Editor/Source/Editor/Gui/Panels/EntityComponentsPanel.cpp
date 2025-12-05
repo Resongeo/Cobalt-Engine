@@ -23,9 +23,10 @@ namespace Cobalt::Editor
                 }
                 
                 if (ecs_registry.any_of<Engine::TransformComponent>(state.selected_entity)) {
-                    auto& [position, scale] = ecs_registry.get<Engine::TransformComponent>(state.selected_entity);
+                    auto& [position, scale, rotation] = ecs_registry.get<Engine::TransformComponent>(state.selected_entity);
                     ImGui::DragFloat2("Position", &position[0], 0.1f);
                     ImGui::DragFloat2("Scale", &scale[0], 0.1f);
+                    ImGui::DragFloat("Rotation", &rotation, 0.1f);
                 }
                 
                 if (ecs_registry.any_of<Engine::SpriteComponent>(state.selected_entity)) {
