@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types.hpp"
-#include <entt/entity/registry.hpp>
+#include "Engine/ECS/Entity.hpp"
 
 namespace Cobalt::Engine
 {
@@ -16,6 +16,9 @@ namespace Cobalt::Engine
 
         auto name() -> String&;
         auto registry() -> entt::registry&;
+        auto create_entity(const String& name) -> Entity;
+        auto create_entity(const String& name, const UUID uuid) -> Entity;
+        auto create_empty_entity() -> Entity;
 
     private:
         String m_name = {};

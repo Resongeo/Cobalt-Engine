@@ -2,6 +2,7 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/Scene/Scene.hpp"
+#include "Engine/ECS/Components/Minimal.hpp"
 
 namespace Cobalt::Engine
 {
@@ -14,5 +15,30 @@ namespace Cobalt::Engine
 
     auto Scene::registry() -> entt::registry& {
         return m_registry;
+    }
+    
+    auto Scene::create_entity(const String& name) -> Entity {
+        const auto id = m_registry.create();
+        auto entity = Entity(id, &m_registry);
+
+        entity.add_component<TagComponent>(name);
+        entity.add_component<TransformComponent>();
+
+        return entity;
+    }
+    
+    auto Scene::create_entity(const String& name, const UUID uuid) -> Entity {
+        const auto id = m_registry.create();
+        auto entity = Entity(id, &m_registry);
+
+        entity.add_component<TagComponent>(name, uuid);
+        entity.add_component<TransformComponent>();
+
+        return entity;
+    }
+
+    auto Scene::create_empty_entity() -> Entity {
+        const auto id = m_registry.create();
+        return Entity(id, &m_registry);
     }
 }

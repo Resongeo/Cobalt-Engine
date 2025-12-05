@@ -11,5 +11,13 @@ namespace Cobalt::Engine
     {
         String name;
         UUID   uuid;
+
+        TagComponent() = default;
+        TagComponent(const String& name, const UUID uuid)
+            : name(name), uuid(uuid) {}
+        TagComponent(const String& name)
+            : name(name) {
+            uuid = UUID::generate();
+        }
     };
 }

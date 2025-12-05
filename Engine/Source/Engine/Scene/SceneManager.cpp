@@ -2,6 +2,7 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Engine/Scene/SceneManager.hpp"
+#include "Engine/ECS/Components/SpriteComponent.hpp"
 
 namespace Cobalt::Engine
 {
@@ -17,6 +18,10 @@ namespace Cobalt::Engine
         const auto& default_scene = m_scenes.emplace_back(
             Memory::make_box<Scene>("Default")
         );
+        
+        auto entity = default_scene->create_entity("Entity");
+        entity.add_component<SpriteComponent>();
+
         m_active_scene = default_scene.get();
     }
 

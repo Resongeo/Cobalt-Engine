@@ -48,6 +48,8 @@ add_library(Engine STATIC
     Source/Engine/ECS/Components/TransformComponent.hpp
     Source/Engine/Graphics/Framebuffer.cpp
     Source/Engine/Graphics/Framebuffer.hpp
+        Source/Engine/ECS/Entity.hpp
+        Source/Engine/ECS/Components/Minimal.hpp
 )
 
 target_link_libraries(Engine PUBLIC

@@ -3,6 +3,7 @@
 
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
+#include "Engine/ECS/Entity.hpp"
 
 #include <imgui.h>
 #include <ImGuizmo.h>
@@ -72,8 +73,9 @@ namespace Cobalt::Editor
                     ImGui::GetWindowWidth(),
                     ImGui::GetWindowHeight()
                 );
-                
-                auto& transform_component = state.active_scene->registry().get<Engine::TransformComponent>(state.selected_entity);
+
+                auto entity = Engine::Entity(state.selected_entity, &state.active_scene->registry());
+                auto& transform_component = entity.get_component<Engine::TransformComponent>();
                 auto transform_matrix = transform_component.get_transform_matrix();
 
                 if (should_snap) {
@@ -100,7 +102,7 @@ namespace Cobalt::Editor
                     mode,
                     glm::value_ptr(transform_matrix),
                     nullptr,
-                    &snap_amount
+                    should_snap ? &snap_amount : nullptr
                 );
 
                 if (ImGuizmo::IsUsing())
