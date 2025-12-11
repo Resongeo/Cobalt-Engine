@@ -2,6 +2,7 @@
 // Copyright (c) 2025 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
+#include "Editor/Core/Project.hpp"
 
 #include <glad/gl.h>
 #include <backends/imgui_impl_glfw.h>
@@ -16,18 +17,25 @@ namespace Cobalt::Editor
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
+        ImGui_ImplGlfw_InitForOpenGL(window.handle(), true);
+        ImGui_ImplOpenGL3_Init("#version 450 core");
+
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-
-        ImGui_ImplGlfw_InitForOpenGL(window.handle(), true);
-        ImGui_ImplOpenGL3_Init("#version 450 core");
     }
 
     auto Gui::begin_frame() -> void {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
+
+        // TODO: Temporary fix. IO.Filename gets overwritten somewhere
+        auto& io = ImGui::GetIO();
+        const auto layout_ini = Project::get_editor_assets_path() / "Editor" / "Settings" / "DefaultLayout.ini";
+        io.IniFilename = layout_ini.c_str();
+
+
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();
     }
