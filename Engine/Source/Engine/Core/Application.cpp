@@ -3,15 +3,12 @@
 
 #include "Engine/Core/Application.hpp"
 #include "Engine/Platform/Platform.hpp"
+#include "Engine/Platform/Window.hpp"
+
+#include <SDL3/SDL.h>
 
 namespace Cobalt::Engine
 {
-    static Application* s_instance = nullptr;
-
-    Application::Application() {
-        s_instance = this;
-    }
-
     auto Application::run() -> void {
         _initialize();
         on_begin();
@@ -20,29 +17,30 @@ namespace Cobalt::Engine
         _cleanup();
     }
 
-    auto Application::get_window() -> Window& {
-        return s_instance->m_window;
-    }
-
-    auto Application::get_scene_manager() -> SceneManager& {
-        return s_instance->m_scene_manager;
-    }
-
-    auto Application::_initialize() -> void {
-        Platform::init_glfw();
-        m_window.create();
-        Platform::init_opengl();
+    auto Application::_initialize() const -> void {
+        Platform::initialize();
+        Window::initialize();
+        Platform::opengl_init();
     }
 
     auto Application::_main_loop() -> void {
-        while (!m_window.close_requested()) {
-            m_window.poll_events();
+        while (!m_close_requested) {
+            SDL_Event e;
+            while (SDL_PollEvent(&e)) {
+                on_event(&e);
+
+                if (e.type == SDL_EVENT_QUIT) {
+                    m_close_requested = true;
+                }
+            }
+
             on_update();
-            m_window.swap_buffers();
+
+            Window::instance().swap_buffers();
         }
     }
 
     auto Application::_cleanup() const -> void {
-        m_window.destroy();
+        Window::destroy();
     }
 }

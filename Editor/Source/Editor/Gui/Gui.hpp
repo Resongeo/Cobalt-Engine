@@ -3,7 +3,9 @@
 
 #pragma once
 
-#include "Engine/Core/Window.hpp"
+#include "Engine/Platform/Window.hpp"
+
+union SDL_Event;
 
 namespace Cobalt::Editor
 {
@@ -12,6 +14,7 @@ namespace Cobalt::Editor
     public:
         static auto init(const Engine::Window& window) -> void;
         static auto begin_frame() -> void;
+        static auto process_event(const SDL_Event* event) -> void;
         static auto end_frame() -> void;
     };
 }

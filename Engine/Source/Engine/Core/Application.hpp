@@ -3,8 +3,9 @@
 
 #pragma once
 
-#include "Engine/Core/Window.hpp"
 #include "Engine/Scene/SceneManager.hpp"
+
+union SDL_Event;
 
 namespace Cobalt::Engine
 {
@@ -12,24 +13,21 @@ namespace Cobalt::Engine
     {
     public:
         virtual ~Application() = default;
-        Application();
 
         auto run() -> void;
 
         virtual auto on_begin() -> void {}
+        virtual auto on_event(SDL_Event* event) -> void {}
         virtual auto on_update() -> void {}
         virtual auto on_end() -> void {}
 
-        static auto get_window() -> Window&;
-        static auto get_scene_manager() -> SceneManager&;
-
     private:
-        auto _initialize() -> void;
+        auto _initialize() const -> void;
         auto _main_loop() -> void;
         auto _cleanup() const -> void;
 
     private:
-        Window m_window;
         SceneManager m_scene_manager;
+        bool m_close_requested = false;
     };
 }

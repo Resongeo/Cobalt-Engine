@@ -11,8 +11,10 @@
 #include "Engine/ECS/Components/TransformComponent.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
-#include "Engine/Scene/Scene.hpp"
+#include "Engine/Platform/Window.hpp"
+#include "Engine/Scene/SceneManager.hpp"
 
+#include <SDL3/SDL.h>
 #include <imgui.h>
 
 namespace Cobalt::Editor
@@ -22,11 +24,12 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::on_begin() -> void {
+        // TODO: Move project to Engine
         Project::init();
         Project::parse(m_argc, m_argv);
-        Gui::init(Application::get_window());
+        Gui::init(Engine::Window::instance());
 
-        Application::get_scene_manager().create_default_scene();
+        Engine::SceneManager::instance().create_default_scene();
 
         m_renderer.init(3, Project::get_editor_assets_path());
 
@@ -37,7 +40,7 @@ namespace Cobalt::Editor
         );
         m_state.framebuffer.unbind();
         
-        Application::get_scene_manager().add_system<Engine::EditorRenderSystem>(
+        Engine::SceneManager::instance().add_system<Engine::EditorRenderSystem>(
             Engine::Schedule::EditorUpdate,
             &m_renderer, &m_state.editor_camera, &m_state.framebuffer
         );
@@ -47,12 +50,16 @@ namespace Cobalt::Editor
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
     }
 
+    void EditorApplication::on_event(SDL_Event* event) {
+        Gui::process_event(event);
+    }
+
     auto EditorApplication::on_update() -> void {
-        auto& scene_manager = Application::get_scene_manager();
+        auto& scene_manager = Engine::SceneManager::instance();
         scene_manager.update();
 
         Gui::begin_frame();
-        if (const auto active_scene = scene_manager.active_scene(); active_scene != nullptr) {
+        if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
             const auto viewport = ImGui::GetMainViewport();
             ImGui::SetNextWindowPos(viewport->Pos);
             ImGui::SetNextWindowSize(viewport->Size);

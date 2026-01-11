@@ -15,12 +15,14 @@ namespace Cobalt::Engine
     public:
         ~SceneManager() = default;
 
-        auto scenes() -> Vector<Box<Scene>>&;
-        auto active_scene() const -> Scene*;
-        auto create_default_scene() -> void;
+        auto get_scenes() -> Vector<Box<Scene>>&;
+        auto get_active_scene() const -> Scene*;
+        auto get_state() const -> SceneState;
         auto set_state(SceneState state) -> void;
-        auto state() const -> SceneState;
+        auto create_default_scene() -> void;
         auto update() -> void;
+
+        static auto instance() -> SceneManager&;
 
         template<typename T, typename... Args>
         auto add_system(const Schedule schedule, Args&&... args) -> void {
@@ -47,7 +49,7 @@ namespace Cobalt::Engine
         }
 
     private:
-        Vector<Box<Scene>> m_scenes;
+        Vector<Box<Scene>> m_scenes = {};
         Scene* m_active_scene = nullptr;
         SceneState m_state = SceneState::None;
 

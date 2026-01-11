@@ -5,76 +5,68 @@
 
 #ifdef PLATFORM_WINDOWS
 
-#include "Engine/Core/Window.hpp"
+#include "Engine/Platform/Window.hpp"
 #include "Engine/Core/Logger.hpp"
 
-#include <GLFW/glfw3.h>
+#include <SDL3/SDL.h>
 
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
 
 namespace Cobalt::Engine
 {
-    auto Window::create() -> void {
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+    SDL_GLContext gl_context = nullptr;
 
-        // TODO: Load window size from config
-        m_handle = glfwCreateWindow(
-            WINDOW_WIDTH, WINDOW_HEIGHT,
+    auto Window::create() -> bool {
+        const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+        constexpr auto window_flags =
+            SDL_WINDOW_OPENGL |
+            SDL_WINDOW_RESIZABLE |
+            SDL_WINDOW_HIDDEN |
+            SDL_WINDOW_HIGH_PIXEL_DENSITY;
+        m_handle = SDL_CreateWindow(
             "Cobalt Engine",
-            nullptr, nullptr
+            static_cast<int>(WINDOW_WIDTH * main_scale),
+            static_cast<int>(WINDOW_HEIGHT * main_scale),
+            window_flags
         );
-
-        if (m_handle == nullptr) {
-            Logger::fatal("Engine::Window", "Failed to create Glfw window");
-            std::exit(EXIT_FAILURE);
+        if (m_handle == nullptr)
+        {
+            Logger::fatal("Engine::Platform::Window", "Failed to create window: {}", SDL_GetError());
+            return false;
         }
-        Logger::trace(
-            "Engine::Window",
-            "Window created with dimensions {}x{}",
-            1280, 720
-        );
 
-        glfwMakeContextCurrent(m_handle);
+        gl_context = SDL_GL_CreateContext(m_handle);
+        if (gl_context == nullptr)
+        {
+            Logger::fatal("Engine::Platform::Window", "Failed to create OpenGL context: {}", SDL_GetError());
+            return false;
+        }
 
-        auto* video_mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-        const int sys_width = video_mode->width;
-        const int sys_height = video_mode->height;
-        glfwSetWindowMonitor(m_handle, nullptr,
-            sys_width / 2 - WINDOW_WIDTH / 2,
-            sys_height / 2 - WINDOW_HEIGHT / 2,
-            WINDOW_WIDTH, WINDOW_HEIGHT,
-            GLFW_DONT_CARE
-        );
+        SDL_GL_MakeCurrent(m_handle, gl_context);
+        SDL_GL_SetSwapInterval(1);
+        SDL_SetWindowPosition(m_handle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        SDL_ShowWindow(m_handle);
 
-        glfwShowWindow(m_handle);
-    }
-
-    auto Window::close_requested() const -> bool {
-        return glfwWindowShouldClose(m_handle);
-    }
-
-    auto Window::poll_events() const -> void {
-        glfwPollEvents();
+        return true;
     }
 
     auto Window::swap_buffers() const -> void {
-        glfwSwapBuffers(m_handle);
+        SDL_GL_SwapWindow(m_handle);
     }
 
     auto Window::destroy() const -> void {
-        glfwDestroyWindow(m_handle);
-        glfwTerminate();
+        SDL_GL_DestroyContext(gl_context);
+        SDL_DestroyWindow(m_handle);
     }
 
-    auto Window::handle() const -> GLFWwindow* {
+    auto Window::handle() const -> SDL_Window* {
         return m_handle;
     }
 
     auto Window::size() const -> Vec<2, i32> {
-        i32 width, height = {};
-        glfwGetWindowSize(m_handle, &width, &height);
-
+        i32 width, height = 0;
+        SDL_GetWindowSize(m_handle, &width, &height);
         return {width, height};
     }
 }

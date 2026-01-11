@@ -6,28 +6,26 @@
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
-#include <GLFW/glfw3.h>
+
+#include <SDL3/SDL.h>
 
 namespace Cobalt::Engine
 {
-    auto Platform::init_glfw() -> void {
-        if (!glfwInit()) {
-            Logger::fatal("Engine::Platform", "Failed to initialize Glfw");
+    auto Platform::initialize() -> void {
+        if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
+            Logger::fatal("Engine::Platform", "Failed to initialize SDL3: {}", SDL_GetError());
             std::exit(EXIT_FAILURE);
         }
-        Logger::trace("Engine::Platform", "Glfw initialized");
+        Logger::trace("Engine::Platform", "SDL3 initialized");
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-        // TODO: Disable OpenGL debug in Release builds
-        glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
     }
 
-    auto Platform::init_opengl() -> void {
-        const auto version = gladLoadGL(glfwGetProcAddress);
+    auto Platform::opengl_init() -> void {
+        const auto version = gladLoadGL(SDL_GL_GetProcAddress);
 
-        //glDisable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -83,4 +81,8 @@ namespace Cobalt::Engine
             major, minor
         );
     }
-}
+
+    auto Platform::destroy() -> void {
+        SDL_Quit();
+    }
+} // namespace Cobalt::Engine

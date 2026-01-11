@@ -17,6 +17,7 @@ namespace Cobalt::Editor
         EditorApplication(i32 argc, char* argv[]);
 
         auto on_begin() -> void override;
+        auto on_event(SDL_Event* event) -> void override;
         auto on_update() -> void override;
         auto on_end() -> void override;
 

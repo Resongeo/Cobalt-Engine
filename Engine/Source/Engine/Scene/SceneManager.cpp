@@ -6,11 +6,11 @@
 
 namespace Cobalt::Engine
 {
-    auto SceneManager::scenes() -> Vector<Box<Scene>>& {
+    auto SceneManager::get_scenes() -> Vector<Box<Scene>>& {
         return m_scenes;
     }
 
-    auto SceneManager::active_scene() const -> Scene* {
+    auto SceneManager::get_active_scene() const -> Scene* {
         return m_active_scene;
     }
 
@@ -29,7 +29,7 @@ namespace Cobalt::Engine
         m_state = state;
     }
 
-    auto SceneManager::state() const -> SceneState {
+    auto SceneManager::get_state() const -> SceneState {
         return m_state;
     }
 
@@ -61,5 +61,10 @@ namespace Cobalt::Engine
                 break;
             }
         }
+    }
+
+    auto SceneManager::instance() -> SceneManager& {
+        static SceneManager instance;
+        return instance;
     }
 }
