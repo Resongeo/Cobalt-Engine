@@ -1,6 +1,3 @@
-[submodule "Vendor/GLFW"]
-	path = Vendor/GLFW
-	url = https://github.com/glfw/glfw
 [submodule "Vendor/TOML"]
 	path = Vendor/TOML
 	url = https://github.com/marzer/tomlplusplus.git

@@ -4,7 +4,7 @@ add_library(Engine STATIC
     Source/Engine/Core/Application.hpp
     Source/Engine/Core/Logger.hpp
     Source/Engine/Core/Defines.hpp
-    Source/Engine/Core/Window.hpp
+        Source/Engine/Platform/Window.hpp
     Source/Engine/Platform/Linux/LinuxWindow.cpp
     Source/Engine/Platform/Windows/WindowsWindow.cpp
     Source/Engine/Platform/Platform.cpp
@@ -48,14 +48,15 @@ add_library(Engine STATIC
     Source/Engine/ECS/Components/TransformComponent.hpp
     Source/Engine/Graphics/Framebuffer.cpp
     Source/Engine/Graphics/Framebuffer.hpp
-        Source/Engine/ECS/Entity.hpp
-        Source/Engine/ECS/Components/Minimal.hpp
+    Source/Engine/ECS/Entity.hpp
+    Source/Engine/ECS/Components/Minimal.hpp
 )
 
 target_link_libraries(Engine PUBLIC
     glfw
     glm::glm
     EnTT::EnTT
+    SDL3::SDL3-static
 )
 
 target_include_directories(Engine PUBLIC

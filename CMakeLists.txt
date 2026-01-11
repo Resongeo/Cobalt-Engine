@@ -5,7 +5,6 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Vendor libraries
-add_subdirectory(Vendor/GLFW)
 add_subdirectory(Vendor/TOML)
 add_subdirectory(Vendor/CATCH2)
 add_subdirectory(Vendor/ENTT)
@@ -23,6 +22,7 @@ file(GLOB IMGUIZMO_SOURCES
 add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
 target_link_libraries(imguizmo PRIVATE imgui)
 target_include_directories(imguizmo PUBLIC "Vendor/IMGUIZMO")
+add_subdirectory(Vendor/SDL)
 
 add_subdirectory(Engine)
 add_subdirectory(Editor)
