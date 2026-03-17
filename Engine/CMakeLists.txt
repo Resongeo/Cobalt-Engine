@@ -4,7 +4,7 @@ add_library(Engine STATIC
     Source/Engine/Core/Application.hpp
     Source/Engine/Core/Logger.hpp
     Source/Engine/Core/Defines.hpp
-        Source/Engine/Platform/Window.hpp
+    Source/Engine/Platform/Window.hpp
     Source/Engine/Platform/Linux/LinuxWindow.cpp
     Source/Engine/Platform/Windows/WindowsWindow.cpp
     Source/Engine/Platform/Platform.cpp
@@ -53,10 +53,9 @@ add_library(Engine STATIC
 )
 
 target_link_libraries(Engine PUBLIC
-    glfw
     glm::glm
     EnTT::EnTT
-    SDL3::SDL3-static
+    SDL3::SDL3
 )
 
 target_include_directories(Engine PUBLIC

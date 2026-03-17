@@ -1,0 +1,35 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "generator": "Ninja",
+            "binaryDir": "cmake-${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        },
+        {
+            "name": "min-size-release",
+            "displayName": "Minimum Size Release",
+            "generator": "Ninja",
+            "binaryDir": "cmake-${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "MinSizeRel",
+                "CMAKE_C_COMPILER": "clang",
+                "CMAKE_CXX_COMPILER": "clang++"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "engine-debug",
+            "displayName": "Engine Debug",
+            "configurePreset": "debug",
+            "configuration": "Debug"
+        }
+    ]
+}

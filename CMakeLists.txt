@@ -16,14 +16,15 @@ file(GLOB IMGUI_SOURCES
 add_library(imgui STATIC ${IMGUI_SOURCES})
 target_include_directories(imgui PUBLIC "Vendor/IMGUI")
 file(GLOB IMGUIZMO_SOURCES
-        "Vendor/IMGUIZMO/ImGuizmo.cpp"
-        "Vendor/IMGUIZMO/ImGuizmo.h"
+    "Vendor/IMGUIZMO/ImGuizmo.cpp"
+    "Vendor/IMGUIZMO/ImGuizmo.h"
 )
 add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
 target_link_libraries(imguizmo PRIVATE imgui)
 target_include_directories(imguizmo PUBLIC "Vendor/IMGUIZMO")
 add_subdirectory(Vendor/SDL)
 
+# Targets
 add_subdirectory(Engine)
 add_subdirectory(Editor)
 add_subdirectory(Tests)

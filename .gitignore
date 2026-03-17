@@ -4,3 +4,4 @@
 # Build system
 cmake*/
 build*/
+.cache/
