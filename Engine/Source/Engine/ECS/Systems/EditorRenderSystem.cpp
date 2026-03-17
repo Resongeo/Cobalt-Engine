@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2025 Somogyvári Benedek
+// Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"

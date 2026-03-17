@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: Apache-2.0
-// Copyright (c) 2025 Somogyvári Benedek
+// Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Shader.hpp"
 #include "Engine/Core/File.hpp"
