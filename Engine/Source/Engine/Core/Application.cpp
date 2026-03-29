@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Core/Application.hpp"
+#include "Engine/Core/Logger.hpp"
 #include "Engine/Platform/Platform.hpp"
 #include "Engine/Platform/Window.hpp"
 
@@ -9,18 +10,27 @@
 
 namespace Cobalt::Engine
 {
-    auto Application::run() -> void {
-        _initialize();
-        on_begin();
-        _main_loop();
-        on_end();
+    Application::~Application() {
         _cleanup();
     }
 
-    auto Application::_initialize() const -> void {
-        Platform::initialize();
-        Window::initialize();
-        Platform::opengl_init();
+    auto Application::run() -> void {
+        if (!_initialize()) {
+            Logger::fatal("Engine::Core::Application", "Initialization failed. Exiting program.");
+            return;
+        }
+
+        on_begin();
+        _main_loop();
+        on_end();
+    }
+
+    auto Application::_initialize() const -> bool {
+        if (!Platform::sdl3_init()) return false;
+        if (!Window::initialize()) return false;
+        if (!Platform::opengl_init()) return false;
+
+        return true;
     }
 
     auto Application::_main_loop() -> void {
@@ -43,4 +53,4 @@ namespace Cobalt::Engine
     auto Application::_cleanup() const -> void {
         Window::destroy();
     }
-}
+} // namespace Cobalt::Engine

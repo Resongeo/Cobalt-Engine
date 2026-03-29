@@ -29,19 +29,13 @@ namespace Cobalt::Editor
         editor_path = Filepath(args[0]).parent_path();
 
         if (args.size() < 2) {
-            Engine::Logger::warn(
-                "Editor::Project",
-                "No project file is provided. Please provide a valid path to a .cbproj file"
-            );
+            Engine::Logger::warn("Editor::Project",
+                                 "No project file is provided. Please provide a valid path to a .cbproj file");
             return;
         }
 
         if (!std::filesystem::exists(args[1])) {
-            Engine::Logger::error(
-                "Editor::Project",
-                "Project file path does not exists: {}",
-                args[1]
-            );
+            Engine::Logger::error("Editor::Project", "Project file path does not exists: {}", args[1]);
             return;
         }
 
@@ -60,20 +54,13 @@ namespace Cobalt::Editor
         if (!result) {
             auto error_msg = std::ostringstream();
             error_msg << result.error();
-            Engine::Logger::error(
-                "Editor::Project",
-                "Error while parsing {}: {}",
-                project_file_path.string(), error_msg.str()
-            );
+            Engine::Logger::error("Editor::Project", "Error while parsing {}: {}", project_file_path.string(),
+                                  error_msg.str());
             valid_file = false;
         }
 
         if (!valid_file) {
-            Engine::Logger::error(
-                "Editor::Project",
-                "{} is not a valid project file",
-                project_file_path.string()
-            );
+            Engine::Logger::error("Editor::Project", "{} is not a valid project file", project_file_path.string());
 
             return;
         }
@@ -82,9 +69,7 @@ namespace Cobalt::Editor
         name = table["project"]["name"].value_or<String>("Default");
         version = table["project"]["version"].value_or<String>("0.0.0");
 
-        Engine::Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}",
-            name, version
-        );
+        Engine::Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}", name, version);
     }
 
     auto Project::get_name() -> String& {
@@ -102,4 +87,4 @@ namespace Cobalt::Editor
     auto Project::get_project_assets_path() -> Filepath {
         return s_instance->m_project_path / "Assets";
     }
-}
+} // namespace Cobalt::Editor

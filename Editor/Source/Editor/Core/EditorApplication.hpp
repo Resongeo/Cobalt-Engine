@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include "Engine/Core/Application.hpp"
-#include "Engine/Graphics/Renderer.hpp"
-#include "Engine/Graphics/Camera.hpp"
 #include "Editor/Core/EditorState.hpp"
 #include "Editor/Gui/IPanel.hpp"
+#include "Engine/Core/Application.hpp"
+#include "Engine/Graphics/Camera.hpp"
+#include "Engine/Graphics/Renderer.hpp"
 
 namespace Cobalt::Editor
 {
@@ -29,4 +29,5 @@ namespace Cobalt::Editor
         int m_argc = {};
         char** m_argv = {};
     };
-}
+} // namespace Cobalt::Editor
+

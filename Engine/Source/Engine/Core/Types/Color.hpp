@@ -31,39 +31,34 @@ namespace Cobalt
 
         static auto from_scalar(const u8 value, const u8 alpha = 255) -> Color {
             return {
-                static_cast<f32>(value) / 255.0f,
-                static_cast<f32>(value) / 255.0f,
-                static_cast<f32>(value) / 255.0f,
-                static_cast<f32>(alpha) / 255.0f,
+                    static_cast<f32>(value) / 255.0f,
+                    static_cast<f32>(value) / 255.0f,
+                    static_cast<f32>(value) / 255.0f,
+                    static_cast<f32>(alpha) / 255.0f,
             };
         }
 
         static auto from_rgb(const u8 r, const u8 g, const u8 b) -> Color {
             return {
-                static_cast<f32>(r) / 255.0f,
-                static_cast<f32>(g) / 255.0f,
-                static_cast<f32>(b) / 255.0f,
-                1.0f,
+                    static_cast<f32>(r) / 255.0f,
+                    static_cast<f32>(g) / 255.0f,
+                    static_cast<f32>(b) / 255.0f,
+                    1.0f,
             };
         }
 
         static auto from_rgba(const u8 r, const u8 g, const u8 b, const u8 a) -> Color {
             return {
-                static_cast<f32>(r) / 255.0f,
-                static_cast<f32>(g) / 255.0f,
-                static_cast<f32>(b) / 255.0f,
-                static_cast<f32>(a) / 255.0f,
+                    static_cast<f32>(r) / 255.0f,
+                    static_cast<f32>(g) / 255.0f,
+                    static_cast<f32>(b) / 255.0f,
+                    static_cast<f32>(a) / 255.0f,
             };
         }
 
         static auto from_hex(const u32 hex) -> Color {
             // TODO: Handle alpha values in hex
-            return {
-                (hex >> 16 & 0xFF) / 255.0f,
-                (hex >> 8 & 0xFF) / 255.0f,
-                (hex & 0xFF) / 255.0f,
-                1.0f
-            };
+            return {(hex >> 16 & 0xFF) / 255.0f, (hex >> 8 & 0xFF) / 255.0f, (hex & 0xFF) / 255.0f, 1.0f};
         }
 
         static auto from_oklch(f32 l, f32 c, f32 deg, f32 alpha = 1.0f) -> Color {
@@ -115,4 +110,5 @@ namespace Cobalt
             return {r, g, b, a};
         }
     };
-}
+} // namespace Cobalt
+

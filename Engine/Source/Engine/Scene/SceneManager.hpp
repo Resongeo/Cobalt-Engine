@@ -3,10 +3,11 @@
 
 #pragma once
 
-#include "Engine/Scene/Scene.hpp"
-#include "Engine/Scene/SceneState.hpp"
+#include "Engine/Core/Types/Memory.hpp"
 #include "Engine/ECS/Systems/ISystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
+#include "Engine/Scene/Scene.hpp"
+#include "Engine/Scene/SceneState.hpp"
 
 namespace Cobalt::Engine
 {
@@ -24,25 +25,19 @@ namespace Cobalt::Engine
 
         static auto instance() -> SceneManager&;
 
-        template<typename T, typename... Args>
+        template <typename T, typename... Args>
         auto add_system(const Schedule schedule, Args&&... args) -> void {
             switch (schedule) {
                 case Schedule::RuntimeStart: {
-                    m_runtime_start_systems.emplace_back(
-                        Memory::make_box<T>(std::forward<Args>(args)...)
-                    );
+                    m_runtime_start_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
                     break;
                 }
                 case Schedule::EditorUpdate: {
-                    m_editor_update_systems.emplace_back(
-                        Memory::make_box<T>(std::forward<Args>(args)...)
-                    );
+                    m_editor_update_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
                     break;
                 }
                 case Schedule::RuntimeUpdate: {
-                    m_runtime_update_systems.emplace_back(
-                        Memory::make_box<T>(std::forward<Args>(args)...)
-                    );
+                    m_runtime_update_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
                     break;
                 }
             }
@@ -57,4 +52,5 @@ namespace Cobalt::Engine
         Vector<Box<ISystem>> m_editor_update_systems = {};
         Vector<Box<ISystem>> m_runtime_update_systems = {};
     };
-}
+} // namespace Cobalt::Engine
+

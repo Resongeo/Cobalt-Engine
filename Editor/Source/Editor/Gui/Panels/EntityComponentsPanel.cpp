@@ -20,14 +20,14 @@ namespace Cobalt::Editor
                     ImGui::Text("Name: %s", name.c_str());
                     ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
                 }
-                
+
                 if (entity.has_component<Engine::TransformComponent>()) {
                     auto& [position, scale, rotation] = entity.get_component<Engine::TransformComponent>();
                     ImGui::DragFloat2("Position", &position[0], 0.1f);
                     ImGui::DragFloat2("Scale", &scale[0], 0.1f);
                     ImGui::DragFloat("Rotation", &rotation, 0.1f);
                 }
-                
+
                 if (entity.has_component<Engine::SpriteComponent>()) {
                     auto& [tint] = entity.get_component<Engine::SpriteComponent>();
                     ImGui::ColorEdit4("Tint", &tint.r);
@@ -36,4 +36,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-}
+} // namespace Cobalt::Editor

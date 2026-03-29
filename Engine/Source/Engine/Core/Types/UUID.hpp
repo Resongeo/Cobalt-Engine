@@ -3,12 +3,13 @@
 
 #pragma once
 
-#include "Engine/Core/Types/Base.hpp"
 #include <random>
+#include "Engine/Core/Types/Base.hpp"
 
 namespace Cobalt
 {
-    struct UUID {
+    struct UUID
+    {
         u64 value;
 
         explicit UUID() : value(0) {}
@@ -31,13 +32,17 @@ namespace Cobalt
             return value != other.value;
         }
     };
-}
+} // namespace Cobalt
 
-/* UUID hashing needed for std::unordered_map */
-namespace std {
-    template<> struct hash<Cobalt::UUID> {
+// UUID hashing needed for std::unordered_map
+namespace std
+{
+    template <>
+    struct hash<Cobalt::UUID>
+    {
         auto operator()(const Cobalt::UUID& id) const -> Cobalt::usize {
             return hash<uint64_t>()(id.value);
         }
     };
-}
+} // namespace std
+

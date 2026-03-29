@@ -5,10 +5,12 @@
 #include "Engine/ECS/Components/TransformComponent.hpp"
 #include "Engine/ECS/Entity.hpp"
 
-#include <imgui.h>
-#include <ImGuizmo.h>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
+#include <imgui.h>
+
+// IMPORTANT: Include ImGuizmo after imgui.h
+#include <ImGuizmo.h>
 
 namespace Cobalt::Editor
 {
@@ -61,18 +63,14 @@ namespace Cobalt::Editor
             if (const auto color_id = state.framebuffer.get_color_attachment_id(0); color_id >= 0) {
                 const auto viewport_size = ImGui::GetContentRegionAvail();
                 state.framebuffer.resize(viewport_size.x, viewport_size.y);
-                ImGui::Image(color_id, viewport_size, {0, 1},{1, 0});
-            }   
+                ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
+            }
 
             if (state.selected_entity != entt::null) {
                 ImGuizmo::SetOrthographic(true);
                 ImGuizmo::SetDrawlist();
-                ImGuizmo::SetRect(
-                    ImGui::GetWindowPos().x,
-                    ImGui::GetWindowPos().y,
-                    ImGui::GetWindowWidth(),
-                    ImGui::GetWindowHeight()
-                );
+                ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(),
+                                  ImGui::GetWindowHeight());
 
                 auto entity = Engine::Entity(state.selected_entity, &state.active_scene->registry());
                 auto& transform_component = entity.get_component<Engine::TransformComponent>();
@@ -80,33 +78,21 @@ namespace Cobalt::Editor
 
                 if (should_snap) {
                     switch (operation) {
-                        case ImGuizmo::TRANSLATE:
-                            snap_amount = 0.5f;
-                            break;
-                        case ImGuizmo::ROTATE:
-                            snap_amount = 15.0f;
-                            break;
-                        case ImGuizmo::SCALE:
-                            snap_amount = 0.1f;
-                            break;
+                        case ImGuizmo::TRANSLATE: snap_amount = 0.5f; break;
+                        case ImGuizmo::ROTATE: snap_amount = 15.0f; break;
+                        case ImGuizmo::SCALE: snap_amount = 0.1f; break;
                         default: break;
                     }
                 } else {
                     snap_amount = 0.0f;
                 }
-                
-                ImGuizmo::Manipulate(
-                    glm::value_ptr(state.editor_camera.view()),
-                    glm::value_ptr(state.editor_camera.projection(state.framebuffer.get_size())),
-                    operation,
-                    mode,
-                    glm::value_ptr(transform_matrix),
-                    nullptr,
-                    should_snap ? &snap_amount : nullptr
-                );
 
-                if (ImGuizmo::IsUsing())
-                {
+                ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.view()),
+                                     glm::value_ptr(state.editor_camera.projection(state.framebuffer.get_size())),
+                                     operation, mode, glm::value_ptr(transform_matrix), nullptr,
+                                     should_snap ? &snap_amount : nullptr);
+
+                if (ImGuizmo::IsUsing()) {
                     Vec3 scale;
                     Quat rotation;
                     Vec3 position;
@@ -114,17 +100,14 @@ namespace Cobalt::Editor
                     Vec4 perspective;
                     glm::decompose(transform_matrix, scale, rotation, position, skew, perspective);
 
-                    switch (operation)
-                    {
+                    switch (operation) {
                         case ImGuizmo::OPERATION::TRANSLATE:
                             transform_component.position = {position.x, position.y};
                             break;
                         case ImGuizmo::ROTATE:
                             transform_component.rotation = glm::degrees(glm::eulerAngles(rotation)).z;
                             break;
-                        case ImGuizmo::OPERATION::SCALE:
-                            transform_component.scale = {scale.x, scale.y};
-                            break;
+                        case ImGuizmo::OPERATION::SCALE: transform_component.scale = {scale.x, scale.y}; break;
                         default:;
                     }
                 }
@@ -132,4 +115,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-}
+} // namespace Cobalt::Editor

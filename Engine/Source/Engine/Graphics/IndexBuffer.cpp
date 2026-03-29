@@ -4,7 +4,7 @@
 #include "Engine/Graphics/IndexBuffer.hpp"
 #include "Engine/Core/Logger.hpp"
 
-#include "glad/gl.h"
+#include <glad/gl.h>
 
 namespace Cobalt::Engine
 {
@@ -34,4 +34,4 @@ namespace Cobalt::Engine
     auto IndexBuffer::count() const -> u32 {
         return m_count;
     }
-}
+} // namespace Cobalt::Engine

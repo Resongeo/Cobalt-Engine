@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Engine/Core/Types/Math.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/Math.hpp"
 
 namespace Cobalt::Engine
 {
@@ -28,4 +28,5 @@ namespace Cobalt::Engine
         HashMap<const char*, i32> m_uniform_locations = {};
         u32 m_renderer_id = 0;
     };
-}
+} // namespace Cobalt::Engine
+

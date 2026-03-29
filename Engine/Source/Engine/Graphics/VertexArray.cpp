@@ -6,7 +6,6 @@
 
 #include <glad/gl.h>
 
-
 namespace Cobalt::Engine
 {
     VertexArray::~VertexArray() {
@@ -42,25 +41,14 @@ namespace Cobalt::Engine
                 case AttributeDataType::Int3:
                 case AttributeDataType::Int4: {
                     glEnableVertexAttribArray(index);
-                    glVertexAttribIPointer(
-                        index,
-                        attribute.element_count(),
-                        GL_INT,
-                        layout.stride(),
-                        (const void*)attribute.offset
-                    );
+                    glVertexAttribIPointer(index, attribute.element_count(), GL_INT, layout.stride(),
+                                           (const void*)attribute.offset);
                     break;
                 }
                 default: {
                     glEnableVertexAttribArray(index);
-                    glVertexAttribPointer(
-                        index,
-                        attribute.element_count(),
-                        GL_FLOAT,
-                        GL_FALSE,
-                        layout.stride(),
-                        (const void*)attribute.offset
-                    );
+                    glVertexAttribPointer(index, attribute.element_count(), GL_FLOAT, GL_FALSE, layout.stride(),
+                                          (const void*)attribute.offset);
                     break;
                 }
             }
@@ -85,4 +73,4 @@ namespace Cobalt::Engine
     auto VertexArray::index_buffer() const -> const Rc<IndexBuffer>& {
         return m_index_buffer;
     }
-}
+} // namespace Cobalt::Engine

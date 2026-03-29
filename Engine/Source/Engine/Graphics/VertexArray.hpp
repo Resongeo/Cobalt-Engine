@@ -5,8 +5,8 @@
 
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
-#include "Engine/Graphics/VertexBuffer.hpp"
 #include "Engine/Graphics/IndexBuffer.hpp"
+#include "Engine/Graphics/VertexBuffer.hpp"
 
 namespace Cobalt::Engine
 {
@@ -30,5 +30,4 @@ namespace Cobalt::Engine
         Rc<IndexBuffer> m_index_buffer = {};
         Vector<Rc<VertexBuffer>> m_vertex_buffers = {};
     };
-}
-
+} // namespace Cobalt::Engine

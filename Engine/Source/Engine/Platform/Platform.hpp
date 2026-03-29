@@ -3,11 +3,10 @@
 
 #pragma once
 
-#include "Engine/Platform/Window.hpp"
-
 namespace Cobalt::Engine::Platform
 {
-    auto initialize() -> void;
-    auto opengl_init() -> void;
+    auto sdl3_init() -> bool;
+    auto opengl_init() -> bool;
     auto destroy() -> void;
-}
+} // namespace Cobalt::Engine::Platform
+

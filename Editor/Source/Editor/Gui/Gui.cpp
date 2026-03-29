@@ -5,12 +5,14 @@
 #include "Editor/Core/Project.hpp"
 #include "Engine/Platform/Window.hpp"
 
-#include <glad/gl.h>
-#include <backends/imgui_impl_sdl3.h>
-#include <backends/imgui_impl_opengl3.h>
-#include <imgui.h>
-#include <ImGuizmo.h>
 #include <SDL3/SDL.h>
+#include <backends/imgui_impl_opengl3.h>
+#include <backends/imgui_impl_sdl3.h>
+#include <glad/gl.h>
+#include <imgui.h>
+
+// IMPORTANT: Include ImGuizmo after imgui.h
+#include <ImGuizmo.h>
 
 namespace Cobalt::Editor
 {
@@ -68,4 +70,4 @@ namespace Cobalt::Editor
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
     }
-}
+} // namespace Cobalt::Editor

@@ -6,11 +6,11 @@
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Quad.hpp"
 #include "Engine/Graphics/Shader.hpp"
 #include "Engine/Graphics/VertexArray.hpp"
 #include "Engine/Graphics/VertexBuffer.hpp"
-#include "Engine/Graphics/Camera.hpp"
 
 namespace Cobalt::Engine
 {
@@ -39,4 +39,5 @@ namespace Cobalt::Engine
         QuadVertexData* m_vertex_buffer_ptr = nullptr;
         Vec<2, u32> m_viewport_size = {};
     };
-}
+} // namespace Cobalt::Engine
+

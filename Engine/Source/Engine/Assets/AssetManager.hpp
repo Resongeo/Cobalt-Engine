@@ -3,15 +3,17 @@
 
 #pragma once
 
-#include "Engine/Core/Types.hpp"
+#include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Types/UUID.hpp"
 
 namespace Cobalt::Engine
 {
     class AssetManager final
     {
     public:
-        template<typename T>
-        auto get(const UUID id) const -> Shared<T> {
+        template <typename T>
+        auto get(const UUID id) const -> Rc<T> {
             if (const auto it = m_loaded_assets.find(id); it != m_loaded_assets.end()) {
                 return std::static_pointer_cast<T>(it->second);
             }
@@ -20,6 +22,7 @@ namespace Cobalt::Engine
         }
 
     private:
-        HashMap<UUID, Shared<void>> m_loaded_assets;
+        HashMap<UUID, Rc<void>> m_loaded_assets;
     };
-}
+} // namespace Cobalt::Engine
+

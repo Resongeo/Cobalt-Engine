@@ -70,4 +70,4 @@ namespace Cobalt::Engine
     auto AttributeLayout::end() const -> Vector<Attribute>::const_iterator {
         return m_attributes.end();
     }
-}
+} // namespace Cobalt::Engine

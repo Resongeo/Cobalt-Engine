@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/ECS/Components/SpriteComponent.hpp"
 #include "Engine/ECS/Components/TagComponent.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
-#include "Engine/ECS/Components/SpriteComponent.hpp"
+

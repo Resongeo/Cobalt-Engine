@@ -17,4 +17,5 @@ namespace Cobalt::Editor
         static auto process_event(const SDL_Event* event) -> void;
         static auto end_frame() -> void;
     };
-}
+} // namespace Cobalt::Editor
+

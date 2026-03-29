@@ -19,4 +19,5 @@ namespace Cobalt::Engine
         Camera* m_camera = nullptr;
         Framebuffer* m_framebuffer = nullptr;
     };
-}
+} // namespace Cobalt::Engine
+

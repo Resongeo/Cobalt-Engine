@@ -5,8 +5,8 @@
 
 #ifdef PLATFORM_LINUX
 
-#include "Engine/Platform/Window.hpp"
 #include "Engine/Core/Logger.hpp"
+#include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
 
@@ -17,23 +17,16 @@ namespace Cobalt::Engine
 {
     SDL_GLContext gl_context = nullptr;
 
-    auto Window::initialize() -> void {
-        instance()._create();
+    auto Window::initialize() -> bool {
+        return instance()._create();
     }
 
     auto Window::_create() -> bool {
         const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
         constexpr auto window_flags =
-            SDL_WINDOW_OPENGL |
-            SDL_WINDOW_RESIZABLE |
-            SDL_WINDOW_HIDDEN |
-            SDL_WINDOW_HIGH_PIXEL_DENSITY;
-        m_handle = SDL_CreateWindow(
-            "Cobalt Engine",
-            static_cast<int>(WINDOW_WIDTH * main_scale),
-            static_cast<int>(WINDOW_HEIGHT * main_scale),
-            window_flags
-        );
+                SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+        m_handle = SDL_CreateWindow("Cobalt Engine", static_cast<int>(WINDOW_WIDTH * main_scale),
+                                    static_cast<int>(WINDOW_HEIGHT * main_scale), window_flags);
         if (m_handle == nullptr) {
             Logger::fatal("Engine::Platform::Window", "Failed to create window: {}", SDL_GetError());
             return false;
@@ -80,7 +73,6 @@ namespace Cobalt::Engine
         SDL_GL_DestroyContext(gl_context);
         SDL_DestroyWindow(instance().m_handle);
     }
-}
+} // namespace Cobalt::Engine
 
 #endif
-

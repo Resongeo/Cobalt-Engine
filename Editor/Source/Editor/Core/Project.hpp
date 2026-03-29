@@ -3,7 +3,8 @@
 
 #pragma once
 
-#include "Engine/Core/Types.hpp"
+#include "Engine/Core/Types/Base.hpp"
+#include "Engine/Core/Types/Containers.hpp"
 
 namespace Cobalt::Editor
 {
@@ -24,4 +25,5 @@ namespace Cobalt::Editor
         String m_name = {};
         String m_version = {};
     };
-}
+} // namespace Cobalt::Editor
+

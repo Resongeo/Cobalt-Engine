@@ -15,10 +15,8 @@ namespace Cobalt::Engine
     }
 
     auto SceneManager::create_default_scene() -> void {
-        const auto& default_scene = m_scenes.emplace_back(
-            Memory::make_box<Scene>("Default")
-        );
-        
+        const auto& default_scene = m_scenes.emplace_back(Memory::make_box<Scene>("Default"));
+
         auto entity = default_scene->create_entity("Entity");
         entity.add_component<SpriteComponent>();
 
@@ -67,4 +65,4 @@ namespace Cobalt::Engine
         static SceneManager instance;
         return instance;
     }
-}
+} // namespace Cobalt::Engine

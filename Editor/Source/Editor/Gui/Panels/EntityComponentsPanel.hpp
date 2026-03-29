@@ -12,4 +12,5 @@ namespace Cobalt::Editor
     public:
         auto draw(EditorState& state) -> void override;
     };
-}
+} // namespace Cobalt::Editor
+

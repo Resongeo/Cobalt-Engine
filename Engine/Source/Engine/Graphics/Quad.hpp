@@ -17,7 +17,7 @@ namespace Cobalt::Engine
     {
         Vec2 position;
         Vec4 color;
-        f32  texture_id;
+        f32 texture_id;
     };
 
     struct QuadDrawCommand
@@ -25,4 +25,5 @@ namespace Cobalt::Engine
         QuadInstanceData quad;
         i32 order;
     };
-}
+} // namespace Cobalt::Engine
+

@@ -15,10 +15,8 @@ namespace Cobalt::Engine
         const auto shaders_path = base_assets_path / "Shaders";
         const auto vertex_path = shaders_path / "DefaultQuad.vert";
         const auto fragment_path = shaders_path / "DefaultQuad.frag";
-        auto result = m_default_shader->create_from_file(
-            reinterpret_cast<const char*>(vertex_path.c_str()),
-            reinterpret_cast<const char*>(fragment_path.c_str())
-        );
+        auto result = m_default_shader->create_from_file(reinterpret_cast<const char*>(vertex_path.c_str()),
+                                                         reinterpret_cast<const char*>(fragment_path.c_str()));
         if (!result) {
             Logger::error("Engine::Shader", "Failed to create default quad shader.");
             result = m_default_shader->create_fallback();
@@ -58,8 +56,8 @@ namespace Cobalt::Engine
 
         auto attribute_layout = AttributeLayout();
         attribute_layout.create({
-            AttributeDataType::Float2, // a_Position
-            AttributeDataType::Float4, // a_Color
+                AttributeDataType::Float2, // a_Position
+                AttributeDataType::Float4, // a_Color
         });
 
         m_vertex_buffer->set_attribute_layout(attribute_layout);
@@ -91,27 +89,27 @@ namespace Cobalt::Engine
             _start_batch();
         }
 
-        const Vec2 offset{ scale.x * 0.5f, scale.y * 0.5f };
-        
-        m_vertex_buffer_ptr->position = { pos.x - offset.x, pos.y - offset.y };
+        const Vec2 offset{scale.x * 0.5f, scale.y * 0.5f};
+
+        m_vertex_buffer_ptr->position = {pos.x - offset.x, pos.y - offset.y};
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
 
-        m_vertex_buffer_ptr->position = { pos.x + offset.x, pos.y - offset.y };
+        m_vertex_buffer_ptr->position = {pos.x + offset.x, pos.y - offset.y};
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
 
-        m_vertex_buffer_ptr->position = { pos.x + offset.x, pos.y + offset.y };
+        m_vertex_buffer_ptr->position = {pos.x + offset.x, pos.y + offset.y};
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
 
-        m_vertex_buffer_ptr->position = { pos.x - offset.x, pos.y + offset.y };
+        m_vertex_buffer_ptr->position = {pos.x - offset.x, pos.y + offset.y};
         m_vertex_buffer_ptr->color = color;
         m_vertex_buffer_ptr++;
 
         m_quad_index_count += 6;
     }
-    
+
     auto Renderer::submit_quad(const Vec3& pos, const Vec2& scale, const f32 rotation, const Vec4& color) -> void {
         if (_is_batch_full()) {
             _flush_batch();
@@ -119,20 +117,19 @@ namespace Cobalt::Engine
         }
 
         static Vec4 vertex_positions[4] = {
-            {-0.5, -0.5, 0.0, 1.0},
-            { 0.5, -0.5, 0.0, 1.0},
-            { 0.5,  0.5, 0.0, 1.0},
-            {-0.5,  0.5, 0.0, 1.0},
+                {-0.5, -0.5, 0.0, 1.0},
+                {0.5, -0.5, 0.0, 1.0},
+                {0.5, 0.5, 0.0, 1.0},
+                {-0.5, 0.5, 0.0, 1.0},
         };
 
-        const auto transform = glm::translate(Mat4(1), pos)
-            * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1})
-            * glm::scale(Mat4(1), {scale.x, scale.y, 1});
+        const auto transform = glm::translate(Mat4(1), pos) * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1}) *
+                glm::scale(Mat4(1), {scale.x, scale.y, 1});
 
         for (auto i = 0; i < 4; i++) {
             m_vertex_buffer_ptr->position = transform * vertex_positions[i];
             m_vertex_buffer_ptr->color = color;
-            m_vertex_buffer_ptr++;    
+            m_vertex_buffer_ptr++;
         }
 
         m_quad_index_count += 6;
@@ -147,8 +144,9 @@ namespace Cobalt::Engine
     }
 
     auto Renderer::_flush_batch() const -> void {
-        const u32 data_size = reinterpret_cast<uint8_t*>(m_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(m_vertex_buffer_base);
-		m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
+        const u32 data_size =
+                reinterpret_cast<uint8_t*>(m_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(m_vertex_buffer_base);
+        m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
 
         const u32 count = m_quad_index_count == 0 ? m_vertex_array->index_buffer()->count() : m_quad_index_count;
 
@@ -163,4 +161,4 @@ namespace Cobalt::Engine
         m_quad_index_count = 0;
         m_vertex_buffer_ptr = m_vertex_buffer_base;
     }
-}
+} // namespace Cobalt::Engine

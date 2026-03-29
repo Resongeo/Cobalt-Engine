@@ -6,8 +6,7 @@
 
 namespace Cobalt::Engine
 {
-    Scene::Scene(const String& name)
-        : m_name(name) {}
+    Scene::Scene(const String& name) : m_name(name) {}
 
     auto Scene::name() -> String& {
         return m_name;
@@ -16,7 +15,7 @@ namespace Cobalt::Engine
     auto Scene::registry() -> entt::registry& {
         return m_registry;
     }
-    
+
     auto Scene::create_entity(const String& name) -> Entity {
         const auto id = m_registry.create();
         auto entity = Entity(id, &m_registry);
@@ -26,7 +25,7 @@ namespace Cobalt::Engine
 
         return entity;
     }
-    
+
     auto Scene::create_entity(const String& name, const UUID uuid) -> Entity {
         const auto id = m_registry.create();
         auto entity = Entity(id, &m_registry);
@@ -41,4 +40,4 @@ namespace Cobalt::Engine
         const auto id = m_registry.create();
         return Entity(id, &m_registry);
     }
-}
+} // namespace Cobalt::Engine

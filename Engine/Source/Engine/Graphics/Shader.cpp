@@ -64,8 +64,7 @@ namespace Cobalt::Engine
         glShaderSource(vertex_shader, 1, &vertex_c_str, nullptr);
         glCompileShader(vertex_shader);
         glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &is_compiled);
-        if (is_compiled == GL_FALSE)
-        {
+        if (is_compiled == GL_FALSE) {
             GLint max_length = 0;
             glGetShaderiv(vertex_shader, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -83,8 +82,7 @@ namespace Cobalt::Engine
         glShaderSource(fragment_shader, 1, &fragment_c_str, nullptr);
         glCompileShader(fragment_shader);
         glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &is_compiled);
-        if (is_compiled == GL_FALSE)
-        {
+        if (is_compiled == GL_FALSE) {
             GLint max_length = 0;
             glGetShaderiv(fragment_shader, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -104,8 +102,7 @@ namespace Cobalt::Engine
 
         GLint is_linked = 0;
         glGetProgramiv(m_renderer_id, GL_LINK_STATUS, &is_linked);
-        if (is_linked == GL_FALSE)
-        {
+        if (is_linked == GL_FALSE) {
             GLint max_length = 0;
             glGetProgramiv(m_renderer_id, GL_INFO_LOG_LENGTH, &max_length);
 
@@ -141,4 +138,4 @@ namespace Cobalt::Engine
 
         return location;
     }
-}
+} // namespace Cobalt::Engine

@@ -27,4 +27,5 @@ namespace Cobalt::Engine
         u32 m_renderer_id = 0;
         AttributeLayout m_attribute_layout = {};
     };
-}
+} // namespace Cobalt::Engine
+

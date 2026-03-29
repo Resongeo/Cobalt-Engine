@@ -11,4 +11,5 @@ namespace Cobalt::Engine
     {
         Color tint;
     };
-}
+} // namespace Cobalt::Engine
+

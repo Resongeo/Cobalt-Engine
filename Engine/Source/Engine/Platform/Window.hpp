@@ -4,16 +4,14 @@
 #pragma once
 
 #include "Engine/Core/Types/Math.hpp"
-
-struct SDL_Window;
-struct SDL_GLContextState;
+#include "Engine/Platform/Fwd.hpp"
 
 namespace Cobalt::Engine
 {
     class Window final
     {
     public:
-        static auto initialize() -> void;
+        static auto initialize() -> bool;
         static auto instance() -> Window&;
         static auto destroy() -> void;
 
@@ -29,4 +27,4 @@ namespace Cobalt::Engine
     private:
         SDL_Window* m_handle = nullptr;
     };
-}
+} // namespace Cobalt::Engine

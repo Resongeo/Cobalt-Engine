@@ -42,4 +42,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-}
+} // namespace Cobalt::Editor

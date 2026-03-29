@@ -3,12 +3,12 @@
 
 #pragma once
 
+#include <filesystem>
+#include <initializer_list>
 #include <string>
 #include <string_view>
-#include <vector>
-#include <filesystem>
 #include <unordered_map>
-#include <initializer_list>
+#include <vector>
 
 namespace Cobalt
 {
@@ -16,12 +16,13 @@ namespace Cobalt
     using StringView = std::string_view;
     using Filepath = std::filesystem::path;
 
-    template<typename T>
+    template <typename T>
     using Vector = std::vector<T>;
 
-    template<typename T>
+    template <typename T>
     using InitializerList = std::initializer_list<T>;
 
-    template<typename K, typename V>
+    template <typename K, typename V>
     using HashMap = std::unordered_map<K, V>;
-}
+} // namespace Cobalt
+

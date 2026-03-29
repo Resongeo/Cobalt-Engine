@@ -3,9 +3,9 @@
 
 #pragma once
 
-#include "Engine/Scene/Scene.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
+#include "Engine/Scene/Scene.hpp"
 
 #include <entt/entity/entity.hpp>
 
@@ -18,4 +18,5 @@ namespace Cobalt::Editor
         Engine::Camera editor_camera = {};
         Engine::Framebuffer framebuffer = {};
     };
-}
+} // namespace Cobalt::Editor
+

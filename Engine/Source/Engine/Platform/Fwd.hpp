@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2026 Somogyvári Benedek
 
-#include "Engine/Assets/AssetManager.hpp"
+#pragma once
 
-namespace Cobalt::Engine
-{}
-
+struct SDL_Window;
+struct SDL_GLContextState;

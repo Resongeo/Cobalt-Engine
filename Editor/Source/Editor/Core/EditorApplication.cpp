@@ -7,8 +7,6 @@
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
-#include "Engine/Core/Logger.hpp"
-#include "Engine/ECS/Components/TransformComponent.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Platform/Window.hpp"
@@ -19,9 +17,7 @@
 
 namespace Cobalt::Editor
 {
-    EditorApplication::EditorApplication(const i32 argc, char* argv[])
-        : m_argc(argc), m_argv(argv) {
-    }
+    EditorApplication::EditorApplication(const i32 argc, char* argv[]) : m_argc(argc), m_argv(argv) {}
 
     auto EditorApplication::on_begin() -> void {
         // TODO: Move project to Engine
@@ -33,17 +29,11 @@ namespace Cobalt::Editor
 
         m_renderer.init(3, Project::get_editor_assets_path());
 
-        m_state.framebuffer.create(
-            Vector{ Engine::FramebufferAttachmentType::RGBA8 },
-            Vec2(1600, 900),
-            1
-        );
+        m_state.framebuffer.create(Vector{Engine::FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
-        
+
         Engine::SceneManager::instance().add_system<Engine::EditorRenderSystem>(
-            Engine::Schedule::EditorUpdate,
-            &m_renderer, &m_state.editor_camera, &m_state.framebuffer
-        );
+                Engine::Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
 
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
         m_panels.emplace_back(Memory::make_box<SceneHierarchyPanel>());
@@ -64,12 +54,10 @@ namespace Cobalt::Editor
             ImGui::SetNextWindowPos(viewport->Pos);
             ImGui::SetNextWindowSize(viewport->Size);
             ImGui::SetNextWindowViewport(viewport->ID);
-            
-            constexpr auto dock_space_flags = 0
-                | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking
-                | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse
-                | ImGuiWindowFlags_NoResize   | ImGuiWindowFlags_NoMove
-                | ImGuiWindowFlags_NoBringToFrontOnFocus;
+
+            constexpr auto dock_space_flags = 0 | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking |
+                    ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
             ImGui::Begin("ViewsDockSpace", nullptr, dock_space_flags);
             {
@@ -77,17 +65,17 @@ namespace Cobalt::Editor
                 ImGui::DockSpace(dock_space_id);
             }
             ImGui::End();
-            
+
             m_state.active_scene = active_scene;
-            
+
             for (const auto& panel : m_panels) {
                 panel->draw(m_state);
             }
         }
-        
+
         Gui::end_frame();
     }
 
-    auto EditorApplication::on_end() -> void {
-    }
-}
+    auto EditorApplication::on_end() -> void {}
+} // namespace Cobalt::Editor
+

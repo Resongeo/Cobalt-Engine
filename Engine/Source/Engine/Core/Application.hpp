@@ -12,7 +12,7 @@ namespace Cobalt::Engine
     class Application
     {
     public:
-        virtual ~Application() = default;
+        virtual ~Application();
 
         auto run() -> void;
 
@@ -22,7 +22,7 @@ namespace Cobalt::Engine
         virtual auto on_end() -> void {}
 
     private:
-        auto _initialize() const -> void;
+        auto _initialize() const -> bool;
         auto _main_loop() -> void;
         auto _cleanup() const -> void;
 
@@ -30,4 +30,4 @@ namespace Cobalt::Engine
         SceneManager m_scene_manager;
         bool m_close_requested = false;
     };
-}
+} // namespace Cobalt::Engine

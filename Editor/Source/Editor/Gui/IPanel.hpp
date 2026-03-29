@@ -13,4 +13,5 @@ namespace Cobalt::Editor
         virtual ~IPanel() = default;
         virtual auto draw(EditorState& state) -> void = 0;
     };
-}
+} // namespace Cobalt::Editor
+

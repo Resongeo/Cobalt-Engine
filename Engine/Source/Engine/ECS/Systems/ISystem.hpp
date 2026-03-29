@@ -13,4 +13,5 @@ namespace Cobalt::Engine
         virtual ~ISystem() = default;
         virtual auto update(entt::registry& registry) -> void {}
     };
-}
+} // namespace Cobalt::Engine
+
