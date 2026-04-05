@@ -48,7 +48,6 @@ cmake --build build
 ## Dependencies
 - [EnTT](https://github.com/skypjack/entt) - Fast and reliable ECS
 - [Glad](https://github.com/Dav1dde/glad) - OpenGL function loader
-- [Glfw](https://github.com/glfw/glfw) - Cross-platform library for window creation, input, and context management
 - [Glm](https://github.com/g-truc/glm) - Mathematics library for graphics applications
 - [Dear ImGui](https://github.com/ocornut/imgui) - Immediate-mode GUI library for the editor
 - [Toml++](https://github.com/marzer/tomlplusplus) - TOML config parser and serializer
