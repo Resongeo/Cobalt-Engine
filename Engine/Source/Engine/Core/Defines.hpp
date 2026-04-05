@@ -10,3 +10,9 @@
 #ifdef __linux__
 #define PLATFORM_LINUX
 #endif
+
+#if defined(CONFIG_DEBUG)
+#define CONFIGURATION_DEBUG
+#else
+#define CONFIGURATION_RELEASE
+#endif

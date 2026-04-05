@@ -2,8 +2,8 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
+#include "Engine/Core/EntryPoint.hpp"
 
-auto main(const int argc, char* argv[]) -> int {
-    auto app = Cobalt::Editor::EditorApplication(argc, argv);
-    app.run();
+auto Cobalt::create_application(CommandLineArgs args) -> Box<Engine::Application> {
+    return Memory::make_box<Editor::EditorApplication>(args.count, args.args);
 }
