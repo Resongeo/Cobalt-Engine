@@ -14,6 +14,7 @@ add_subdirectory(Vendor/TOML)
 add_subdirectory(Vendor/CATCH2)
 add_subdirectory(Vendor/ENTT)
 add_subdirectory(Vendor/GLM)
+add_subdirectory(Vendor/EASTL)
 file(GLOB IMGUI_SOURCES
 	"Vendor/IMGUI/*.cpp"
 	"Vendor/IMGUI/*.h"

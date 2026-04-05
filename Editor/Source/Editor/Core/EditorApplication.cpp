@@ -77,4 +77,4 @@ namespace Cobalt::Engine
     }
 
     auto EditorApplication::on_end() -> void {}
-} // namespace Cobalt::Editor
+} // namespace Cobalt::Engine

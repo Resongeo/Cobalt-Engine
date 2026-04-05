@@ -3,12 +3,11 @@
 
 #pragma once
 
+#include <EASTL/initializer_list.h>
+#include <EASTL/string.h>
+#include <EASTL/unordered_map.h>
+#include <EASTL/vector.h>
 #include <filesystem>
-#include <initializer_list>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <vector>
 
 namespace Cobalt
 {
@@ -17,12 +16,11 @@ namespace Cobalt
     using Filepath = std::filesystem::path;
 
     template <typename T>
-    using Vector = std::vector<T>;
+    using Vector = eastl::vector<T>;
 
     template <typename T>
     using InitializerList = std::initializer_list<T>;
 
     template <typename K, typename V>
-    using HashMap = std::unordered_map<K, V>;
+    using HashMap = eastl::unordered_map<K, V>;
 } // namespace Cobalt
-
