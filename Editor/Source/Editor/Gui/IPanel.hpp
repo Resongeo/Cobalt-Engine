@@ -5,7 +5,7 @@
 
 #include "Editor/Core/EditorState.hpp"
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     class IPanel
     {

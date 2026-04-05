@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
-#include "Editor/Core/Project.hpp"
+#include "../../../../Engine/Source/Engine/Core/Project.hpp"
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
@@ -15,7 +15,7 @@
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     EditorApplication::EditorApplication(const Engine::CommandLineArgs args) : m_args(args) {}
 

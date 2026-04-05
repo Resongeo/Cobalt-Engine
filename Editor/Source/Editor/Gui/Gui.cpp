@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
-#include "Editor/Core/Project.hpp"
+#include "../../../../Engine/Source/Engine/Core/Project.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
@@ -14,7 +14,7 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     auto Gui::init(const Engine::Window& window) -> void {
         IMGUI_CHECKVERSION();

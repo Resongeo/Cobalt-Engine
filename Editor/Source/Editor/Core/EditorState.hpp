@@ -9,7 +9,7 @@
 
 #include <entt/entity/entity.hpp>
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     struct EditorState
     {

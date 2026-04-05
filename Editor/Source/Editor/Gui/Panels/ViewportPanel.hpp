@@ -5,7 +5,7 @@
 
 #include "Editor/Gui/IPanel.hpp"
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     class ViewportPanel final : public IPanel
     {

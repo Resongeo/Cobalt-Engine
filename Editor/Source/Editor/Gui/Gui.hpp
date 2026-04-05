@@ -7,7 +7,7 @@
 
 union SDL_Event;
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     class Gui final
     {

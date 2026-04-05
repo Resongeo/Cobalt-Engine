@@ -10,7 +10,7 @@
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     class EditorApplication final : public Engine::Application
     {

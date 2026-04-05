@@ -2,8 +2,8 @@ add_executable(Editor
 	Source/Editor/main.cpp
 	Source/Editor/Core/EditorApplication.cpp
 	Source/Editor/Core/EditorApplication.hpp
-	Source/Editor/Core/Project.cpp
-	Source/Editor/Core/Project.hpp
+	../Engine/Source/Engine/Core/Project.cpp
+	../Engine/Source/Engine/Core/Project.hpp
 	Source/Editor/Gui/ImGuiBuild.cpp
 	Source/Editor/Gui/Gui.cpp
 	Source/Editor/Gui/Gui.hpp

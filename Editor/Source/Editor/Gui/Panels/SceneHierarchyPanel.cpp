@@ -7,7 +7,7 @@
 
 #include <imgui.h>
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     auto SceneHierarchyPanel::draw(EditorState& state) -> void {
         ImGui::Begin("Scene Hierarchy");

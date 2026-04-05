@@ -12,7 +12,7 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-namespace Cobalt::Editor
+namespace Cobalt::Engine
 {
     auto ViewportPanel::draw(EditorState& state) -> void {
         ImGui::Begin("Viewport");
