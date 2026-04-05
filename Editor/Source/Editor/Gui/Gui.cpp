@@ -43,7 +43,8 @@ namespace Cobalt::Editor
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
         const auto layout_ini = Project::get_editor_assets_path() / "Editor" / "Settings" / "DefaultLayout.ini";
-        io.IniFilename = layout_ini.c_str();
+        const auto layout_init_str = layout_ini.string();
+        io.IniFilename = layout_init_str.c_str();
 
         ImGui::NewFrame();
         ImGuizmo::BeginFrame();

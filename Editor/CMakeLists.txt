@@ -41,3 +41,10 @@ add_custom_command(TARGET Editor POST_BUILD
     "${CMAKE_SOURCE_DIR}/Engine/Assets"
     "${CMAKE_BINARY_DIR}/Editor/Assets"
 )
+
+# -- Copy SDL3 dynamic library to Editor build output --
+add_custom_command(TARGET Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy
+    "${CMAKE_BINARY_DIR}/Vendor/SDL/SDL3.dll"
+    "${CMAKE_BINARY_DIR}/Editor"
+)

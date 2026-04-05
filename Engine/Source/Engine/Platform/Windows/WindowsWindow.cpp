@@ -17,7 +17,11 @@ namespace Cobalt::Engine
 {
     SDL_GLContext gl_context = nullptr;
 
-    auto Window::create() -> bool {
+    auto Window::initialize() -> bool {
+        return instance()._create();
+    }
+
+    auto Window::_create() -> bool {
         const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
         constexpr auto window_flags =
                 SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
@@ -46,19 +50,28 @@ namespace Cobalt::Engine
         SDL_GL_SwapWindow(m_handle);
     }
 
-    auto Window::destroy() const -> void {
-        SDL_GL_DestroyContext(gl_context);
-        SDL_DestroyWindow(m_handle);
-    }
-
-    auto Window::handle() const -> SDL_Window* {
+    auto Window::get_handle() const -> SDL_Window* {
         return m_handle;
     }
 
-    auto Window::size() const -> Vec<2, i32> {
+    auto Window::get_gl_context() const -> SDL_GLContextState* {
+        return gl_context;
+    }
+
+    auto Window::get_size() const -> Vec<2, i32> {
         i32 width, height = 0;
         SDL_GetWindowSize(m_handle, &width, &height);
         return {width, height};
+    }
+
+    auto Window::instance() -> Window& {
+        static Window instance;
+        return instance;
+    }
+
+    auto Window::destroy() -> void {
+        SDL_GL_DestroyContext(gl_context);
+        SDL_DestroyWindow(instance().m_handle);
     }
 } // namespace Cobalt::Engine
 
