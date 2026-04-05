@@ -17,12 +17,12 @@
 
 namespace Cobalt::Editor
 {
-    EditorApplication::EditorApplication(const i32 argc, char* argv[]) : m_argc(argc), m_argv(argv) {}
+    EditorApplication::EditorApplication(const Engine::CommandLineArgs args) : m_args(args) {}
 
     auto EditorApplication::on_begin() -> void {
         // TODO: Move project to Engine
         Project::init();
-        Project::parse(m_argc, m_argv);
+        Project::parse(m_args);
         Gui::init(Engine::Window::instance());
 
         Engine::SceneManager::instance().create_default_scene();
@@ -78,4 +78,3 @@ namespace Cobalt::Editor
 
     auto EditorApplication::on_end() -> void {}
 } // namespace Cobalt::Editor
-

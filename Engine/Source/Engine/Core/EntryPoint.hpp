@@ -4,18 +4,13 @@
 #pragma once
 
 #include "Engine/Core/Application.hpp"
+#include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Core/Defines.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 
 namespace Cobalt
 {
-    struct CommandLineArgs
-    {
-        int count;
-        char** args;
-    };
-
-    extern auto create_application(CommandLineArgs args) -> Box<Engine::Application>;
+    extern auto create_application(Engine::CommandLineArgs args) -> Box<Engine::Application>;
 } // namespace Cobalt
 
 #if defined(PLATFORM_WINDOWS) && defined(CONFIGURATION_RELEASE)

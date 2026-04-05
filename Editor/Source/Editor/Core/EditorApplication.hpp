@@ -6,6 +6,7 @@
 #include "Editor/Core/EditorState.hpp"
 #include "Editor/Gui/IPanel.hpp"
 #include "Engine/Core/Application.hpp"
+#include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
@@ -14,7 +15,7 @@ namespace Cobalt::Editor
     class EditorApplication final : public Engine::Application
     {
     public:
-        EditorApplication(i32 argc, char* argv[]);
+        EditorApplication(Engine::CommandLineArgs args);
 
         auto on_begin() -> void override;
         auto on_event(SDL_Event* event) -> void override;
@@ -26,8 +27,6 @@ namespace Cobalt::Editor
         Engine::Camera m_camera = {};
         EditorState m_state = {};
         Vector<Box<IPanel>> m_panels = {};
-        int m_argc = {};
-        char** m_argv = {};
+        Engine::CommandLineArgs m_args = {};
     };
 } // namespace Cobalt::Editor
-

@@ -15,8 +15,8 @@ namespace Cobalt::Editor
         s_instance = new Project();
     }
 
-    auto Project::parse(const i32 argc, char* argv[]) -> void {
-        s_instance->m_args = Vector<String>(argv, argv + argc);
+    auto Project::parse(const Engine::CommandLineArgs& cli_args) -> void {
+        s_instance->m_args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
         auto& args = s_instance->m_args;
         auto& name = s_instance->m_name;
         auto& version = s_instance->m_version;

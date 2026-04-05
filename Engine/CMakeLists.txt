@@ -50,6 +50,7 @@ add_library(Engine STATIC
 	Source/Engine/ECS/Entity.hpp
 	Source/Engine/ECS/Components/Minimal.hpp
 	Source/Engine/Core/EntryPoint.hpp
+	Source/Engine/Core/CommandLineArgs.hpp
 )
 
 target_link_libraries(Engine PUBLIC
