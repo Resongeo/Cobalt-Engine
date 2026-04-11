@@ -52,6 +52,15 @@ add_library(Engine STATIC
 	Source/Engine/Core/EntryPoint.hpp
 	Source/Engine/Core/CommandLineArgs.hpp
 	Source/Engine/Core/EASTLConfig.cpp
+	Source/Engine/Events/EventType.hpp
+	Source/Engine/Events/IEvent.hpp
+	Source/Engine/Events/Dispatcher.hpp
+	Source/Engine/Events/ApplicationEvents.hpp
+	Source/Engine/Events/WindowEvents.hpp
+	Source/Engine/Events/KeyboardEvents.hpp
+	Source/Engine/Events/MouseEvents.hpp
+	Source/Engine/Events/GamepadEvents.hpp
+	Source/Engine/Events/DropEvents.hpp
 )
 
 target_link_libraries(Engine PUBLIC

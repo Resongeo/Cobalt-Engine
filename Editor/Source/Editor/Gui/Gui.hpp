@@ -7,7 +7,7 @@
 
 union SDL_Event;
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     class Gui final
     {
@@ -18,4 +18,3 @@ namespace Cobalt::Engine
         static auto end_frame() -> void;
     };
 } // namespace Cobalt::Editor
-

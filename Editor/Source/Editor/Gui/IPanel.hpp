@@ -5,7 +5,7 @@
 
 #include "Editor/Core/EditorState.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     class IPanel
     {
@@ -14,4 +14,3 @@ namespace Cobalt::Engine
         virtual auto draw(EditorState& state) -> void = 0;
     };
 } // namespace Cobalt::Editor
-

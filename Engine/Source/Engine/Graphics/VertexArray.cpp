@@ -9,7 +9,7 @@
 namespace Cobalt::Engine
 {
     VertexArray::~VertexArray() {
-        Logger::trace("vertex array", "Deleting ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::VertexArray", "Deleting ID: {}", m_renderer_id);
         glDeleteVertexArrays(1, &m_renderer_id);
         m_renderer_id = 0;
     }
@@ -17,7 +17,7 @@ namespace Cobalt::Engine
     auto VertexArray::create() -> void {
         glGenVertexArrays(1, &m_renderer_id);
         bind();
-        Logger::trace("vertex array", "Created ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::VertexArray", "Created ID: {}", m_renderer_id);
     }
 
     auto VertexArray::bind() const -> void {

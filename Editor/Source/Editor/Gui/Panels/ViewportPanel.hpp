@@ -5,7 +5,7 @@
 
 #include "Editor/Gui/IPanel.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     class ViewportPanel final : public IPanel
     {
@@ -13,4 +13,3 @@ namespace Cobalt::Engine
         auto draw(EditorState& state) -> void override;
     };
 } // namespace Cobalt::Editor
-

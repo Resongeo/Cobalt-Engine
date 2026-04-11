@@ -18,7 +18,7 @@ namespace Cobalt::Engine
         auto name() -> String&;
         auto registry() -> entt::registry&;
         auto create_entity(const String& name) -> Entity;
-        auto create_entity(const String& name, const UUID uuid) -> Entity;
+        auto create_entity(const String& name, UUID uuid) -> Entity;
         auto create_empty_entity() -> Entity;
 
     private:
@@ -26,4 +26,3 @@ namespace Cobalt::Engine
         entt::registry m_registry = {};
     };
 } // namespace Cobalt::Engine
-

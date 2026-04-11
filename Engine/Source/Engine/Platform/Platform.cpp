@@ -43,46 +43,24 @@ namespace Cobalt::Engine
 
                         auto src = String{};
                         switch (source) {
-                            case GL_DEBUG_SOURCE_API_ARB:
-                                src = "API";
-                                break;
-                            case GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB:
-                                src = "WindowSys";
-                                break;
-                            case GL_DEBUG_SOURCE_SHADER_COMPILER_ARB:
-                                src = "ShaderCompiler";
-                                break;
-                            case GL_DEBUG_SOURCE_THIRD_PARTY_ARB:
-                                src = "ThirdParty";
-                                break;
-                            case GL_DEBUG_SOURCE_APPLICATION_ARB:
-                                src = "Application";
-                                break;
-                            case GL_DEBUG_SOURCE_OTHER_ARB:
-                                src = "Other";
-                                break;
-                            default:
-                                src = "NONE";
-                                break;
+                            case GL_DEBUG_SOURCE_API_ARB: src = "API"; break;
+                            case GL_DEBUG_SOURCE_WINDOW_SYSTEM_ARB: src = "WindowSys"; break;
+                            case GL_DEBUG_SOURCE_SHADER_COMPILER_ARB: src = "ShaderCompiler"; break;
+                            case GL_DEBUG_SOURCE_THIRD_PARTY_ARB: src = "ThirdParty"; break;
+                            case GL_DEBUG_SOURCE_APPLICATION_ARB: src = "Application"; break;
+                            case GL_DEBUG_SOURCE_OTHER_ARB: src = "Other"; break;
+                            default: src = "NONE"; break;
                         }
 
                         auto sev = String{};
                         switch (severity) {
-                            case GL_DEBUG_SEVERITY_HIGH_ARB:
-                                sev = "HIGH";
-                                break;
-                            case GL_DEBUG_SEVERITY_MEDIUM_ARB:
-                                sev = "MEDIUM";
-                                break;
-                            case GL_DEBUG_SEVERITY_LOW_ARB:
-                                sev = "LOW";
-                                break;
-                            default:
-                                sev = "NONE";
-                                break;
+                            case GL_DEBUG_SEVERITY_HIGH_ARB: sev = "HIGH"; break;
+                            case GL_DEBUG_SEVERITY_MEDIUM_ARB: sev = "MEDIUM"; break;
+                            case GL_DEBUG_SEVERITY_LOW_ARB: sev = "LOW"; break;
+                            default: sev = "NONE"; break;
                         }
 
-                        Logger::trace("OpenGL", "[src={} | sev={}] {}", src, sev, message);
+                        Logger::trace("Engine::Platform::OpenGL", "[src={} | sev={}] {}", src, sev, message);
                     },
                     nullptr);
         }

@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
-#include "../../../../Engine/Source/Engine/Core/Project.hpp"
+#include "Engine/Core/Project.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
@@ -14,7 +14,7 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     auto Gui::init(const Engine::Window& window) -> void {
         IMGUI_CHECKVERSION();
@@ -42,7 +42,7 @@ namespace Cobalt::Engine
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini = Project::get_editor_assets_path() / "Editor" / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini = Engine::Project::get_editor_assets_path() / "Editor" / "Settings" / "DefaultLayout.ini";
         const auto layout_init_str = layout_ini.string();
         io.IniFilename = layout_init_str.c_str();
 

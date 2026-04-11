@@ -123,7 +123,7 @@ namespace Cobalt::Engine
         glDeleteShader(vertex_shader);
         glDeleteShader(fragment_shader);
 
-        Logger::trace("shader", "Created ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::Shader", "Created ID: {}", m_renderer_id);
 
         return true;
     }

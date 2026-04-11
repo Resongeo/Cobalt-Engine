@@ -10,17 +10,16 @@
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     class EditorApplication final : public Engine::Application
     {
     public:
-        EditorApplication(Engine::CommandLineArgs args);
+        explicit EditorApplication(Engine::CommandLineArgs args);
 
         auto on_begin() -> void override;
-        auto on_event(SDL_Event* event) -> void override;
+        auto on_sdl_event(SDL_Event* event) -> void override;
         auto on_update() -> void override;
-        auto on_end() -> void override;
 
     private:
         Engine::Renderer m_renderer = {};

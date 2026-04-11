@@ -72,7 +72,7 @@ namespace Cobalt::Engine
         m_attachment_ids.resize(m_attachment_types.size());
         _create();
 
-        Logger::trace("framebuffer", "Created ID: {} Attachment count: {} Size {}x{}", m_renderer_id,
+        Logger::trace("Engine::Graphics::Framebuffer", "Created ID: {} Attachment count: {} Size {}x{}", m_renderer_id,
                       m_attachment_types.size(), m_size.x, m_size.y);
     }
 

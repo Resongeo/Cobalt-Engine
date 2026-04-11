@@ -5,5 +5,5 @@
 #include "Engine/Core/EntryPoint.hpp"
 
 auto Cobalt::create_application(Engine::CommandLineArgs args) -> Box<Engine::Application> {
-    return Memory::make_box<Engine::EditorApplication>(args);
+    return Memory::make_box<Editor::EditorApplication>(args);
 }

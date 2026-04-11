@@ -9,7 +9,7 @@
 namespace Cobalt::Engine
 {
     IndexBuffer::~IndexBuffer() {
-        Logger::trace("index buffer", "Deleting ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::IndexBuffer", "Deleting ID: {}", m_renderer_id);
         glDeleteBuffers(1, &m_renderer_id);
         m_renderer_id = 0;
     }
@@ -28,7 +28,7 @@ namespace Cobalt::Engine
         glGenBuffers(1, &m_renderer_id);
         bind();
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_count * sizeof(u32), indices, GL_STATIC_DRAW);
-        Logger::trace("index buffer", "Created ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::IndexBuffer", "Created ID: {}", m_renderer_id);
     }
 
     auto IndexBuffer::count() const -> u32 {

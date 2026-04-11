@@ -2,11 +2,11 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Core/EditorApplication.hpp"
-#include "../../../../Engine/Source/Engine/Core/Project.hpp"
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
+#include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Platform/Window.hpp"
@@ -15,19 +15,19 @@
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     EditorApplication::EditorApplication(const Engine::CommandLineArgs args) : m_args(args) {}
 
     auto EditorApplication::on_begin() -> void {
         // TODO: Move project to Engine
-        Project::init();
-        Project::parse(m_args);
+        Engine::Project::init();
+        Engine::Project::parse(m_args);
         Gui::init(Engine::Window::instance());
 
         Engine::SceneManager::instance().create_default_scene();
 
-        m_renderer.init(3, Project::get_editor_assets_path());
+        m_renderer.init(3, Engine::Project::get_editor_assets_path());
 
         m_state.framebuffer.create(Vector{Engine::FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
@@ -40,7 +40,7 @@ namespace Cobalt::Engine
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
     }
 
-    void EditorApplication::on_event(SDL_Event* event) {
+    void EditorApplication::on_sdl_event(SDL_Event* event) {
         Gui::process_event(event);
     }
 
@@ -75,6 +75,4 @@ namespace Cobalt::Engine
 
         Gui::end_frame();
     }
-
-    auto EditorApplication::on_end() -> void {}
-} // namespace Cobalt::Engine
+} // namespace Cobalt::Editor

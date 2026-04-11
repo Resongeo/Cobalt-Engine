@@ -9,7 +9,7 @@
 
 #include <entt/entity/entity.hpp>
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     struct EditorState
     {
@@ -19,4 +19,3 @@ namespace Cobalt::Engine
         Engine::Framebuffer framebuffer = {};
     };
 } // namespace Cobalt::Editor
-

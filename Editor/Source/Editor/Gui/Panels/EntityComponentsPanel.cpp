@@ -7,7 +7,7 @@
 
 #include <imgui.h>
 
-namespace Cobalt::Engine
+namespace Cobalt::Editor
 {
     auto EntityComponentsPanel::draw(EditorState& state) -> void {
         ImGui::Begin("Components");

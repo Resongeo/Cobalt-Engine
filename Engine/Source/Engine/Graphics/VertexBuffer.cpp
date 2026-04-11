@@ -9,7 +9,7 @@
 namespace Cobalt::Engine
 {
     VertexBuffer::~VertexBuffer() {
-        Logger::trace("vertex buffer", "Deleting ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::VertexBuffer", "Deleting ID: {}", m_renderer_id);
         glDeleteBuffers(1, &m_renderer_id);
         m_renderer_id = 0;
     }
@@ -18,14 +18,14 @@ namespace Cobalt::Engine
         glGenBuffers(1, &m_renderer_id);
         bind();
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
-        Logger::trace("vertex buffer", "Created ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::VertexBuffer", "Created ID: {}", m_renderer_id);
     }
 
     auto VertexBuffer::create_dynamic(const u32 size) -> void {
         glGenBuffers(1, &m_renderer_id);
         bind();
         glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
-        Logger::trace("vertex buffer", "Created ID: {}", m_renderer_id);
+        Logger::trace("Engine::Graphics::VertexBuffer", "Created ID: {}", m_renderer_id);
     }
 
     auto VertexBuffer::set_attribute_layout(const AttributeLayout& layout) -> void {
