@@ -61,6 +61,8 @@ add_library(Engine STATIC
 	Source/Engine/Events/MouseEvents.hpp
 	Source/Engine/Events/GamepadEvents.hpp
 	Source/Engine/Events/DropEvents.hpp
+	Source/Engine/Core/Project.cpp
+	Source/Engine/Core/Project.hpp
 )
 
 target_link_libraries(Engine PUBLIC
@@ -68,6 +70,7 @@ target_link_libraries(Engine PUBLIC
 	EnTT::EnTT
 	SDL3::SDL3
 	EASTL
+	tomlplusplus::tomlplusplus
 )
 
 target_include_directories(Engine PUBLIC

@@ -2,8 +2,6 @@ add_executable(Editor
 	Source/Editor/main.cpp
 	Source/Editor/Core/EditorApplication.cpp
 	Source/Editor/Core/EditorApplication.hpp
-	../Engine/Source/Engine/Core/Project.cpp
-	../Engine/Source/Engine/Core/Project.hpp
 	Source/Editor/Gui/ImGuiBuild.cpp
 	Source/Editor/Gui/Gui.cpp
 	Source/Editor/Gui/Gui.hpp
@@ -21,7 +19,6 @@ target_link_libraries(Editor PRIVATE
 	Engine
 	imgui
 	imguizmo
-	tomlplusplus::tomlplusplus
 )
 
 target_include_directories(Editor PRIVATE
@@ -42,17 +39,17 @@ add_custom_command(TARGET Editor POST_BUILD
 
 # -- Copy SDL3 dynamic library to Editor build output --
 if (WIN32)
-add_custom_command(TARGET Editor POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy
-	"${CMAKE_BINARY_DIR}/Vendor/SDL/SDL3.dll"
-	"${CMAKE_BINARY_DIR}/Editor"
-)
+	add_custom_command(TARGET Editor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+		"${CMAKE_BINARY_DIR}/Vendor/SDL/SDL3.dll"
+		"${CMAKE_BINARY_DIR}/Editor"
+	)
 endif ()
 
 if (UNIX)
-add_custom_command(TARGET Editor POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy
-	"${CMAKE_BINARY_DIR}/Vendor/SDL/libSDL3.so"
-	"${CMAKE_BINARY_DIR}/Editor"
-)
+	add_custom_command(TARGET Editor POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy
+		"${CMAKE_BINARY_DIR}/Vendor/SDL/libSDL3.so"
+		"${CMAKE_BINARY_DIR}/Editor"
+	)
 endif ()
