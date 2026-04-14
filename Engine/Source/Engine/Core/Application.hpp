@@ -8,7 +8,7 @@
 
 union SDL_Event;
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Application
     {
@@ -33,4 +33,4 @@ namespace Cobalt::Engine
         SceneManager m_scene_manager;
         bool m_close_requested = false;
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

@@ -4,7 +4,7 @@
 #include "Engine/Scene/SceneManager.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto SceneManager::get_scenes() -> Vector<Box<Scene>>& {
         return m_scenes;
@@ -65,4 +65,4 @@ namespace Cobalt::Engine
         static SceneManager instance;
         return instance;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

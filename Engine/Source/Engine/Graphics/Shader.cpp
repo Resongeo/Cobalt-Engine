@@ -7,7 +7,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto Shader::create_from_file(const char* vertex_path, const char* fragment_path) -> bool {
         if (!File::exists(vertex_path) || !File::exists(fragment_path)) {
@@ -138,4 +138,4 @@ namespace Cobalt::Engine
 
         return location;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

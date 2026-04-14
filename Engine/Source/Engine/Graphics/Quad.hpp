@@ -5,7 +5,7 @@
 
 #include "Engine/Core/Types/Math.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct QuadVertexData
     {
@@ -25,5 +25,4 @@ namespace Cobalt::Engine
         QuadInstanceData quad;
         i32 order;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

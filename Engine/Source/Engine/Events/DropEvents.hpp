@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Events/IEvent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class DropFileEvent : public IEvent
     {
@@ -46,7 +46,7 @@ namespace Cobalt::Engine
         explicit DropPositionEvent(const u32 x, const u32 y) : x(x), y(y) {}
         u32 x = 0;
         u32 y = 0;
-        
+
         EVENT_BUILDER(EventType::DropPosition)
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

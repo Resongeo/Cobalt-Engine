@@ -7,7 +7,7 @@
 
 #include <functional>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class EventDispatcher final
     {
@@ -21,4 +21,4 @@ namespace Cobalt::Engine
     };
 
 #define BIND(callback) std::bind(&callback, this, std::placeholders::_1)
-} // namespace Cobalt::Engine
+} // namespace Cobalt

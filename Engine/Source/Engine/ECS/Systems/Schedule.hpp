@@ -3,7 +3,7 @@
 
 #pragma once
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     enum class Schedule
     {
@@ -12,4 +12,3 @@ namespace Cobalt::Engine
         RuntimeUpdate,
     };
 }
-

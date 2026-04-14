@@ -12,7 +12,7 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     auto ViewportPanel::draw(EditorState& state) -> void {
         ImGui::Begin("Viewport");
@@ -72,8 +72,8 @@ namespace Cobalt::Editor
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(),
                                   ImGui::GetWindowHeight());
 
-                auto entity = Engine::Entity(state.selected_entity, &state.active_scene->registry());
-                auto& transform_component = entity.get_component<Engine::TransformComponent>();
+                auto entity = Entity(state.selected_entity, &state.active_scene->registry());
+                auto& transform_component = entity.get_component<TransformComponent>();
                 auto transform_matrix = transform_component.get_transform_matrix();
 
                 if (should_snap) {
@@ -115,4 +115,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-} // namespace Cobalt::Editor
+} // namespace Cobalt

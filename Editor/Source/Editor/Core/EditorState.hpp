@@ -9,13 +9,13 @@
 
 #include <entt/entity/entity.hpp>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     struct EditorState
     {
         entt::entity selected_entity = entt::null;
-        Engine::Scene* active_scene = nullptr;
-        Engine::Camera editor_camera = {};
-        Engine::Framebuffer framebuffer = {};
+        Scene* active_scene = nullptr;
+        Camera editor_camera = {};
+        Framebuffer framebuffer = {};
     };
-} // namespace Cobalt::Editor
+} // namespace Cobalt

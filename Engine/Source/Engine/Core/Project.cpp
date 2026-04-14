@@ -7,7 +7,7 @@
 #define TOML_EXCEPTIONS 0
 #include <toml++/toml.hpp>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     static Project* s_instance = nullptr;
 
@@ -86,4 +86,4 @@ namespace Cobalt::Engine
     auto Project::get_project_assets_path() -> Filepath {
         return s_instance->m_project_path / "Assets";
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

@@ -13,7 +13,7 @@
 constexpr int WINDOW_WIDTH = 1280;
 constexpr int WINDOW_HEIGHT = 720;
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     SDL_GLContext gl_context = nullptr;
 
@@ -73,6 +73,6 @@ namespace Cobalt::Engine
         SDL_GL_DestroyContext(gl_context);
         SDL_DestroyWindow(instance().m_handle);
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt
 
 #endif

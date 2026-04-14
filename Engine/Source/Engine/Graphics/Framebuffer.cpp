@@ -6,7 +6,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     namespace Utils
     {
@@ -184,4 +184,4 @@ namespace Cobalt::Engine
             }
         }
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

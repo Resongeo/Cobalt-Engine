@@ -5,11 +5,11 @@
 
 #include "Editor/Gui/IPanel.hpp"
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     class EntityComponentsPanel final : public IPanel
     {
     public:
         auto draw(EditorState& state) -> void override;
     };
-} // namespace Cobalt::Editor
+} // namespace Cobalt

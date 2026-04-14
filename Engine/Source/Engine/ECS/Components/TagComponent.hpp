@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/UUID.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct TagComponent
     {
@@ -19,5 +19,4 @@ namespace Cobalt::Engine
             uuid = UUID::generate();
         }
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

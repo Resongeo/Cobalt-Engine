@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Graphics/Attributes.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class VertexBuffer final
     {
@@ -27,5 +27,4 @@ namespace Cobalt::Engine
         u32 m_renderer_id = 0;
         AttributeLayout m_attribute_layout = {};
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

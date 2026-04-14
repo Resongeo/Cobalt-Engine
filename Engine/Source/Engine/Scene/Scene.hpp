@@ -7,7 +7,7 @@
 #include "Engine/Core/Types/UUID.hpp"
 #include "Engine/ECS/Entity.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Scene final
     {
@@ -25,4 +25,4 @@ namespace Cobalt::Engine
         String m_name = {};
         entt::registry m_registry = {};
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

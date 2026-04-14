@@ -9,7 +9,7 @@
 
 #include <SDL3/SDL.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto Platform::sdl3_init() -> bool {
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
@@ -76,4 +76,4 @@ namespace Cobalt::Engine
     auto Platform::destroy() -> void {
         SDL_Quit();
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

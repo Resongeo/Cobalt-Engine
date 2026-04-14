@@ -5,13 +5,13 @@
 
 #include "Engine/Events/EventType.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class IEvent
     {
     public:
         virtual ~IEvent() = default;
-        
+
         virtual auto type() const -> EventType = 0;
         virtual auto name() const -> const char* = 0;
     };
@@ -26,4 +26,4 @@ namespace Cobalt::Engine
     auto name() const -> const char* override {                                                                        \
         return #event_type;                                                                                            \
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

@@ -6,7 +6,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto Renderer::init(const u32 max_quads, const Filepath& base_assets_path) -> void {
         m_max_quads = max_quads;
@@ -162,4 +162,4 @@ namespace Cobalt::Engine
         m_quad_index_count = 0;
         m_vertex_buffer_ptr = m_vertex_buffer_base;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

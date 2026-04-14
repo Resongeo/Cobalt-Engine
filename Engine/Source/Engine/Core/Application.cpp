@@ -13,7 +13,7 @@
 
 #include <SDL3/SDL.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     Application::~Application() {
         _cleanup();
@@ -178,4 +178,4 @@ namespace Cobalt::Engine
             }
         }
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

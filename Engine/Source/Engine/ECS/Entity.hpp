@@ -5,7 +5,7 @@
 
 #include <entt/entt.hpp>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Entity final
     {
@@ -40,5 +40,4 @@ namespace Cobalt::Engine
         entt::entity m_id = entt::null;
         entt::registry* m_registry = nullptr;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

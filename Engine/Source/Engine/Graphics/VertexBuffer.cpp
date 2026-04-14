@@ -6,7 +6,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     VertexBuffer::~VertexBuffer() {
         Logger::trace("Engine::Graphics::VertexBuffer", "Deleting ID: {}", m_renderer_id);
@@ -48,4 +48,4 @@ namespace Cobalt::Engine
         bind();
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

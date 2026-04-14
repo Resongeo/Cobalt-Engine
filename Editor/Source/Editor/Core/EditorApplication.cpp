@@ -18,16 +18,16 @@
 #include <SDL3/SDL.h>
 #include <imgui.h>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
-    EditorApplication::EditorApplication(const Engine::CommandLineArgs args) : m_args(args) {}
+    EditorApplication::EditorApplication(const CommandLineArgs args) : m_args(args) {}
 
     auto EditorApplication::on_begin() -> void {
         // TODO: Move project to Engine
-        Engine::Project::init();
-        Engine::Project::parse(m_args);
+        Project::init();
+        Project::parse(m_args);
 
-        const auto asset_dir = Engine::Project::get_project_assets_path();
+        const auto asset_dir = Project::get_project_assets_path();
         if (!std::filesystem::exists(asset_dir)) {
             std::filesystem::create_directories(asset_dir);
         }
@@ -38,22 +38,21 @@ namespace Cobalt::Editor
             }
 
             const auto entry_string = entry.path().string();
-            const auto is_registered = Engine::AssetManager::instance().is_asset_registered(entry.path());
-            Engine::Logger::warn("Editor", "Checking if {} is registered ... {}", entry_string,
-                                 is_registered ? "YES" : "NO");
+            const auto is_registered = AssetManager::instance().is_asset_registered(entry.path());
+            Logger::warn("Editor", "Checking if {} is registered ... {}", entry_string, is_registered ? "YES" : "NO");
         }
 
-        Gui::init(Engine::Window::instance());
+        Gui::init(Window::instance());
 
-        Engine::SceneManager::instance().create_default_scene();
+        SceneManager::instance().create_default_scene();
 
-        m_renderer.init(10000, Engine::Project::get_editor_assets_path());
+        m_renderer.init(10000, Project::get_editor_assets_path());
 
-        m_state.framebuffer.create(Vector{Engine::FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
+        m_state.framebuffer.create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
 
-        Engine::SceneManager::instance().add_system<Engine::EditorRenderSystem>(
-                Engine::Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
+        SceneManager::instance().add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer,
+                                                                &m_state.editor_camera, &m_state.framebuffer);
 
         m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
@@ -70,7 +69,7 @@ namespace Cobalt::Editor
     }
 
     auto EditorApplication::on_update() -> void {
-        auto& scene_manager = Engine::SceneManager::instance();
+        auto& scene_manager = SceneManager::instance();
         scene_manager.update();
 
         Gui::begin_frame();
@@ -100,4 +99,4 @@ namespace Cobalt::Editor
 
         Gui::end_frame();
     }
-} // namespace Cobalt::Editor
+} // namespace Cobalt

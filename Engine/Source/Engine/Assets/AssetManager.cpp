@@ -5,7 +5,7 @@
 
 #include <ranges>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto AssetManager::is_asset_registered(const UUID id) -> bool {
         const auto it = m_asset_registry.find(id);
@@ -26,4 +26,4 @@ namespace Cobalt::Engine
         static AssetManager instance;
         return instance;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

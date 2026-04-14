@@ -6,7 +6,7 @@
 #include "Engine/ECS/Systems/ISystem.hpp"
 #include "Engine/Graphics/Fwd.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class EditorRenderSystem final : public ISystem
     {
@@ -19,5 +19,4 @@ namespace Cobalt::Engine
         Camera* m_camera = nullptr;
         Framebuffer* m_framebuffer = nullptr;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

@@ -7,7 +7,7 @@
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Math.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     enum class FramebufferAttachmentType : u8
     {
@@ -44,5 +44,4 @@ namespace Cobalt::Engine
         u32 m_samples = 0;
         bool m_is_resized = false;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

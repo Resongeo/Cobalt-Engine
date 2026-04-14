@@ -5,11 +5,10 @@
 
 #include "Engine/Core/Types/Color.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct SpriteComponent
     {
         Color tint;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

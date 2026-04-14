@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     enum class AttributeDataType
     {
@@ -52,5 +52,4 @@ namespace Cobalt::Engine
         Vector<Attribute> m_attributes = {};
         u32 m_stride = 0;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

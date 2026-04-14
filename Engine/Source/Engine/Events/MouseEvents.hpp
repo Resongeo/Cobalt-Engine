@@ -5,5 +5,5 @@
 
 #include "Engine/Events/IEvent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {}

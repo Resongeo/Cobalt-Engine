@@ -5,7 +5,7 @@
 
 #include "Engine/Core/Types/Math.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct TransformComponent
     {
@@ -19,5 +19,4 @@ namespace Cobalt::Engine
                     glm::scale(Mat4(1), {scale.x, scale.y, 1});
         }
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

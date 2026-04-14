@@ -8,7 +8,7 @@
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class AssetManager final
     {
@@ -31,4 +31,4 @@ namespace Cobalt::Engine
         HashMap<UUID, Rc<void>> m_loaded_assets = {};
         HashMap<UUID, AssetMetadata> m_asset_registry = {};
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

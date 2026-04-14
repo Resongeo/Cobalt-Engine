@@ -5,7 +5,7 @@
 
 #include "Engine/Events/IEvent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class ApplicationQuitEvent final : public IEvent
     {
@@ -13,4 +13,4 @@ namespace Cobalt::Engine
         explicit ApplicationQuitEvent() = default;
         EVENT_BUILDER(EventType::ApplicationQuit)
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

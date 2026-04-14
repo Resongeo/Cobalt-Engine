@@ -8,7 +8,7 @@
 #include "Engine/Graphics/IndexBuffer.hpp"
 #include "Engine/Graphics/VertexBuffer.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class VertexArray final
     {
@@ -30,4 +30,4 @@ namespace Cobalt::Engine
         Rc<IndexBuffer> m_index_buffer = {};
         Vector<Rc<VertexBuffer>> m_vertex_buffers = {};
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

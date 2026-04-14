@@ -5,7 +5,7 @@
 
 #include "Engine/Events/IEvent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class GamepadAxisMotionEvent : public IEvent
     {
@@ -46,4 +46,4 @@ namespace Cobalt::Engine
         EVENT_BUILDER(EventType::GamepadRemoved)
         // TODO: Implement GamepadRemovedEvent properly when working on Input
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

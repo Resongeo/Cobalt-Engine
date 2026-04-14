@@ -3,16 +3,16 @@
 
 #pragma once
 
+#include "Engine/Core/Defines.hpp"
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
-#include "Engine/Core/Defines.hpp"
 
-#include <format>
 #include <chrono>
 #include <ctime>
+#include <format>
 #include <iostream>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     enum class LogLevel : u8
     {
@@ -26,25 +26,25 @@ namespace Cobalt::Engine
     class Logger final
     {
     public:
-        template<typename... Args>
+        template <typename... Args>
         static auto trace(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
             _log(LogLevel::Trace, location, msg);
         }
 
-        template<typename... Args>
+        template <typename... Args>
         static auto warn(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
             _log(LogLevel::Warn, location, msg);
         }
 
-        template<typename... Args>
+        template <typename... Args>
         static auto error(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
             _log(LogLevel::Error, location, msg);
         }
 
-        template<typename... Args>
+        template <typename... Args>
         static auto fatal(const String& location, std::format_string<Args...> fmt, Args&&... args) -> void {
             auto msg = std::format(fmt, std::forward<Args>(args)...);
             _log(LogLevel::Fatal, location, msg);
@@ -59,15 +59,8 @@ namespace Cobalt::Engine
             constexpr auto RESET = "\033[0m";
             constexpr auto GRAY = "\033[37m";
 
-            const auto final_msg = std::format("{}({}) {}[{} - {}]{} {}",
-                GRAY,
-                time_str,
-                color_str,
-                level_str,
-                loc,
-                RESET,
-                msg
-            );
+            const auto final_msg =
+                    std::format("{}({}) {}[{} - {}]{} {}", GRAY, time_str, color_str, level_str, loc, RESET, msg);
 
             std::cout << final_msg << "\n";
         }
@@ -91,7 +84,7 @@ namespace Cobalt::Engine
         static auto _log_level(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "TRACE";
-                case LogLevel::Warn:  return "WARN";
+                case LogLevel::Warn: return "WARN";
                 case LogLevel::Error: return "ERROR";
                 case LogLevel::Fatal: return "FATAL";
             }
@@ -100,10 +93,10 @@ namespace Cobalt::Engine
         static auto _log_color(const LogLevel level) -> String {
             switch (level) {
                 case LogLevel::Trace: return "\033[94m";
-                case LogLevel::Warn:  return "\033[93m";
+                case LogLevel::Warn: return "\033[93m";
                 case LogLevel::Error: return "\033[91m";
                 case LogLevel::Fatal: return "\033[31m";
             }
         }
     };
-}
+} // namespace Cobalt

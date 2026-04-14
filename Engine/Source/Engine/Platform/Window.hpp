@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Math.hpp"
 #include "Engine/Platform/Fwd.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Window final
     {
@@ -27,4 +27,4 @@ namespace Cobalt::Engine
     private:
         SDL_Window* m_handle = nullptr;
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

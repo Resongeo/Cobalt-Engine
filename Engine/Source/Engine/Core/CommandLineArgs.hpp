@@ -3,11 +3,11 @@
 
 #pragma once
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct CommandLineArgs
     {
         int count;
         char** args;
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

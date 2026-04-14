@@ -5,7 +5,7 @@
 
 #include "Engine/Core/Types/Base.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class IndexBuffer final
     {
@@ -23,5 +23,4 @@ namespace Cobalt::Engine
         u32 m_renderer_id = 0;
         u32 m_count = 0;
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

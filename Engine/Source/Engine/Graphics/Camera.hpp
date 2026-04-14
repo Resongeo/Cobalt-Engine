@@ -6,7 +6,7 @@
 #include "Engine/Core/Types/Color.hpp"
 #include "Engine/Core/Types/Math.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     struct Camera
     {
@@ -19,4 +19,4 @@ namespace Cobalt::Engine
         auto projection(const Vec<2, i32>& viewport_size) const -> Mat4;
         auto view_projection(const Vec<2, i32>& viewport_size) -> Mat4;
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

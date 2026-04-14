@@ -5,11 +5,10 @@
 
 #include <fstream>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto File::read(const Filepath& path) -> String {
-        if (std::ifstream stream(path, std::ios::in | std::ios::binary); stream)
-        {
+        if (std::ifstream stream(path, std::ios::in | std::ios::binary); stream) {
             String result = {};
 
             stream.seekg(0, std::ios::end);
@@ -28,4 +27,4 @@ namespace Cobalt::Engine
     auto File::exists(const Filepath& path) -> bool {
         return std::filesystem::exists(path);
     }
-}
+} // namespace Cobalt

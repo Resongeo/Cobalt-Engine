@@ -7,7 +7,7 @@
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     EditorRenderSystem::EditorRenderSystem(Renderer* renderer, Camera* camera, Framebuffer* framebuffer) :
         m_renderer(renderer), m_camera(camera), m_framebuffer(framebuffer) {}
@@ -32,4 +32,4 @@ namespace Cobalt::Engine
         m_renderer->end_frame();
         m_framebuffer->unbind();
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

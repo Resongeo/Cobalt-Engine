@@ -12,7 +12,7 @@
 #include "Engine/Graphics/VertexArray.hpp"
 #include "Engine/Graphics/VertexBuffer.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Renderer final
     {
@@ -39,5 +39,4 @@ namespace Cobalt::Engine
         QuadVertexData* m_vertex_buffer_ptr = nullptr;
         Vec<2, u32> m_viewport_size = {};
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

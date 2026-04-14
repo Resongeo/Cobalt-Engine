@@ -5,7 +5,7 @@
 
 #include "Engine/Core/Types/Base.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     enum class EventType : u8
     {

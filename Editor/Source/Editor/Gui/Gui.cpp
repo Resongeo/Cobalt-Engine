@@ -14,9 +14,9 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
-    auto Gui::init(const Engine::Window& window) -> void {
+    auto Gui::init(const Window& window) -> void {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -42,8 +42,7 @@ namespace Cobalt::Editor
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini =
-                Engine::Project::get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini = Project::get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
 
         if (!std::filesystem::exists(layout_ini.parent_path())) {
             std::filesystem::create_directories(layout_ini.parent_path());
@@ -70,11 +69,11 @@ namespace Cobalt::Editor
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            auto* backup_current_window = Engine::Window::instance().get_handle();
-            const auto backup_current_context = Engine::Window::instance().get_gl_context();
+            auto* backup_current_window = Window::instance().get_handle();
+            const auto backup_current_context = Window::instance().get_gl_context();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
     }
-} // namespace Cobalt::Editor
+} // namespace Cobalt

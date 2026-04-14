@@ -1,10 +1,9 @@
-//
-// Created by sbene on 10/18/2025.
-//
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Attributes.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     Attribute::Attribute(const AttributeDataType data_type) : type(data_type) {
         switch (type) {
@@ -70,4 +69,4 @@ namespace Cobalt::Engine
     auto AttributeLayout::end() const -> Vector<Attribute>::const_iterator {
         return m_attributes.end();
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

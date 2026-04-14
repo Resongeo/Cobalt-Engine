@@ -7,14 +7,14 @@
 
 #include <imgui.h>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     auto SceneHierarchyPanel::draw(EditorState& state) -> void {
         ImGui::Begin("Scene Hierarchy");
         {
             if (ImGui::Button("Create")) {
                 auto entity = state.active_scene->create_entity("Entity");
-                entity.add_component<Engine::SpriteComponent>();
+                entity.add_component<SpriteComponent>();
             }
 
             if (state.selected_entity != entt::null) {
@@ -25,7 +25,7 @@ namespace Cobalt::Editor
             }
 
             for (const auto entity : state.active_scene->registry().view<entt::entity>()) {
-                auto name = state.active_scene->registry().get<Engine::TagComponent>(entity).name;
+                auto name = state.active_scene->registry().get<TagComponent>(entity).name;
 
                 if (state.selected_entity == entity) {
                     ImGui::PushStyleColor(ImGuiCol_Button, {0.8, 0.3, 0.3, 1.0});
@@ -42,4 +42,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-} // namespace Cobalt::Editor
+} // namespace Cobalt

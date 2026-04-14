@@ -3,8 +3,8 @@
 
 #pragma once
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Application;
     class Window;
-}
+} // namespace Cobalt

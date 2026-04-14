@@ -5,7 +5,7 @@
 
 #include "Engine/Events/IEvent.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class WindowMovedEvent : public IEvent
     {
@@ -61,4 +61,4 @@ namespace Cobalt::Engine
         explicit WindowLeaveFullscreenEvent() = default;
         EVENT_BUILDER(EventType::WindowLeaveFullscreen)
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

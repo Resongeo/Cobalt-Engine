@@ -3,7 +3,7 @@
 
 #include "Engine/Graphics/Camera.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     auto Camera::view() -> Mat4 {
         auto transform = Mat4(1.0f);
@@ -28,4 +28,4 @@ namespace Cobalt::Engine
         const auto p = projection(viewport_size);
         return p * v;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

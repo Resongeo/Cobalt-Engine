@@ -7,14 +7,14 @@
 
 union SDL_Event;
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     class Gui final
     {
     public:
-        static auto init(const Engine::Window& window) -> void;
+        static auto init(const Window& window) -> void;
         static auto begin_frame() -> void;
         static auto process_event(const SDL_Event* event) -> void;
         static auto end_frame() -> void;
     };
-} // namespace Cobalt::Editor
+} // namespace Cobalt

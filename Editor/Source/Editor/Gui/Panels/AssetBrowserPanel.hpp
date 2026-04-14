@@ -6,7 +6,7 @@
 #include "Editor/Gui/IPanel.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     class AssetBrowserPanel final : public IPanel
     {
@@ -18,4 +18,4 @@ namespace Cobalt::Editor
         Filepath m_assets_base_dir = {};
         Filepath m_current_dir = {};
     };
-} // namespace Cobalt::Editor
+} // namespace Cobalt

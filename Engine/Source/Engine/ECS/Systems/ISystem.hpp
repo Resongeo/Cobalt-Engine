@@ -5,7 +5,7 @@
 
 #include <entt/entity/registry.hpp>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class ISystem
     {
@@ -13,5 +13,4 @@ namespace Cobalt::Engine
         virtual ~ISystem() = default;
         virtual auto update(entt::registry& registry) -> void {}
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

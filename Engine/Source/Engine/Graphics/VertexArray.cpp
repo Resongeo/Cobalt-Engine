@@ -6,7 +6,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     VertexArray::~VertexArray() {
         Logger::trace("Engine::Graphics::VertexArray", "Deleting ID: {}", m_renderer_id);
@@ -73,4 +73,4 @@ namespace Cobalt::Engine
     auto VertexArray::index_buffer() const -> const Rc<IndexBuffer>& {
         return m_index_buffer;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

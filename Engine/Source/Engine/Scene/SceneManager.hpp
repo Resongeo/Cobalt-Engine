@@ -9,7 +9,7 @@
 #include "Engine/Scene/Scene.hpp"
 #include "Engine/Scene/SceneState.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class SceneManager final
     {
@@ -52,5 +52,4 @@ namespace Cobalt::Engine
         Vector<Box<ISystem>> m_editor_update_systems = {};
         Vector<Box<ISystem>> m_runtime_update_systems = {};
     };
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
 
 namespace Cobalt
@@ -20,4 +19,3 @@ namespace Cobalt
     typedef float f32;
     typedef double f64;
 } // namespace Cobalt
-

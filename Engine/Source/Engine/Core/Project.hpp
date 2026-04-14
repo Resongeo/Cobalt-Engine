@@ -6,7 +6,7 @@
 #include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     class Project final
     {
@@ -25,4 +25,4 @@ namespace Cobalt::Engine
         String m_name = {};
         String m_version = {};
     };
-} // namespace Cobalt::Engine
+} // namespace Cobalt

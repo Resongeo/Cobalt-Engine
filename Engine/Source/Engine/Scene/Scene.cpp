@@ -4,7 +4,7 @@
 #include "Engine/Scene/Scene.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     Scene::Scene(const String& name) : m_name(name) {}
 
@@ -40,4 +40,4 @@ namespace Cobalt::Engine
         const auto id = m_registry.create();
         return Entity(id, &m_registry);
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

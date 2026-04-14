@@ -3,14 +3,13 @@
 
 #pragma once
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
-    class Camera;
+    struct Camera;
     class Renderer;
     class Shader;
     class IndexBuffer;
     class VertexArray;
     class VertexBuffer;
     class Framebuffer;
-} // namespace Cobalt::Engine
-
+} // namespace Cobalt

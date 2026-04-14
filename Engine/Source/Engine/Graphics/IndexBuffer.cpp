@@ -6,7 +6,7 @@
 
 #include <glad/gl.h>
 
-namespace Cobalt::Engine
+namespace Cobalt
 {
     IndexBuffer::~IndexBuffer() {
         Logger::trace("Engine::Graphics::IndexBuffer", "Deleting ID: {}", m_renderer_id);
@@ -34,4 +34,4 @@ namespace Cobalt::Engine
     auto IndexBuffer::count() const -> u32 {
         return m_count;
     }
-} // namespace Cobalt::Engine
+} // namespace Cobalt

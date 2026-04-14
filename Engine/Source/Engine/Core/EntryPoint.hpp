@@ -10,7 +10,7 @@
 
 namespace Cobalt
 {
-    extern auto create_application(Engine::CommandLineArgs args) -> Box<Engine::Application>;
+    extern auto create_application(CommandLineArgs args) -> Box<Application>;
 } // namespace Cobalt
 
 #if defined(PLATFORM_WINDOWS) && defined(CONFIGURATION_RELEASE)

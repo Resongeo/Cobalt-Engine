@@ -6,10 +6,10 @@
 
 #include <imgui.h>
 
-namespace Cobalt::Editor
+namespace Cobalt
 {
     void AssetBrowserPanel::begin(EditorState& state) {
-        m_assets_base_dir = Engine::Project::get_project_assets_path();
+        m_assets_base_dir = Project::get_project_assets_path();
         m_current_dir = m_assets_base_dir;
     }
 
@@ -62,4 +62,4 @@ namespace Cobalt::Editor
         }
         ImGui::End();
     }
-} // namespace Cobalt::Editor
+} // namespace Cobalt
