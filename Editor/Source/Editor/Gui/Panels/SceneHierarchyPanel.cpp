@@ -9,7 +9,7 @@
 
 namespace Cobalt
 {
-    auto SceneHierarchyPanel::draw(EditorState& state) -> void {
+    auto SceneHierarchyPanel::draw(EngineContext& ctx, EditorState& state) -> void {
         ImGui::Begin("Scene Hierarchy");
         {
             if (ImGui::Button("Create")) {

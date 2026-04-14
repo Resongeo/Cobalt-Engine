@@ -8,12 +8,12 @@
 
 namespace Cobalt
 {
-    void AssetBrowserPanel::begin(EditorState& state) {
-        m_assets_base_dir = Project::get_project_assets_path();
+    void AssetBrowserPanel::begin(EngineContext& ctx, EditorState& state) {
+        m_assets_base_dir = ctx.project.get_project_assets_path();
         m_current_dir = m_assets_base_dir;
     }
 
-    auto AssetBrowserPanel::draw(EditorState& state) -> void {
+    auto AssetBrowserPanel::draw(EngineContext& ctx, EditorState& state) -> void {
         ImGui::Begin("Asset Browser");
         {
             if (m_current_dir != std::filesystem::path(m_assets_base_dir)) {

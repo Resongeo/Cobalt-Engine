@@ -9,7 +9,7 @@
 
 namespace Cobalt
 {
-    auto EntityComponentsPanel::draw(EditorState& state) -> void {
+    auto EntityComponentsPanel::draw(EngineContext& ctx, EditorState& state) -> void {
         ImGui::Begin("Components");
         {
             if (state.selected_entity != entt::null) {

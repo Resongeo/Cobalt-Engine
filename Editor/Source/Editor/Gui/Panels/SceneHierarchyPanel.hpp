@@ -10,6 +10,6 @@ namespace Cobalt
     class SceneHierarchyPanel final : public IPanel
     {
     public:
-        auto draw(EditorState& state) -> void override;
+        auto draw(EngineContext& ctx, EditorState& state) -> void override;
     };
 } // namespace Cobalt

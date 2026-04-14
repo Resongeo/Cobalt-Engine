@@ -11,12 +11,11 @@ namespace Cobalt
     class Project final
     {
     public:
-        static auto init() -> void;
-        static auto parse(const CommandLineArgs& cli_args) -> void;
-        static auto get_name() -> String&;
-        static auto get_version() -> String&;
-        static auto get_editor_assets_path() -> Filepath;
-        static auto get_project_assets_path() -> Filepath;
+        auto init(const CommandLineArgs& cli_args) -> void;
+        auto get_name() -> String&;
+        auto get_version() -> String&;
+        auto get_editor_assets_path() const -> Filepath;
+        auto get_project_assets_path() const -> Filepath;
 
     private:
         Vector<String> m_args = {};

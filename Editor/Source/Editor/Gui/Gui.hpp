@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Platform/Window.hpp"
 
 union SDL_Event;
@@ -13,8 +14,8 @@ namespace Cobalt
     {
     public:
         static auto init(const Window& window) -> void;
-        static auto begin_frame() -> void;
+        static auto begin_frame(EngineContext& ctx) -> void;
+        static auto end_frame(EngineContext& ctx) -> void;
         static auto process_event(const SDL_Event* event) -> void;
-        static auto end_frame() -> void;
     };
 } // namespace Cobalt

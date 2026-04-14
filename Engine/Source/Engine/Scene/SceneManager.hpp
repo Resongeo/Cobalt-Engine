@@ -23,8 +23,6 @@ namespace Cobalt
         auto create_default_scene() -> void;
         auto update() -> void;
 
-        static auto instance() -> SceneManager&;
-
         template <typename T, typename... Args>
         auto add_system(const Schedule schedule, Args&&... args) -> void {
             switch (schedule) {

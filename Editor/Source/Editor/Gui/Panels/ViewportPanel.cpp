@@ -14,7 +14,7 @@
 
 namespace Cobalt
 {
-    auto ViewportPanel::draw(EditorState& state) -> void {
+    auto ViewportPanel::draw(EngineContext& ctx, EditorState& state) -> void {
         ImGui::Begin("Viewport");
         {
             static auto operation = ImGuizmo::TRANSLATE;

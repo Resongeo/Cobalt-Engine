@@ -36,13 +36,13 @@ namespace Cobalt
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     }
 
-    auto Gui::begin_frame() -> void {
+    auto Gui::begin_frame(EngineContext& ctx) -> void {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini = Project::get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini = ctx.project.get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
 
         if (!std::filesystem::exists(layout_ini.parent_path())) {
             std::filesystem::create_directories(layout_ini.parent_path());
@@ -59,7 +59,7 @@ namespace Cobalt
         ImGui_ImplSDL3_ProcessEvent(event);
     }
 
-    auto Gui::end_frame() -> void {
+    auto Gui::end_frame(EngineContext& ctx) -> void {
         const auto& io = ImGui::GetIO();
 
         ImGui::Render();
@@ -69,8 +69,8 @@ namespace Cobalt
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            auto* backup_current_window = Window::instance().get_handle();
-            const auto backup_current_context = Window::instance().get_gl_context();
+            auto* backup_current_window = ctx.window.get_handle();
+            const auto backup_current_context = ctx.window.get_gl_context();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Editor/Core/EditorState.hpp"
+#include "Engine/Core/EngineContext.hpp"
 
 namespace Cobalt
 {
@@ -12,7 +13,7 @@ namespace Cobalt
     public:
         virtual ~IPanel() = default;
 
-        virtual auto begin(EditorState& state) -> void {}
-        virtual auto draw(EditorState& state) -> void = 0;
+        virtual auto begin(EngineContext& ctx, EditorState& state) -> void {}
+        virtual auto draw(EngineContext& ctx, EditorState& state) -> void = 0;
     };
 } // namespace Cobalt

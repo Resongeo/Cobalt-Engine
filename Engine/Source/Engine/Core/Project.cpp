@@ -9,41 +9,30 @@
 
 namespace Cobalt
 {
-    static Project* s_instance = nullptr;
+    auto Project::init(const CommandLineArgs& cli_args) -> void {
+        m_args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
 
-    auto Project::init() -> void {
-        s_instance = new Project();
-    }
+        m_name = "No Project";
+        m_version = "0.0.0";
 
-    auto Project::parse(const CommandLineArgs& cli_args) -> void {
-        s_instance->m_args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
-        auto& args = s_instance->m_args;
-        auto& name = s_instance->m_name;
-        auto& version = s_instance->m_version;
-        auto& project_path = s_instance->m_project_path;
-        auto& editor_path = s_instance->m_editor_path;
+        m_editor_path = Filepath(m_args[0]).parent_path();
 
-        name = "No Project";
-        version = "0.0.0";
-
-        editor_path = Filepath(args[0]).parent_path();
-
-        if (args.size() < 2) {
+        if (m_args.size() < 2) {
             Logger::warn("Editor::Project",
                          "No project file is provided. Please provide a valid path to a .cbproj file");
             return;
         }
 
-        if (!std::filesystem::exists(args[1])) {
-            Logger::error("Editor::Project", "Project file path does not exists: {}", args[1]);
+        if (!std::filesystem::exists(m_args[1])) {
+            Logger::error("Editor::Project", "Project file path does not exists: {}", m_args[1]);
             return;
         }
 
         // TODO: Load a Default level if no project is provided
 
         auto valid_file = true;
-        const auto project_file_path = Filepath(args[1]);
-        project_path = project_file_path.parent_path();
+        const auto project_file_path = Filepath(m_args[1]);
+        m_project_path = project_file_path.parent_path();
 
         if (project_file_path.extension() != ".cbproj") {
             valid_file = false;
@@ -65,25 +54,25 @@ namespace Cobalt
         }
 
         auto table = result.table();
-        name = table["project"]["name"].value_or<String>("Default");
-        version = table["project"]["version"].value_or<String>("0.0.0");
+        m_name = table["project"]["name"].value_or<String>("Default");
+        m_version = table["project"]["version"].value_or<String>("0.0.0");
 
-        Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}", name, version);
+        Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}", m_name, m_version);
     }
 
     auto Project::get_name() -> String& {
-        return s_instance->m_name;
+        return m_name;
     }
 
     auto Project::get_version() -> String& {
-        return s_instance->m_version;
+        return m_version;
     }
 
-    auto Project::get_editor_assets_path() -> Filepath {
-        return s_instance->m_editor_path / "Assets";
+    auto Project::get_editor_assets_path() const -> Filepath {
+        return m_editor_path / "Assets";
     }
 
-    auto Project::get_project_assets_path() -> Filepath {
-        return s_instance->m_project_path / "Assets";
+    auto Project::get_project_assets_path() const -> Filepath {
+        return m_project_path / "Assets";
     }
 } // namespace Cobalt

@@ -11,8 +11,8 @@ namespace Cobalt
     class AssetBrowserPanel final : public IPanel
     {
     public:
-        auto begin(EditorState& state) -> void override;
-        auto draw(EditorState& state) -> void override;
+        auto begin(EngineContext& ctx, EditorState& state) -> void override;
+        auto draw(EngineContext& ctx, EditorState& state) -> void override;
 
     private:
         Filepath m_assets_base_dir = {};

@@ -12,7 +12,6 @@
 #include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
-#include "Engine/Platform/Window.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 
 #include <SDL3/SDL.h>
@@ -20,14 +19,8 @@
 
 namespace Cobalt
 {
-    EditorApplication::EditorApplication(const CommandLineArgs args) : m_args(args) {}
-
-    auto EditorApplication::on_begin() -> void {
-        // TODO: Move project to Engine
-        Project::init();
-        Project::parse(m_args);
-
-        const auto asset_dir = Project::get_project_assets_path();
+    auto EditorApplication::begin(EngineContext& ctx) -> void {
+        const auto asset_dir = ctx.project.get_project_assets_path();
         if (!std::filesystem::exists(asset_dir)) {
             std::filesystem::create_directories(asset_dir);
         }
@@ -42,17 +35,17 @@ namespace Cobalt
             Logger::warn("Editor", "Checking if {} is registered ... {}", entry_string, is_registered ? "YES" : "NO");
         }
 
-        Gui::init(Window::instance());
+        Gui::init(ctx.window);
 
-        SceneManager::instance().create_default_scene();
+        ctx.scene_manager.create_default_scene();
 
-        m_renderer.init(10000, Project::get_editor_assets_path());
+        m_renderer.init(10000, ctx.project.get_editor_assets_path());
 
         m_state.framebuffer.create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
 
-        SceneManager::instance().add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer,
-                                                                &m_state.editor_camera, &m_state.framebuffer);
+        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera,
+                                                         &m_state.framebuffer);
 
         m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
@@ -60,7 +53,7 @@ namespace Cobalt
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
 
         for (const auto& panel : m_panels) {
-            panel->begin(m_state);
+            panel->begin(ctx, m_state);
         }
     }
 
@@ -68,11 +61,11 @@ namespace Cobalt
         Gui::process_event(event);
     }
 
-    auto EditorApplication::on_update() -> void {
-        auto& scene_manager = SceneManager::instance();
+    auto EditorApplication::update(EngineContext& ctx) -> void {
+        auto& scene_manager = ctx.scene_manager;
         scene_manager.update();
 
-        Gui::begin_frame();
+        Gui::begin_frame(ctx);
         if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
             const auto viewport = ImGui::GetMainViewport();
             ImGui::SetNextWindowPos(viewport->Pos);
@@ -93,10 +86,10 @@ namespace Cobalt
             m_state.active_scene = active_scene;
 
             for (const auto& panel : m_panels) {
-                panel->draw(m_state);
+                panel->draw(ctx, m_state);
             }
         }
 
-        Gui::end_frame();
+        Gui::end_frame(ctx);
     }
 } // namespace Cobalt

@@ -60,9 +60,4 @@ namespace Cobalt
             }
         }
     }
-
-    auto SceneManager::instance() -> SceneManager& {
-        static SceneManager instance;
-        return instance;
-    }
 } // namespace Cobalt

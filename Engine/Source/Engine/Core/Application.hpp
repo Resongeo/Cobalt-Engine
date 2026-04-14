@@ -3,8 +3,9 @@
 
 #pragma once
 
+#include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Events/IEvent.hpp"
-#include "Engine/Scene/SceneManager.hpp"
+#include "EngineContext.hpp"
 
 union SDL_Event;
 
@@ -15,22 +16,21 @@ namespace Cobalt
     public:
         virtual ~Application();
 
-        auto run() -> void;
+        auto run(const CommandLineArgs& args) -> void;
 
-        virtual auto on_begin() -> void {}
-        virtual auto on_event(IEvent& event) -> void {}
-        virtual auto on_update() -> void {}
-        virtual auto on_end() -> void {}
+        virtual auto begin(EngineContext& ctx) -> void {}
+        virtual auto update(EngineContext& ctx) -> void {}
+        virtual auto end(EngineContext& ctx) -> void {}
+        virtual auto event(IEvent& event) -> void {}
+        // TEMPORARY
         virtual auto on_sdl_event(SDL_Event* event) -> void {}
 
     private:
-        auto _initialize() const -> bool;
-        auto _main_loop() -> void;
-        auto _cleanup() const -> void;
-        auto _poll_events() -> void;
+        auto initialize(const CommandLineArgs& args) -> bool;
+        auto main_loop() -> void;
+        auto poll_events() -> void;
 
     private:
-        SceneManager m_scene_manager;
-        bool m_close_requested = false;
+        EngineContext m_ctx = {};
     };
 } // namespace Cobalt

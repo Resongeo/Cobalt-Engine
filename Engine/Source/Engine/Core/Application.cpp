@@ -8,174 +8,168 @@
 #include "Engine/Events/GamepadEvents.hpp"
 #include "Engine/Events/KeyboardEvents.hpp"
 #include "Engine/Events/WindowEvents.hpp"
-#include "Engine/Platform/Platform.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
 
 namespace Cobalt
 {
-    Application::~Application() {
-        _cleanup();
-    }
-
-    auto Application::run() -> void {
-        if (!_initialize()) {
+    auto Application::run(const CommandLineArgs& args) -> void {
+        if (!initialize(args)) {
             Logger::fatal("Engine::Core::Application", "Initialization failed. Exiting program.");
             return;
         }
 
-        on_begin();
-        _main_loop();
-        on_end();
+        begin(m_ctx);
+        main_loop();
+        end(m_ctx);
     }
 
-    auto Application::_initialize() const -> bool {
-        if (!Platform::sdl3_init()) return false;
-        if (!Window::initialize()) return false;
-        if (!Platform::opengl_init()) return false;
+    auto Application::initialize(const CommandLineArgs& args) -> bool {
+        m_ctx.project.init(args);
+
+        if (!m_ctx.window.init(m_ctx.project)) return false;
 
         return true;
     }
 
-    auto Application::_main_loop() -> void {
-        while (!m_close_requested) {
-            _poll_events();
-
-            on_update();
-
-            Window::instance().swap_buffers();
+    auto Application::main_loop() -> void {
+        while (!m_ctx.close_requested) {
+            poll_events();
+            update(m_ctx);
+            m_ctx.window.swap_buffers();
         }
     }
 
-    auto Application::_cleanup() const -> void {
-        Window::destroy();
-    }
+    auto Application::poll_events() -> void {
+        static SDL_Event sdl_event;
 
-    auto Application::_poll_events() -> void {
-        static SDL_Event e;
+        while (SDL_PollEvent(&sdl_event)) {
+            on_sdl_event(&sdl_event);
 
-        while (SDL_PollEvent(&e)) {
-            on_sdl_event(&e);
-
-            switch (e.type) {
+            switch (sdl_event.type) {
                 // Application events
                 case SDL_EVENT_QUIT: {
-                    auto event = ApplicationQuitEvent();
-                    m_close_requested = true;
-                    on_event(event);
+                    auto e = ApplicationQuitEvent();
+                    m_ctx.close_requested = true;
+                    event(e);
                     break;
                 }
 
                 // Window events
                 case SDL_EVENT_WINDOW_MOVED: {
-                    auto event = WindowMovedEvent(e.window.data1, e.window.data2);
-                    on_event(event);
+                    auto e = WindowMovedEvent(sdl_event.window.data1, sdl_event.window.data2);
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_WINDOW_RESIZED: {
-                    auto event = WindowResizedEvent(e.window.data1, e.window.data2);
-                    on_event(event);
+                    auto e = WindowResizedEvent(sdl_event.window.data1, sdl_event.window.data2);
+                    event(e);
+                    ;
                     break;
                 }
                 case SDL_EVENT_WINDOW_MINIMIZED: {
-                    auto event = WindowMinimizedEvent();
-                    on_event(event);
+                    auto e = WindowMinimizedEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_WINDOW_MAXIMIZED: {
-                    auto event = WindowMaximizedEvent();
-                    on_event(event);
+                    auto e = WindowMaximizedEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_WINDOW_RESTORED: {
-                    auto event = WindowRestoredEvent();
-                    on_event(event);
+                    auto e = WindowRestoredEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_WINDOW_ENTER_FULLSCREEN: {
-                    auto event = WindowEnterFullscreenEvent();
-                    on_event(event);
+                    auto e = WindowEnterFullscreenEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN: {
-                    auto event = WindowLeaveFullscreenEvent();
-                    on_event(event);
+                    auto e = WindowLeaveFullscreenEvent();
+                    event(e);
                     break;
                 }
 
                 // Keyboard events
                 case SDL_EVENT_KEY_DOWN: {
-                    auto event = KeyboardKeyDownEvent();
-                    on_event(event);
+                    auto e = KeyboardKeyDownEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_KEY_UP: {
-                    auto event = KeyboardKeyUpEvent();
-                    on_event(event);
+                    auto e = KeyboardKeyUpEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_TEXT_INPUT: {
-                    auto event = KeyboardTextInputEvent();
-                    on_event(event);
+                    auto e = KeyboardTextInputEvent();
+                    event(e);
                     break;
                 }
 
                 // Gamepad events
                 case SDL_EVENT_GAMEPAD_AXIS_MOTION: {
-                    auto event = GamepadAxisMotionEvent();
-                    on_event(event);
+                    auto e = GamepadAxisMotionEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_BUTTON_DOWN: {
-                    auto event = GamepadButtonDownEvent();
-                    on_event(event);
+                    auto e = GamepadButtonDownEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_BUTTON_UP: {
-                    auto event = GamepadButtonUpEvent();
-                    on_event(event);
+                    auto e = GamepadButtonUpEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_ADDED: {
-                    auto event = GamepadAddedEvent();
-                    on_event(event);
+                    auto e = GamepadAddedEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_REMOVED: {
-                    auto event = GamepadRemovedEvent();
-                    on_event(event);
+                    auto e = GamepadRemovedEvent();
+                    event(e);
                     break;
                 }
 
                 // Drop events
                 case SDL_EVENT_DROP_FILE: {
-                    auto event = DropFileEvent(e.drop.data);
-                    on_event(event);
+                    auto e = DropFileEvent(sdl_event.drop.data);
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_DROP_TEXT: {
-                    auto event = DropTextEvent(e.drop.data);
-                    on_event(event);
+                    auto e = DropTextEvent(sdl_event.drop.data);
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_DROP_BEGIN: {
-                    auto event = DropBeginEvent();
-                    on_event(event);
+                    auto e = DropBeginEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_DROP_COMPLETE: {
-                    auto event = DropCompleteEvent();
-                    on_event(event);
+                    auto e = DropCompleteEvent();
+                    event(e);
                     break;
                 }
                 case SDL_EVENT_DROP_POSITION: {
-                    auto event = DropPositionEvent(e.drop.x, e.drop.y);
-                    on_event(event);
+                    auto e = DropPositionEvent(sdl_event.drop.x, sdl_event.drop.y);
+                    event(e);
                     break;
                 }
                 default: return;
             }
         }
+    }
+
+    Application::~Application() {
+        m_ctx.window.destroy();
     }
 } // namespace Cobalt

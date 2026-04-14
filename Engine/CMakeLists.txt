@@ -66,6 +66,7 @@ add_library(Engine STATIC
 	Source/Engine/Assets/AssetManager.hpp
 	Source/Engine/Assets/AssetType.hpp
 	Source/Engine/Assets/AssetMetadata.hpp
+	Source/Engine/Core/EngineContext.hpp
 )
 
 target_link_libraries(Engine PUBLIC
