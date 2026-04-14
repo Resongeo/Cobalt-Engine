@@ -3,9 +3,12 @@
 
 #include "Editor/Core/EditorApplication.hpp"
 #include "Editor/Gui/Gui.hpp"
+#include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
+#include "Engine/Assets/AssetManager.hpp"
+#include "Engine/Core/Logger.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
@@ -23,11 +26,28 @@ namespace Cobalt::Editor
         // TODO: Move project to Engine
         Engine::Project::init();
         Engine::Project::parse(m_args);
+
+        const auto asset_dir = Engine::Project::get_project_assets_path();
+        if (!std::filesystem::exists(asset_dir)) {
+            std::filesystem::create_directories(asset_dir);
+        }
+
+        for (auto& entry : std::filesystem::recursive_directory_iterator(asset_dir)) {
+            if (entry.is_directory()) {
+                continue;
+            }
+
+            const auto entry_string = entry.path().string();
+            const auto is_registered = Engine::AssetManager::instance().is_asset_registered(entry.path());
+            Engine::Logger::warn("Editor", "Checking if {} is registered ... {}", entry_string,
+                                 is_registered ? "YES" : "NO");
+        }
+
         Gui::init(Engine::Window::instance());
 
         Engine::SceneManager::instance().create_default_scene();
 
-        m_renderer.init(3, Engine::Project::get_editor_assets_path());
+        m_renderer.init(10000, Engine::Project::get_editor_assets_path());
 
         m_state.framebuffer.create(Vector{Engine::FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
@@ -35,9 +55,14 @@ namespace Cobalt::Editor
         Engine::SceneManager::instance().add_system<Engine::EditorRenderSystem>(
                 Engine::Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
 
+        m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
         m_panels.emplace_back(Memory::make_box<SceneHierarchyPanel>());
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
+
+        for (const auto& panel : m_panels) {
+            panel->begin(m_state);
+        }
     }
 
     void EditorApplication::on_sdl_event(SDL_Event* event) {

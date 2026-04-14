@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/Assets/AssetMetadata.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"
@@ -21,8 +22,13 @@ namespace Cobalt::Engine
             return nullptr;
         }
 
+        auto is_asset_registered(UUID id) -> bool;
+        auto is_asset_registered(const Filepath& path) -> bool;
+
+        static auto instance() -> AssetManager&;
+
     private:
-        HashMap<UUID, Rc<void>> m_loaded_assets;
+        HashMap<UUID, Rc<void>> m_loaded_assets = {};
+        HashMap<UUID, AssetMetadata> m_asset_registry = {};
     };
 } // namespace Cobalt::Engine
-

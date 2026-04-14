@@ -42,7 +42,13 @@ namespace Cobalt::Editor
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini = Engine::Project::get_editor_assets_path() / "Editor" / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini =
+                Engine::Project::get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
+
+        if (!std::filesystem::exists(layout_ini.parent_path())) {
+            std::filesystem::create_directories(layout_ini.parent_path());
+        }
+
         const auto layout_init_str = layout_ini.string();
         io.IniFilename = layout_init_str.c_str();
 

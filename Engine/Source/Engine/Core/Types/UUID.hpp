@@ -31,6 +31,14 @@ namespace Cobalt
         auto operator!=(const UUID& other) const -> bool {
             return value != other.value;
         }
+
+        operator u64() {
+            return value;
+        }
+
+        operator u64() const {
+            return value;
+        }
     };
 } // namespace Cobalt
 
@@ -45,4 +53,3 @@ namespace std
         }
     };
 } // namespace std
-

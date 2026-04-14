@@ -63,6 +63,10 @@ add_library(Engine STATIC
 	Source/Engine/Events/DropEvents.hpp
 	Source/Engine/Core/Project.cpp
 	Source/Engine/Core/Project.hpp
+	Source/Engine/Assets/AssetManager.cpp
+	Source/Engine/Assets/AssetManager.hpp
+	Source/Engine/Assets/AssetType.hpp
+	Source/Engine/Assets/AssetMetadata.hpp
 )
 
 target_link_libraries(Engine PUBLIC

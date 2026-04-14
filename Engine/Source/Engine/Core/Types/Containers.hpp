@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include <EASTL/initializer_list.h>
-#include <EASTL/string.h>
-#include <EASTL/unordered_map.h>
+// clang-format off
+__pragma(warning(push, 0))
 #include <EASTL/vector.h>
+__pragma(warnings(pop))
 #include <filesystem>
+#include <unordered_map>
 
-namespace Cobalt
-{
+namespace Cobalt {
     using String = std::string;
     using StringView = std::string_view;
     using Filepath = std::filesystem::path;
@@ -22,5 +22,5 @@ namespace Cobalt
     using InitializerList = std::initializer_list<T>;
 
     template <typename K, typename V>
-    using HashMap = eastl::unordered_map<K, V>;
+    using HashMap = std::unordered_map<K, V>;
 } // namespace Cobalt

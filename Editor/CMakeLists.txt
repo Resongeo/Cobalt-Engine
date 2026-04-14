@@ -13,6 +13,8 @@ add_executable(Editor
 	Source/Editor/Gui/Panels/ViewportPanel.hpp
 	Source/Editor/Gui/Panels/EntityComponentsPanel.cpp
 	Source/Editor/Gui/Panels/EntityComponentsPanel.hpp
+	Source/Editor/Gui/Panels/AssetBrowserPanel.cpp
+	Source/Editor/Gui/Panels/AssetBrowserPanel.hpp
 )
 
 target_link_libraries(Editor PRIVATE
