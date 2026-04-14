@@ -20,21 +20,6 @@
 namespace Cobalt
 {
     auto EditorApplication::begin(EngineContext& ctx) -> void {
-        const auto asset_dir = ctx.project.get_project_assets_path();
-        if (!std::filesystem::exists(asset_dir)) {
-            std::filesystem::create_directories(asset_dir);
-        }
-
-        for (auto& entry : std::filesystem::recursive_directory_iterator(asset_dir)) {
-            if (entry.is_directory()) {
-                continue;
-            }
-
-            const auto entry_string = entry.path().string();
-            const auto is_registered = AssetManager::instance().is_asset_registered(entry.path());
-            Logger::warn("Editor", "Checking if {} is registered ... {}", entry_string, is_registered ? "YES" : "NO");
-        }
-
         Gui::init(ctx.window);
 
         ctx.scene_manager.create_default_scene();

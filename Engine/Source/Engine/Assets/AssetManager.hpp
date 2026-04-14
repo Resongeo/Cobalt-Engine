@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Assets/AssetMetadata.hpp"
+#include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"
@@ -13,6 +14,11 @@ namespace Cobalt
     class AssetManager final
     {
     public:
+        auto init(const Project& project) -> void;
+
+        auto is_asset_registered(UUID id) -> bool;
+        auto is_asset_registered(const Filepath& path) -> bool;
+
         template <typename T>
         auto get(const UUID id) const -> Rc<T> {
             if (const auto it = m_loaded_assets.find(id); it != m_loaded_assets.end()) {
@@ -21,11 +27,6 @@ namespace Cobalt
             // TODO: Load asset
             return nullptr;
         }
-
-        auto is_asset_registered(UUID id) -> bool;
-        auto is_asset_registered(const Filepath& path) -> bool;
-
-        static auto instance() -> AssetManager&;
 
     private:
         HashMap<UUID, Rc<void>> m_loaded_assets = {};

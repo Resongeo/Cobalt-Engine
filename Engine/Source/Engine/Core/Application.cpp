@@ -27,6 +27,7 @@ namespace Cobalt
 
     auto Application::initialize(const CommandLineArgs& args) -> bool {
         m_ctx.project.init(args);
+        m_ctx.asset_manager.init(m_ctx.project);
 
         if (!m_ctx.window.init(m_ctx.project)) return false;
 

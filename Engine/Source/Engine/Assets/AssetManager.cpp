@@ -7,6 +7,27 @@
 
 namespace Cobalt
 {
+    auto AssetManager::init(const Project& project) -> void {
+        const auto& project_asset_dir = project.get_project_assets_path();
+
+        if (!std::filesystem::exists(project_asset_dir)) {
+            std::filesystem::create_directories(project_asset_dir);
+        }
+
+        // TODO: Load and parse asset registry file
+
+        for (auto& entry : std::filesystem::recursive_directory_iterator(project_asset_dir)) {
+            if (entry.is_directory()) {
+                continue;
+            }
+
+            const auto entry_string = entry.path().string();
+            if (!is_asset_registered(entry.path())) {
+                // TODO: Register asset
+            }
+        }
+    }
+
     auto AssetManager::is_asset_registered(const UUID id) -> bool {
         const auto it = m_asset_registry.find(id);
         return it != m_asset_registry.end();
@@ -20,10 +41,5 @@ namespace Cobalt
         }
 
         return false;
-    }
-
-    auto AssetManager::instance() -> AssetManager& {
-        static AssetManager instance;
-        return instance;
     }
 } // namespace Cobalt
