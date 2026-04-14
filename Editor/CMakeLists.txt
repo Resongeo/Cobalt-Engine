@@ -32,11 +32,6 @@ target_compile_definitions(Editor PRIVATE
 	$<$<CONFIG:Release>:CONFIG_RELEASE>
 )
 
-# -- Supress compiler warnings from EASTL --
-target_compile_options(EASTL PRIVATE
-	$<$<CXX_COMPILER_ID:Clang>:-Wno-deprecated-literal-operator>
-)
-
 # -- Copy Engine assets to Editor build output --
 add_custom_command(TARGET Editor POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory

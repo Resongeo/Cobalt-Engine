@@ -3,20 +3,18 @@
 
 #pragma once
 
-// clang-format off
-__pragma(warning(push, 0))
-#include <EASTL/vector.h>
-__pragma(warnings(pop))
 #include <filesystem>
 #include <unordered_map>
+#include <vector>
 
-namespace Cobalt {
+namespace Cobalt
+{
     using String = std::string;
     using StringView = std::string_view;
     using Filepath = std::filesystem::path;
 
     template <typename T>
-    using Vector = eastl::vector<T>;
+    using Vector = std::vector<T>;
 
     template <typename T>
     using InitializerList = std::initializer_list<T>;

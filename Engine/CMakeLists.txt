@@ -51,7 +51,6 @@ add_library(Engine STATIC
 	Source/Engine/ECS/Components/Minimal.hpp
 	Source/Engine/Core/EntryPoint.hpp
 	Source/Engine/Core/CommandLineArgs.hpp
-	Source/Engine/Core/EASTLConfig.cpp
 	Source/Engine/Events/EventType.hpp
 	Source/Engine/Events/IEvent.hpp
 	Source/Engine/Events/Dispatcher.hpp
@@ -73,7 +72,6 @@ target_link_libraries(Engine PUBLIC
 	glm::glm
 	EnTT::EnTT
 	SDL3::SDL3
-	EASTL
 	tomlplusplus::tomlplusplus
 )
 

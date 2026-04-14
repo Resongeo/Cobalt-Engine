@@ -21,5 +21,3 @@
 	path = Vendor/SDL
 	url = https://github.com/libsdl-org/SDL.git
 [submodule "Vendor/EASTL"]
-	path = Vendor/EASTL
-	url = https://github.com/electronicarts/EASTL
