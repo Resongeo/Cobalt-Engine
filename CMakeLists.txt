@@ -28,6 +28,12 @@ add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
 target_link_libraries(imguizmo PRIVATE imgui)
 target_include_directories(imguizmo PUBLIC "Vendor/IMGUIZMO")
 add_subdirectory(Vendor/SDL)
+file(GLOB SIMDJSON_SOURCES
+	"Vendor/SIMDJSON/singleheader/simdjson.cpp"
+	"Vendor/SIMDJSON/singleheader/simdjson.h"
+)
+add_library(simdjson STATIC ${SIMDJSON_SOURCES})
+target_include_directories(simdjson PUBLIC "Vendor/SIMDJSON/singleheader")
 
 # -- Targets --
 add_subdirectory(Engine)

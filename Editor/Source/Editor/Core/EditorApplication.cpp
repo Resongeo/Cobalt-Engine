@@ -7,8 +7,6 @@
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
-#include "Engine/Assets/AssetManager.hpp"
-#include "Engine/Core/Logger.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
@@ -51,27 +49,29 @@ namespace Cobalt
         scene_manager.update();
 
         Gui::begin_frame(ctx);
-        if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
-            const auto viewport = ImGui::GetMainViewport();
-            ImGui::SetNextWindowPos(viewport->Pos);
-            ImGui::SetNextWindowSize(viewport->Size);
-            ImGui::SetNextWindowViewport(viewport->ID);
+        {
+            if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
+                const auto viewport = ImGui::GetMainViewport();
+                ImGui::SetNextWindowPos(viewport->Pos);
+                ImGui::SetNextWindowSize(viewport->Size);
+                ImGui::SetNextWindowViewport(viewport->ID);
 
-            constexpr auto dock_space_flags = 0 | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking |
-                    ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                    ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
+                constexpr auto dock_space_flags = 0 | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoDocking |
+                        ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus;
 
-            ImGui::Begin("ViewsDockSpace", nullptr, dock_space_flags);
-            {
-                const auto dock_space_id = ImGui::GetID("ViewsDockSpace");
-                ImGui::DockSpace(dock_space_id);
-            }
-            ImGui::End();
+                ImGui::Begin("ViewsDockSpace", nullptr, dock_space_flags);
+                {
+                    const auto dock_space_id = ImGui::GetID("ViewsDockSpace");
+                    ImGui::DockSpace(dock_space_id);
+                }
+                ImGui::End();
 
-            m_state.active_scene = active_scene;
+                m_state.active_scene = active_scene;
 
-            for (const auto& panel : m_panels) {
-                panel->draw(ctx, m_state);
+                for (const auto& panel : m_panels) {
+                    panel->draw(ctx, m_state);
+                }
             }
         }
 

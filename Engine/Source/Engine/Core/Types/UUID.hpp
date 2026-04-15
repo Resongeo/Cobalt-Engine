@@ -14,6 +14,7 @@ namespace Cobalt
 
         explicit UUID() : value(0) {}
         explicit UUID(const u64 val) : value(val) {}
+        explicit UUID(const String& val) : value(std::stoll(val)) {}
 
         auto is_valid() const -> bool {
             return value != 0;

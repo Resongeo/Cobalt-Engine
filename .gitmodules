@@ -21,3 +21,6 @@
 	path = Vendor/SDL
 	url = https://github.com/libsdl-org/SDL.git
 [submodule "Vendor/EASTL"]
+[submodule "Vendor/SIMDJSON"]
+	path = Vendor/SIMDJSON
+	url = https://github.com/simdjson/simdjson

@@ -171,6 +171,7 @@ namespace Cobalt
     }
 
     Application::~Application() {
+        m_ctx.asset_manager.save_registry();
         m_ctx.window.destroy();
     }
 } // namespace Cobalt
