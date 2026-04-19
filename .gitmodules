@@ -24,3 +24,6 @@
 [submodule "Vendor/SIMDJSON"]
 	path = Vendor/SIMDJSON
 	url = https://github.com/simdjson/simdjson
+[submodule "Vendor/STB"]
+	path = Vendor/STB
+	url = https://github.com/nothings/stb

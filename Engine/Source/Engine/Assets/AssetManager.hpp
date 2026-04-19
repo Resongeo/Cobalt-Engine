@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Engine/Assets/AssetMetadata.hpp"
+#include "Engine/Assets/IAssetLoader.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
@@ -16,18 +16,33 @@ namespace Cobalt
     public:
         auto init(const Project& project) -> void;
 
-        auto register_asset(const Filepath& path) -> void;
-        auto is_asset_registered(UUID id) -> bool;
-        auto is_asset_registered(const Filepath& path) -> bool;
-        auto load_registry() -> void;
-        auto save_registry() -> void;
+        auto register_asset(const Filepath& path) const -> void;
+        auto register_asset(UUID id, const AssetMetadata& metadata) const -> void;
+        auto get_metadata(UUID id) const -> AssetMetadata;
+        auto is_asset_registered(UUID id) const -> bool;
+        auto is_asset_registered(const Filepath& path) const -> bool;
+        auto load_registry() const -> void;
+        auto save_registry() const -> void;
+        auto get_registry() const -> HashMap<UUID, AssetMetadata>&;
 
         template <typename T>
-        auto get(const UUID id) const -> Rc<T> {
-            if (const auto it = m_loaded_assets.find(id); it != m_loaded_assets.end()) {
+        auto get_asset(const UUID id) const -> Rc<T> {
+            if (const auto it = m_loaded.find(id); it != m_loaded.end()) {
                 return std::static_pointer_cast<T>(it->second);
             }
-            // TODO: Load asset
+
+            const auto& metadata = get_metadata(id);
+            const auto& loader = m_loaders[static_cast<usize>(metadata.type)];
+
+            if (!loader) {
+                return nullptr;
+            }
+
+            if (const auto asset = loader->load(metadata)) {
+                m_loaded[id] = asset;
+                return std::static_pointer_cast<T>(asset);
+            }
+
             return nullptr;
         }
 
@@ -38,9 +53,10 @@ namespace Cobalt
         auto is_file_asset(const Filepath& path) const -> bool;
 
     private:
-        HashMap<UUID, Rc<void>> m_loaded_assets = {};
-        HashMap<UUID, AssetMetadata> m_asset_registry = {};
+        mutable HashMap<UUID, Rc<void>> m_loaded = {};
+        mutable HashMap<UUID, AssetMetadata> m_registry = {};
+        Array<Rc<IAssetLoader>, static_cast<usize>(AssetType::SIZE)> m_loaders = {};
         Filepath m_registry_path = {};
-        Filepath m_assets_path = {};
+        Filepath m_assets_dir = {};
     };
 } // namespace Cobalt

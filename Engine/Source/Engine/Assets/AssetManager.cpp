@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Assets/AssetManager.hpp"
+#include "Engine/Assets/Loaders/Texture2DLoader.hpp"
 #include "Engine/Core/Logger.hpp"
 
 #include <ranges>
@@ -11,28 +12,34 @@
 namespace Cobalt
 {
     auto AssetManager::init(const Project& project) -> void {
-        m_assets_path = project.get_project_assets_path();
+        m_assets_dir = project.get_project_assets_path();
 
-        if (!std::filesystem::exists(m_assets_path)) {
-            std::filesystem::create_directories(m_assets_path);
+        if (!std::filesystem::exists(m_assets_dir)) {
+            std::filesystem::create_directories(m_assets_dir);
         }
 
-        m_registry_path = m_assets_path / "AssetRegistry.json";
+        m_registry_path = m_assets_dir / "AssetRegistry.json";
         load_registry();
 
-        for (auto& entry : std::filesystem::recursive_directory_iterator(m_assets_path)) {
+        for (auto& entry : std::filesystem::recursive_directory_iterator(m_assets_dir)) {
             if (entry.is_directory()) {
                 continue;
             }
 
-            if (auto asset_path = std::filesystem::relative(entry.path(), m_assets_path); is_file_asset(asset_path)) {
-                register_asset(asset_path);
+            if (is_file_asset(entry.path())) {
+                register_asset(entry.path());
             }
         }
+
+        m_loaders[static_cast<usize>(AssetType::Texture)] = Memory::make_rc<Texture2DLoader>();
     }
 
-    auto AssetManager::register_asset(const Filepath& path) -> void {
+    auto AssetManager::register_asset(const Filepath& path) const -> void {
         if (is_asset_registered(path)) {
+            return;
+        }
+
+        if (!std::filesystem::exists(path)) {
             return;
         }
 
@@ -41,16 +48,32 @@ namespace Cobalt
             .type = get_asset_type_from_extension(path)
         };
 
-        m_asset_registry[UUID::generate()] = meta;
+        m_registry[UUID::generate()] = meta;
     }
 
-    auto AssetManager::is_asset_registered(const UUID id) -> bool {
-        const auto it = m_asset_registry.find(id);
-        return it != m_asset_registry.end();
+    auto AssetManager::register_asset(UUID id, const AssetMetadata& metadata) const -> void {
+        if (!std::filesystem::exists(metadata.path)) {
+            return;
+        }
+
+        m_registry[id] = metadata;
     }
 
-    auto AssetManager::is_asset_registered(const Filepath& path) -> bool {
-        for (const auto& asset : m_asset_registry | std::views::values) {
+    auto AssetManager::get_metadata(const UUID id) const -> AssetMetadata {
+        if (const auto it = m_registry.find(id); it != m_registry.end()) {
+            return it->second;
+        }
+
+        return {};
+    }
+
+    auto AssetManager::is_asset_registered(const UUID id) const -> bool {
+        const auto it = m_registry.find(id);
+        return it != m_registry.end();
+    }
+
+    auto AssetManager::is_asset_registered(const Filepath& path) const -> bool {
+        for (const auto& asset : m_registry | std::views::values) {
             if (asset.path == path) {
                 return true;
             }
@@ -59,7 +82,7 @@ namespace Cobalt
         return false;
     }
 
-    auto AssetManager::load_registry() -> void {
+    auto AssetManager::load_registry() const -> void {
         if (!std::filesystem::exists(m_registry_path)) {
             return;
         }
@@ -96,8 +119,8 @@ namespace Cobalt
                 continue;
             }
 
-            auto path_string = String{};
-            if (const auto error = asset["path"].get_string().get(path_string)) {
+            auto relative_path_string = String{};
+            if (const auto error = asset["path"].get_string().get(relative_path_string)) {
                 Logger::error(
                     "Engine::AssetManager", "{} Expected: \"{}\"",
                     simdjson::error_message(error), "path"
@@ -105,7 +128,7 @@ namespace Cobalt
 
                 continue;
             }
-            meta.path = path_string;
+            meta.path = m_assets_dir / relative_path_string;
 
             auto type_string = String{};
             if (const auto error = asset["type"].get_string().get(type_string)) {
@@ -118,11 +141,11 @@ namespace Cobalt
             }
             meta.type = string_to_asset_type(type_string);
 
-            m_asset_registry[id] = meta;
+            register_asset(id, meta);
         }
     }
 
-    auto AssetManager::save_registry() -> void {
+    auto AssetManager::save_registry() const -> void {
         auto sb = simdjson::builder::string_builder{};
 
         sb.start_object();
@@ -133,21 +156,22 @@ namespace Cobalt
             sb.start_array();
             {
                 auto asset_index = 0;
-                for (const auto& [id, meta] : m_asset_registry) {
+                for (const auto& [id, meta] : m_registry) {
                     asset_index++;
                     sb.start_object();
                     {
                         sb.append_key_value("uuid", id.value);
                         sb.append_comma();
 
-                        sb.append_key_value("path", meta.path.string());
+                        const auto relative_path = std::filesystem::relative(meta.path, m_assets_dir).string();
+                        sb.append_key_value("path", relative_path);
                         sb.append_comma();
 
                         sb.append_key_value("type", asset_type_to_string(meta.type));
                     }
                     sb.end_object();
 
-                    if (asset_index != m_asset_registry.size()) {
+                    if (asset_index != m_registry.size()) {
                         sb.append_comma();
                     }
                 }
@@ -161,6 +185,10 @@ namespace Cobalt
         std::ofstream out(m_registry_path);
         out << result.value_unsafe();
         out.close();
+    }
+
+    auto AssetManager::get_registry() const -> HashMap<UUID, AssetMetadata>& {
+        return m_registry;
     }
 
     auto AssetManager::get_asset_type_from_extension(const Filepath& path) const -> AssetType {

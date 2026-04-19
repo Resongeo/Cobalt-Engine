@@ -81,13 +81,13 @@ namespace Cobalt
         glClearColor(col.r, col.g, col.b, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        _start_batch();
+        start_batch();
     }
 
     auto Renderer::submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void {
-        if (_is_batch_full()) {
-            _flush_batch();
-            _start_batch();
+        if (is_batch_full()) {
+            flush_batch();
+            start_batch();
         }
 
         const Vec2 offset{scale.x * 0.5f, scale.y * 0.5f};
@@ -112,9 +112,9 @@ namespace Cobalt
     }
 
     auto Renderer::submit_quad(const Vec3& pos, const Vec2& scale, const f32 rotation, const Vec4& color) -> void {
-        if (_is_batch_full()) {
-            _flush_batch();
-            _start_batch();
+        if (is_batch_full()) {
+            flush_batch();
+            start_batch();
         }
 
         static Vec4 vertex_positions[4] = {
@@ -137,14 +137,14 @@ namespace Cobalt
     }
 
     auto Renderer::end_frame() const -> void {
-        _flush_batch();
+        flush_batch();
     }
 
     auto Renderer::set_viewport_size(const Vec<2, i32>& size) -> void {
         m_viewport_size = size;
     }
 
-    auto Renderer::_flush_batch() const -> void {
+    auto Renderer::flush_batch() const -> void {
         const u32 data_size =
                 reinterpret_cast<uint8_t*>(m_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(m_vertex_buffer_base);
         m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
@@ -154,11 +154,11 @@ namespace Cobalt
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 
-    auto Renderer::_is_batch_full() const -> bool {
+    auto Renderer::is_batch_full() const -> bool {
         return m_quad_index_count >= m_max_quads * 6;
     }
 
-    auto Renderer::_start_batch() -> void {
+    auto Renderer::start_batch() -> void {
         m_quad_index_count = 0;
         m_vertex_buffer_ptr = m_vertex_buffer_base;
     }

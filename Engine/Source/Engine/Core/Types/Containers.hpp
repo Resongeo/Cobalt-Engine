@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <unordered_map>
 #include <vector>
+#include <array>
 
 namespace Cobalt
 {
@@ -21,4 +22,7 @@ namespace Cobalt
 
     template <typename K, typename V>
     using HashMap = std::unordered_map<K, V>;
+
+    template <typename T, size_t S>
+    using Array = std::array<T, S>;
 } // namespace Cobalt

@@ -67,6 +67,12 @@ add_library(Engine STATIC
 	Source/Engine/Assets/AssetType.hpp
 	Source/Engine/Assets/AssetMetadata.hpp
 	Source/Engine/Core/EngineContext.hpp
+	Source/Engine/Assets/IAsset.hpp
+	Source/Engine/Assets/IAssetLoader.hpp
+	Source/Engine/Graphics/Texture2D.cpp
+	Source/Engine/Graphics/Texture2D.hpp
+	Source/Engine/Assets/Loaders/Texture2DLoader.cpp
+	Source/Engine/Assets/Loaders/Texture2DLoader.hpp
 )
 
 target_link_libraries(Engine PUBLIC
@@ -80,6 +86,7 @@ target_link_libraries(Engine PUBLIC
 target_include_directories(Engine PUBLIC
 	Source
 	${CMAKE_SOURCE_DIR}/Vendor/GLAD
+	${CMAKE_SOURCE_DIR}/Vendor/STB
 )
 
 target_compile_definitions(Engine PRIVATE

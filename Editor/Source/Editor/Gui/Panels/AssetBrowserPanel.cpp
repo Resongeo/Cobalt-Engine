@@ -22,6 +22,14 @@ namespace Cobalt
                 }
             }
 
+            if (ImGui::Button("Refresh")) {
+                for (auto& entry : std::filesystem::directory_iterator(m_current_dir)) {
+                    if (!entry.is_directory()) {
+                        ctx.asset_manager.register_asset(entry.path());
+                    }
+                }
+            }
+
             static auto padding = 16.0f;
             static auto thumbnail_size = 64.0f;
             const auto cell_size = thumbnail_size + padding;
