@@ -15,6 +15,7 @@ add_executable(Editor
 	Source/Editor/Gui/Panels/EntityComponentsPanel.hpp
 	Source/Editor/Gui/Panels/AssetBrowserPanel.cpp
 	Source/Editor/Gui/Panels/AssetBrowserPanel.hpp
+	Source/Editor/Gui/Fonts.hpp
 )
 
 target_link_libraries(Editor PRIVATE

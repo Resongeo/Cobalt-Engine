@@ -11,7 +11,6 @@
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Scene/SceneManager.hpp"
-#include "Engine/Graphics/Texture2D.hpp"
 
 #include <SDL3/SDL.h>
 #include <imgui.h>
@@ -69,21 +68,8 @@ namespace Cobalt
                 ImGui::End();
 
                 m_state.active_scene = active_scene;
-
                 for (const auto& panel : m_panels) {
                     panel->draw(ctx, m_state);
-                }
-
-                ImGui::Text("Loaded textures");
-                ImGui::Separator();
-                for (auto& [id, meta] : ctx.asset_manager.get_registry()) {
-                    if (meta.type == AssetType::Texture) {
-                        ImGui::PushID(id.value);
-                        ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&id.value);
-                        ImGui::PopID();
-                        const auto& texture = ctx.asset_manager.get_asset<Texture2D>(id);
-                        ImGui::Image(texture->get_renderer_id(), {128, 128});
-                    }
                 }
             }
         }

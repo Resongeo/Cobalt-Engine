@@ -2,8 +2,13 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
+#include "Editor/Gui/Fonts.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Platform/Window.hpp"
+
+#include "Editor/Embedded/Fonts/InterRegular.embed"
+#include "Editor/Embedded/Fonts/InterSemibold.embed"
+#include "Editor/Embedded/Fonts/InterBold.embed"
 
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -22,21 +27,27 @@ namespace Cobalt
 
         const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
 
-        ImGuiStyle& style = ImGui::GetStyle();
-        style.ScaleAllSizes(main_scale);
-        style.FontScaleDpi = main_scale;
-
-        ImGui_ImplSDL3_InitForOpenGL(window.get_handle(), window.get_gl_context());
-        ImGui_ImplOpenGL3_Init("#version 450 core");
-
         auto& io = ImGui::GetIO();
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
         io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
+        auto& style = ImGui::GetStyle();
+        style.ScaleAllSizes(main_scale);
+        style.FontScaleDpi = main_scale;
+
+        Fonts::semibold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_semibold_base85);
+        Fonts::bold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_bold_base85);
+        // IMPORTANT: Load this last so icon loading works as expected
+        Fonts::regular = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_regular_base85);
+        io.FontDefault = Fonts::regular;
+
+        ImGui_ImplSDL3_InitForOpenGL(window.get_handle(), window.get_gl_context());
+        ImGui_ImplOpenGL3_Init("#version 450 core");
     }
 
-    auto Gui::begin_frame(EngineContext& ctx) -> void {
+    auto Gui::begin_frame(const EngineContext& ctx) -> void {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
 
@@ -59,7 +70,7 @@ namespace Cobalt
         ImGui_ImplSDL3_ProcessEvent(event);
     }
 
-    auto Gui::end_frame(EngineContext& ctx) -> void {
+    auto Gui::end_frame(const EngineContext& ctx) -> void {
         const auto& io = ImGui::GetIO();
 
         ImGui::Render();

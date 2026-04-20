@@ -51,7 +51,7 @@ namespace Cobalt
         m_registry[UUID::generate()] = meta;
     }
 
-    auto AssetManager::register_asset(UUID id, const AssetMetadata& metadata) const -> void {
+    auto AssetManager::register_asset(const UUID id, const AssetMetadata& metadata) const -> void {
         if (!std::filesystem::exists(metadata.path)) {
             return;
         }
