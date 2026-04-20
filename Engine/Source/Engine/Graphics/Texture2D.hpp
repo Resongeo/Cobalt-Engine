@@ -15,6 +15,7 @@ namespace Cobalt
         ~Texture2D() override;
 
         auto load_from_file(const Filepath& path) -> bool;
+        auto create_with_size(const u32 width, const u32 height) -> bool;
         auto bind_slot(u32 slot) const -> void;
 
         auto get_width() const -> u32;

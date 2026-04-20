@@ -27,6 +27,10 @@ namespace Cobalt
 
         template <typename T>
         auto get_asset(const UUID id) const -> Rc<T> {
+            if (!id.is_valid()) {
+                return nullptr;
+            }
+
             if (const auto it = m_loaded.find(id); it != m_loaded.end()) {
                 return std::static_pointer_cast<T>(it->second);
             }

@@ -29,8 +29,9 @@ namespace Cobalt
                 }
 
                 if (entity.has_component<SpriteComponent>()) {
-                    auto& [tint] = entity.get_component<SpriteComponent>();
+                    auto& [tint, uuid] = entity.get_component<SpriteComponent>();
                     ImGui::ColorEdit4("Tint", &tint.r);
+                    ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&uuid.value);
                 }
             }
         }

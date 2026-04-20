@@ -7,10 +7,12 @@
 
 namespace Cobalt
 {
+    struct EngineContext;
+
     class ISystem
     {
     public:
         virtual ~ISystem() = default;
-        virtual auto update(entt::registry& registry) -> void {}
+        virtual auto update(EngineContext& ctx, entt::registry& registry) -> void {}
     };
 } // namespace Cobalt

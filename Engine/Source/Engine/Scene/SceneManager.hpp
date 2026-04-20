@@ -21,7 +21,7 @@ namespace Cobalt
         auto get_state() const -> SceneState;
         auto set_state(SceneState state) -> void;
         auto create_default_scene() -> void;
-        auto update() -> void;
+        auto update(EngineContext& ctx) -> void;
 
         template <typename T, typename... Args>
         auto add_system(const Schedule schedule, Args&&... args) -> void {

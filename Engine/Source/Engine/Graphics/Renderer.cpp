@@ -8,6 +8,20 @@
 
 namespace Cobalt
 {
+    constexpr Vec4 VERTEX_POSITIONS[4] = {
+        {-0.5, -0.5, 0.0, 1.0},
+        {0.5, -0.5, 0.0, 1.0},
+        {0.5, 0.5, 0.0, 1.0},
+        {-0.5, 0.5, 0.0, 1.0},
+    };
+
+    constexpr Vec2 TEXTURE_COORDS[4] = {
+        { 0.0f, 0.0f },
+        { 1.0f, 0.0f },
+        { 1.0f, 1.0f },
+        { 0.0f, 1.0f },
+    };
+
     auto Renderer::init(const u32 max_quads, const Filepath& base_assets_path) -> void {
         m_max_quads = max_quads;
 
@@ -49,7 +63,7 @@ namespace Cobalt
 
         m_vertex_array = Memory::make_rc<VertexArray>();
         m_vertex_buffer = Memory::make_rc<VertexBuffer>();
-        auto index_buffer = Memory::make_rc<IndexBuffer>();
+        const auto index_buffer = Memory::make_rc<IndexBuffer>();
 
         m_vertex_array->create();
         m_vertex_buffer->create_dynamic(max_vertices * sizeof(QuadVertexData));
@@ -58,12 +72,26 @@ namespace Cobalt
         auto attribute_layout = AttributeLayout();
         attribute_layout.create({
                 AttributeDataType::Float2, // a_Position
+                AttributeDataType::Float2, // a_TexCoords
                 AttributeDataType::Float4, // a_Color
+                AttributeDataType::Float,  // a_TexIndex
         });
 
         m_vertex_buffer->set_attribute_layout(attribute_layout);
         m_vertex_array->add_vertex_buffer(m_vertex_buffer);
         m_vertex_array->set_index_buffer(index_buffer);
+
+        auto texture_samplers = Array<i32, MAX_TEXTURES>{};
+        for (auto i = 0; i < MAX_TEXTURES; i++) {
+            texture_samplers[i] = i;
+        }
+
+        m_default_shader->bind();
+        m_default_shader->set_int_array("u_TextureSlots", texture_samplers.data(), texture_samplers.size());
+
+        m_default_texture = Memory::make_rc<Texture2D>();
+        m_default_texture->create_with_size(1, 1);
+        m_texture_slots[0] = m_default_texture;
 
         delete[] indices;
     }
@@ -93,19 +121,27 @@ namespace Cobalt
         const Vec2 offset{scale.x * 0.5f, scale.y * 0.5f};
 
         m_vertex_buffer_ptr->position = {pos.x - offset.x, pos.y - offset.y};
+        m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[0];
         m_vertex_buffer_ptr->color = color;
+        m_vertex_buffer_ptr->tex_index = 0.0f;
         m_vertex_buffer_ptr++;
 
         m_vertex_buffer_ptr->position = {pos.x + offset.x, pos.y - offset.y};
+        m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[1];
         m_vertex_buffer_ptr->color = color;
+        m_vertex_buffer_ptr->tex_index = 0.0f;
         m_vertex_buffer_ptr++;
 
         m_vertex_buffer_ptr->position = {pos.x + offset.x, pos.y + offset.y};
+        m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[2];
         m_vertex_buffer_ptr->color = color;
+        m_vertex_buffer_ptr->tex_index = 0.0f;
         m_vertex_buffer_ptr++;
 
         m_vertex_buffer_ptr->position = {pos.x - offset.x, pos.y + offset.y};
+        m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[3];
         m_vertex_buffer_ptr->color = color;
+        m_vertex_buffer_ptr->tex_index = 0.0f;
         m_vertex_buffer_ptr++;
 
         m_quad_index_count += 6;
@@ -117,19 +153,52 @@ namespace Cobalt
             start_batch();
         }
 
-        static Vec4 vertex_positions[4] = {
-                {-0.5, -0.5, 0.0, 1.0},
-                {0.5, -0.5, 0.0, 1.0},
-                {0.5, 0.5, 0.0, 1.0},
-                {-0.5, 0.5, 0.0, 1.0},
-        };
+        const auto transform = glm::translate(Mat4(1), pos) * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1}) *
+                glm::scale(Mat4(1), {scale.x, scale.y, 1});
+
+        for (auto i = 0; i < 4; i++) {
+            m_vertex_buffer_ptr->position = transform * VERTEX_POSITIONS[i];
+            m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[i];
+            m_vertex_buffer_ptr->color = color;
+            m_vertex_buffer_ptr->tex_index = 0.0f;
+            m_vertex_buffer_ptr++;
+        }
+
+        m_quad_index_count += 6;
+    }
+
+    auto Renderer::submit_quad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color,
+                               const Rc<Texture2D>& texture) -> void {
+        if (is_batch_full()) {
+            flush_batch();
+            start_batch();
+        }
+
+        auto index = 0;
+
+        if (texture) {
+            for (auto i = 0; i < m_texture_index; i++) {
+                if (m_texture_slots[i]->get_renderer_id() == texture->get_renderer_id()) {
+                    index = i;
+                    break;
+                }
+            }
+
+            if (index == 0) {
+                m_texture_slots[m_texture_index] = texture;
+                index = m_texture_index;
+                m_texture_index++;
+            }
+        }
 
         const auto transform = glm::translate(Mat4(1), pos) * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1}) *
                 glm::scale(Mat4(1), {scale.x, scale.y, 1});
 
         for (auto i = 0; i < 4; i++) {
-            m_vertex_buffer_ptr->position = transform * vertex_positions[i];
+            m_vertex_buffer_ptr->position = transform * VERTEX_POSITIONS[i];
+            m_vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[i];
             m_vertex_buffer_ptr->color = color;
+            m_vertex_buffer_ptr->tex_index = static_cast<f32>(index);
             m_vertex_buffer_ptr++;
         }
 
@@ -149,17 +218,23 @@ namespace Cobalt
                 reinterpret_cast<uint8_t*>(m_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(m_vertex_buffer_base);
         m_vertex_buffer->copy_data(data_size, m_vertex_buffer_base);
 
+        for (auto i = 0; i < m_texture_index; i++) {
+            m_texture_slots[i]->bind_slot(i);
+        }
+
         const u32 count = m_quad_index_count == 0 ? m_vertex_array->index_buffer()->count() : m_quad_index_count;
 
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 
     auto Renderer::is_batch_full() const -> bool {
-        return m_quad_index_count >= m_max_quads * 6;
+        return m_quad_index_count >= m_max_quads * 6 || m_texture_index >= MAX_TEXTURES;
     }
 
     auto Renderer::start_batch() -> void {
         m_quad_index_count = 0;
         m_vertex_buffer_ptr = m_vertex_buffer_base;
+        m_texture_index = 1;
     }
 } // namespace Cobalt

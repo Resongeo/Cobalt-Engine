@@ -31,7 +31,7 @@ namespace Cobalt
         return m_state;
     }
 
-    auto SceneManager::update() -> void {
+    auto SceneManager::update(EngineContext& ctx) -> void {
         if (m_active_scene == nullptr) {
             return;
         }
@@ -41,20 +41,20 @@ namespace Cobalt
         switch (m_state) {
             case SceneState::None: {
                 for (const auto& system : m_editor_update_systems) {
-                    system->update(registry);
+                    system->update(ctx, registry);
                 }
                 break;
             }
             case SceneState::Start: {
                 for (const auto& system : m_runtime_start_systems) {
-                    system->update(registry);
+                    system->update(ctx, registry);
                 }
                 m_state = SceneState::Update;
                 break;
             }
             case SceneState::Update: {
                 for (const auto& system : m_runtime_update_systems) {
-                    system->update(registry);
+                    system->update(ctx, registry);
                 }
                 break;
             }

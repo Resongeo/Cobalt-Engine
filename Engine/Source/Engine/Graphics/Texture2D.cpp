@@ -5,8 +5,8 @@
 #include "Engine/Core/Logger.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
 #include <glad/gl.h>
+#include <stb_image.h>
 
 namespace Cobalt
 {
@@ -30,16 +30,47 @@ namespace Cobalt
         glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        // TODO: generate mipmaps
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, data_format, GL_UNSIGNED_BYTE, data);
 
         stbi_image_free(data);
 
-        Logger::trace("Engine::Graphics::Texture2D",
+        Logger::trace(
+            "Engine::Graphics::Texture2D",
             "Loaded from file: {} Size: {}x{}",
             path_str, m_width, m_height
+        );
+
+        return true;
+    }
+
+    auto Texture2D::create_with_size(const u32 width, const u32 height) -> bool {
+        constexpr auto internal_format = GL_RGBA8;
+        constexpr auto data_format = GL_RGBA;
+
+        m_width = width;
+        m_height = height;
+
+        auto temp_buffer = Vector<unsigned char>{};
+        temp_buffer.resize(m_width * m_height * 4, 255);
+
+        glCreateTextures(GL_TEXTURE_2D, 1, &m_renderer_id);
+        glTextureStorage2D(m_renderer_id, 1, internal_format, m_width, m_height);
+
+        glTextureParameteri(m_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(m_renderer_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(m_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, data_format, GL_UNSIGNED_BYTE,
+                            temp_buffer.data());
+
+        Logger::trace(
+            "Engine::Graphics::Texture2D",
+            "Created with size: {}x{}",
+            m_width, m_height
         );
 
         return true;
@@ -63,9 +94,7 @@ namespace Cobalt
     }
 
     Texture2D::~Texture2D() {
-        Logger::trace("Engine::Graphics::Texture2D",
-            "Unloaded ID: {}", m_renderer_id
-        );
+        Logger::trace("Engine::Graphics::Texture2D", "Unloaded ID: {}", m_renderer_id);
         glDeleteTextures(1, &m_renderer_id);
         m_renderer_id = 0;
     }

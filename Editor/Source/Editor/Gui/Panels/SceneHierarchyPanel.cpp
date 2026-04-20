@@ -25,8 +25,9 @@ namespace Cobalt
             }
 
             for (const auto entity : state.active_scene->registry().view<entt::entity>()) {
-                auto name = state.active_scene->registry().get<TagComponent>(entity).name;
+                auto [name, id] = state.active_scene->registry().get<TagComponent>(entity);
 
+                ImGui::PushID(id.value);
                 if (state.selected_entity == entity) {
                     ImGui::PushStyleColor(ImGuiCol_Button, {0.8, 0.3, 0.3, 1.0});
                     if (ImGui::Button(name.c_str())) {
@@ -38,6 +39,7 @@ namespace Cobalt
                         state.selected_entity = entity;
                     }
                 }
+                ImGui::PopID();
             }
         }
         ImGui::End();

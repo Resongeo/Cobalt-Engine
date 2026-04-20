@@ -17,7 +17,7 @@ namespace Cobalt
         const auto vertex_source = File::read(vertex_path);
         const auto fragment_source = File::read(fragment_path);
 
-        return _create(vertex_source, fragment_source);
+        return create(vertex_source, fragment_source);
     }
 
     auto Shader::create_fallback() -> bool {
@@ -41,7 +41,7 @@ namespace Cobalt
             }
         )";
 
-        return _create(vertex_source, fragment_source);
+        return create(vertex_source, fragment_source);
     }
 
     auto Shader::bind() const -> void {
@@ -53,10 +53,14 @@ namespace Cobalt
     }
 
     auto Shader::set_mat4(const char* name, const Mat4& value) -> void {
-        glUniformMatrix4fv(_uniform_location(name), 1, GL_FALSE, glm::value_ptr(value));
+        glUniformMatrix4fv(uniform_location(name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    auto Shader::_create(const String& vertex_source, const String& fragment_source) -> bool {
+    auto Shader::set_int_array(const char* name, const i32* values, const u32 count) -> void {
+        glUniform1iv(uniform_location(name), count, values);
+    }
+
+    auto Shader::create(const String& vertex_source, const String& fragment_source) -> bool {
         GLint is_compiled = 0;
 
         const auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -128,7 +132,7 @@ namespace Cobalt
         return true;
     }
 
-    auto Shader::_uniform_location(const char* name) -> i32 {
+    auto Shader::uniform_location(const char* name) -> i32 {
         if (m_uniform_locations.contains(name)) {
             return m_uniform_locations[name];
         }

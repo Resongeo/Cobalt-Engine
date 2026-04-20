@@ -10,14 +10,16 @@ namespace Cobalt
     struct QuadVertexData
     {
         Vec2 position;
+        Vec2 tex_coords;
         Vec4 color;
+        f32  tex_index;
     };
 
     struct QuadInstanceData
     {
         Vec2 position;
         Vec4 color;
-        f32 texture_id;
+        f32  texture_id;
     };
 
     struct QuadDrawCommand

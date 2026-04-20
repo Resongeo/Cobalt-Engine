@@ -19,10 +19,11 @@ namespace Cobalt
         auto create_from_file(const char* vertex_path, const char* fragment_path) -> bool;
         auto create_fallback() -> bool;
         auto set_mat4(const char* name, const Mat4& value) -> void;
+        auto set_int_array(const char* name, const i32* values, const u32 count) -> void;
 
     private:
-        auto _create(const String& vertex_source, const String& fragment_source) -> bool;
-        auto _uniform_location(const char* name) -> i32;
+        auto create(const String& vertex_source, const String& fragment_source) -> bool;
+        auto uniform_location(const char* name) -> i32;
 
     private:
         HashMap<const char*, i32> m_uniform_locations = {};
