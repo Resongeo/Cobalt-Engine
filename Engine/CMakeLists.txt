@@ -92,4 +92,5 @@ target_include_directories(Engine PUBLIC
 target_compile_definitions(Engine PRIVATE
 	$<$<CONFIG:Debug>:CONFIG_DEBUG>
 	$<$<CONFIG:Release>:CONFIG_RELEASE>
+	$<$<CONFIG:MinSizeRel>:CONFIG_RELEASE>
 )

@@ -30,6 +30,7 @@ target_include_directories(Editor PRIVATE
 target_compile_definitions(Editor PRIVATE
 	$<$<CONFIG:Debug>:CONFIG_DEBUG>
 	$<$<CONFIG:Release>:CONFIG_RELEASE>
+	$<$<CONFIG:MinSizeRel>:CONFIG_RELEASE>
 )
 
 # -- Copy Engine assets to Editor build output --
