@@ -78,14 +78,14 @@ namespace Cobalt
             const auto _s = l_oklab - 0.0894841775f * a_oklab - 1.2914855480f * b_oklab;
 
             // Undo cube root
-            _l = _l * _l * _l;
+            const auto l_ = _l * _l * _l;
             const auto m = _m * _m * _m;
             const auto s = _s * _s * _s;
 
             // LMS -> sRGB
-            const auto r_lin = +4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s;
-            const auto g_lin = -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s;
-            const auto b_lin = -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s;
+            const auto r_lin = +4.0767416621f * l_ - 3.3077115913f * m + 0.2309699292f * s;
+            const auto g_lin = -1.2684380046f * l_ + 2.6097574011f * m - 0.3413193965f * s;
+            const auto b_lin = -0.0041960863f * l_ - 0.7034186147f * m + 1.7076147010f * s;
 
             // sRGB -> gamma encoded
             auto srgb_transfer = [](const f32 x) {
