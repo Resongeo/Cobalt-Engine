@@ -10,4 +10,5 @@ namespace Cobalt::Fonts
     inline ImFont* regular = nullptr;
     inline ImFont* semibold = nullptr;
     inline ImFont* bold = nullptr;
+    inline ImFont* icon = nullptr;
 }
