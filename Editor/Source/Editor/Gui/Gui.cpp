@@ -4,11 +4,13 @@
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Fonts.hpp"
 #include "Engine/Core/Project.hpp"
+#include "Engine/Core/Types/Color.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include "Editor/Embedded/Fonts/InterRegular.embed"
 #include "Editor/Embedded/Fonts/InterSemibold.embed"
 #include "Editor/Embedded/Fonts/InterBold.embed"
+#include "Editor/Embedded/Icons/Lucide.embed"
 
 #include <SDL3/SDL.h>
 #include <backends/imgui_impl_opengl3.h>
@@ -18,6 +20,8 @@
 
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
+
+#define IMVEC4(col) ImVec4(col.r, col.g, col.b, col.a)
 
 namespace Cobalt
 {
@@ -39,12 +43,65 @@ namespace Cobalt
 
         Fonts::semibold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_semibold_base85);
         Fonts::bold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_bold_base85);
-        // IMPORTANT: Load this last so icon loading works as expected
         Fonts::regular = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_regular_base85);
         io.FontDefault = Fonts::regular;
 
+        auto config = ImFontConfig{};
+        config.MergeMode = false;
+        config.GlyphMinAdvanceX = 20.0f;
+        config.GlyphOffset = {0, 3};
+        Fonts::icon = io.Fonts->AddFontFromMemoryCompressedBase85TTF(
+            lucide_fonticon_base85,
+            20.0f,
+            &config
+        );
+
         ImGui_ImplSDL3_InitForOpenGL(window.get_handle(), window.get_gl_context());
         ImGui_ImplOpenGL3_Init("#version 450 core");
+    }
+
+    auto Gui::setup_style() -> void {
+        auto& style = ImGui::GetStyle();
+
+        // Default ImGui style values
+        // -- Main --
+        style.WindowPadding = {0.0f, 0.0f};
+        style.FramePadding = {12.0f, 8.0f};
+        style.ItemSpacing = {4.0f, 4.0f};
+        style.GrabMinSize = 16.0f;
+
+        // -- Borders --
+        style.FrameBorderSize = 1.0f;
+        style.WindowBorderSize = 0.0f;
+
+        // -- Rounding --
+        style.WindowRounding = 12.0f;
+        style.FrameRounding = 6.0f;
+
+        // -- Windows --
+        style.WindowTitleAlign = {0.5f, 0.5f};
+
+        // Default ImGui colors
+        // -- Background colors --
+        style.Colors[ImGuiCol_WindowBg]            = IMVEC4(Color::from_oklch(0.2f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TitleBg]             = IMVEC4(Color::from_oklch(0.2f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TitleBgActive]       = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_Button]              = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_ButtonHovered]       = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_ButtonActive]        = IMVEC4(Color::from_oklch(0.32f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBg]             = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBgActive]       = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBgHovered]      = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_Tab]                 = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TabDimmedSelected]   = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+
+        // -- Foreground colors --
+        style.Colors[ImGuiCol_Text]                = IMVEC4(Color::from_scalar(1.0f, 0.88f));
+
+        // -- Primary colors --
+        style.Colors[ImGuiCol_TabSelected]         = IMVEC4(Color::from_oklch(0.52f, 0.17f, 260.0f));
+        style.Colors[ImGuiCol_TabSelectedOverline] = IMVEC4(Color::from_oklch(0.52f, 0.17f, 260.0f));
+        style.Colors[ImGuiCol_TabHovered]          = IMVEC4(Color::from_oklch(0.61f, 0.17f, 260.0f));
     }
 
     auto Gui::begin_frame(const EngineContext& ctx) -> void {

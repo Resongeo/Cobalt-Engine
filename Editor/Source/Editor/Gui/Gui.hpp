@@ -14,6 +14,7 @@ namespace Cobalt
     {
     public:
         static auto init(const Window& window) -> void;
+        static auto setup_style() -> void;
         static auto begin_frame(const EngineContext& ctx) -> void;
         static auto end_frame(const EngineContext& ctx) -> void;
         static auto process_event(const SDL_Event* event) -> void;
