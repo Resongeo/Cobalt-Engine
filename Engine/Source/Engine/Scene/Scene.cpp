@@ -8,11 +8,11 @@ namespace Cobalt
 {
     Scene::Scene(const String& name) : m_name(name) {}
 
-    auto Scene::name() -> String& {
+    auto Scene::get_name() -> String& {
         return m_name;
     }
 
-    auto Scene::registry() -> entt::registry& {
+    auto Scene::get_registry() -> entt::registry& {
         return m_registry;
     }
 

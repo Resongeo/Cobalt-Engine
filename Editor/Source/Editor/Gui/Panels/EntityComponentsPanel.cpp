@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
+#include "Editor/Gui/Widgets.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Entity.hpp"
 
@@ -10,10 +11,10 @@
 namespace Cobalt
 {
     auto EntityComponentsPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        ImGui::Begin("Components");
+        Widgets::begin("Components", {8, 8});
         {
             if (state.selected_entity != entt::null) {
-                auto entity = Entity(state.selected_entity, &state.active_scene->registry());
+                auto entity = Entity(state.selected_entity, &state.active_scene->get_registry());
 
                 if (entity.has_component<TagComponent>()) {
                     auto& [name, uuid] = entity.get_component<TagComponent>();
@@ -35,6 +36,6 @@ namespace Cobalt
                 }
             }
         }
-        ImGui::End();
+        Widgets::end();
     }
 } // namespace Cobalt

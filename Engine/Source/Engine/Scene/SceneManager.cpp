@@ -36,7 +36,7 @@ namespace Cobalt
             return;
         }
 
-        auto& registry = m_active_scene->registry();
+        auto& registry = m_active_scene->get_registry();
 
         switch (m_state) {
             case SceneState::None: {

@@ -16,6 +16,9 @@ add_executable(Editor
 	Source/Editor/Gui/Panels/AssetBrowserPanel.cpp
 	Source/Editor/Gui/Panels/AssetBrowserPanel.hpp
 	Source/Editor/Gui/Fonts.hpp
+	Source/Editor/Gui/Widgets.hpp
+	Source/Editor/Gui/Widgets.cpp
+	Source/Editor/Gui/Helpers.hpp
 )
 
 target_link_libraries(Editor PRIVATE

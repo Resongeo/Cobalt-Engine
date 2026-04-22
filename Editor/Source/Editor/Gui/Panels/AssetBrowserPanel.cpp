@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
+#include "Editor/Gui/Widgets.hpp"
 #include "Engine/Core/Project.hpp"
 
 #include <imgui.h>
@@ -14,15 +15,15 @@ namespace Cobalt
     }
 
     auto AssetBrowserPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        ImGui::Begin("Asset Browser");
+        Widgets::begin("Asset Browser", {8, 8});
         {
             if (m_current_dir != std::filesystem::path(m_assets_base_dir)) {
-                if (ImGui::Button("<-")) {
+                if (Widgets::button("<-")) {
                     m_current_dir = m_current_dir.parent_path();
                 }
             }
 
-            if (ImGui::Button("Refresh")) {
+            if (Widgets::button("Refresh")) {
                 for (auto& entry : std::filesystem::directory_iterator(m_current_dir)) {
                     if (!entry.is_directory()) {
                         ctx.asset_manager.register_asset(entry.path());
@@ -49,7 +50,7 @@ namespace Cobalt
                 ImGui::PushID(filename_string.c_str());
 
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 100));
-                ImGui::Button(filename_string.c_str(), {thumbnail_size, thumbnail_size});
+                Widgets::button(filename_string.c_str(), Variant::Default, {thumbnail_size, thumbnail_size});
                 ImGui::PopStyleColor();
 
                 if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
@@ -68,6 +69,6 @@ namespace Cobalt
             ImGui::SliderFloat("Thumbnail Size", &thumbnail_size, 16, 512);
             ImGui::SliderFloat("Padding", &padding, 0, 32);
         }
-        ImGui::End();
+        Widgets::end();
     }
 } // namespace Cobalt

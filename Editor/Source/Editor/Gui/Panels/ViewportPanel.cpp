@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
+#include "Editor/Gui/Widgets.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
 #include "Engine/ECS/Entity.hpp"
 
@@ -15,7 +16,7 @@
 namespace Cobalt
 {
     auto ViewportPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        ImGui::Begin("Viewport");
+        Widgets::begin("Viewport");
         {
             static auto operation = ImGuizmo::TRANSLATE;
             static auto mode = ImGuizmo::LOCAL;
@@ -38,6 +39,18 @@ namespace Cobalt
                 }
             }
 
+            static auto toolbar_pos = ImVec2();
+            toolbar_pos = ImGui::GetCursorScreenPos();
+
+            if (const auto color_id = state.framebuffer.get_color_attachment_id(0); color_id >= 0) {
+                const auto viewport_size = ImGui::GetContentRegionAvail();
+                state.framebuffer.resize(viewport_size.x, viewport_size.y);
+                ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
+            }
+
+            ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});
+
+            ImGui::SetCursorScreenPos(toolbar_pos);
             if (ImGui::RadioButton("Translate", operation == ImGuizmo::TRANSLATE)) {
                 operation = ImGuizmo::TRANSLATE;
             }
@@ -60,11 +73,7 @@ namespace Cobalt
                 mode = ImGuizmo::WORLD;
             }
 
-            if (const auto color_id = state.framebuffer.get_color_attachment_id(0); color_id >= 0) {
-                const auto viewport_size = ImGui::GetContentRegionAvail();
-                state.framebuffer.resize(viewport_size.x, viewport_size.y);
-                ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
-            }
+            ImGui::PopStyleVar();
 
             if (state.selected_entity != entt::null) {
                 ImGuizmo::SetOrthographic(true);
@@ -72,7 +81,7 @@ namespace Cobalt
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(),
                                   ImGui::GetWindowHeight());
 
-                auto entity = Entity(state.selected_entity, &state.active_scene->registry());
+                auto entity = Entity(state.selected_entity, &state.active_scene->get_registry());
                 auto& transform_component = entity.get_component<TransformComponent>();
                 auto transform_matrix = transform_component.get_transform_matrix();
 
@@ -113,6 +122,6 @@ namespace Cobalt
                 }
             }
         }
-        ImGui::End();
+        Widgets::end();
     }
 } // namespace Cobalt

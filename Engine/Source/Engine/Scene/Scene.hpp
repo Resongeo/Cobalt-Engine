@@ -15,8 +15,8 @@ namespace Cobalt
         explicit Scene() = default;
         explicit Scene(const String& name);
 
-        auto name() -> String&;
-        auto registry() -> entt::registry&;
+        auto get_name() -> String&;
+        auto get_registry() -> entt::registry&;
         auto create_entity(const String& name) -> Entity;
         auto create_entity(const String& name, UUID uuid) -> Entity;
         auto create_empty_entity() -> Entity;

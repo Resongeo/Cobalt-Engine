@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <vector>
 #include <array>
+#include <string>
+#include <string_view>
 
 namespace Cobalt
 {

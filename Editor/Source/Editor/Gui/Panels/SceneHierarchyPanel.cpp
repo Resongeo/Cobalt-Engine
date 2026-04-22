@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
+#include "Editor/Gui/Widgets.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Entity.hpp"
 
@@ -10,38 +11,38 @@
 namespace Cobalt
 {
     auto SceneHierarchyPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        ImGui::Begin("Scene Hierarchy");
+        Widgets::begin("Scene Hierarchy");
         {
-            if (ImGui::Button("Create")) {
+            if (Widgets::button("Create")) {
                 auto entity = state.active_scene->create_entity("Entity");
                 entity.add_component<SpriteComponent>();
             }
 
             if (state.selected_entity != entt::null) {
                 ImGui::SameLine();
-                if (ImGui::Button("Deselect")) {
+                if (Widgets::button("Deselect")) {
                     state.selected_entity = entt::null;
                 }
             }
 
-            for (const auto entity : state.active_scene->registry().view<entt::entity>()) {
-                auto [name, id] = state.active_scene->registry().get<TagComponent>(entity);
+            for (const auto entity : state.active_scene->get_registry().view<entt::entity>()) {
+                auto [name, id] = state.active_scene->get_registry().get<TagComponent>(entity);
 
                 ImGui::PushID(id.value);
                 if (state.selected_entity == entity) {
                     ImGui::PushStyleColor(ImGuiCol_Button, {0.8, 0.3, 0.3, 1.0});
-                    if (ImGui::Button(name.c_str())) {
+                    if (Widgets::button(name.c_str())) {
                         state.selected_entity = entity;
                     }
                     ImGui::PopStyleColor();
                 } else {
-                    if (ImGui::Button(name.c_str())) {
+                    if (Widgets::button(name.c_str())) {
                         state.selected_entity = entity;
                     }
                 }
                 ImGui::PopID();
             }
         }
-        ImGui::End();
+        Widgets::end();
     }
 } // namespace Cobalt
