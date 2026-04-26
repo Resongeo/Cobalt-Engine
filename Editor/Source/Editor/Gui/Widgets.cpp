@@ -2,9 +2,12 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Widgets.hpp"
+#include "Editor/Gui/Colors.hpp"
 #include "Editor/Gui/Fonts.hpp"
 
 #include <imgui_internal.h>
+
+#define IMVEC4(col) ImVec4(col.r, col.g, col.b, col.a)
 
 namespace Cobalt::Widgets
 {
@@ -55,10 +58,24 @@ namespace Cobalt::Widgets
 
         bool hovered, held;
         const bool pressed = ImGui::ButtonBehavior(bb, id, &hovered, &held, 0);
+        auto bg_col = Color{};
 
-        const ImU32 col = ImGui::GetColorU32(held && hovered   ? ImGuiCol_ButtonActive
-                                                     : hovered ? ImGuiCol_ButtonHovered
-                                                               : ImGuiCol_Button);
+        switch (variant) {
+            case Variant::Default: {
+                bg_col = held && hovered ? Colors::frame_active : hovered ? Colors::frame_hovered : Colors::frame;
+                break;
+            }
+            case Variant::Primary: {
+                bg_col = held && hovered ? Colors::primary_active : hovered ? Colors::primary_hovered : Colors::primary;
+                break;
+            }
+            case Variant::Secondary: {
+                bg_col = held && hovered ? Colors::secondary_active : hovered ? Colors::secondary_hovered : Colors::secondary;
+                break;
+            }
+        }
+
+        const auto col = ImGui::GetColorU32(IMVEC4(bg_col));
         ImGui::RenderNavCursor(bb, id);
         ImGui::RenderFrame(bb.Min, bb.Max, col, true, style.FrameRounding);
 

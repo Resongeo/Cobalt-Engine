@@ -19,6 +19,7 @@ add_executable(Editor
 	Source/Editor/Gui/Widgets.hpp
 	Source/Editor/Gui/Widgets.cpp
 	Source/Editor/Gui/Helpers.hpp
+	Source/Editor/Gui/Colors.hpp
 )
 
 target_link_libraries(Editor PRIVATE
