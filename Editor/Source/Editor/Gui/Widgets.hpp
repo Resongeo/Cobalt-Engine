@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types/Containers.hpp"
+#include "Editor/Gui/Colors.hpp"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
@@ -24,5 +25,6 @@ namespace Cobalt
 
         auto separator() -> void;
         auto button(StringView label, Variant variant = Variant::Default, ImVec2 size = {0, 0}) -> bool;
+        auto collapsing_header(StringView label, const Color& text_color = Colors::text, bool default_opened = true) -> bool;
     }
 }

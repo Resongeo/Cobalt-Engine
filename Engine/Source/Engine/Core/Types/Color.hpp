@@ -21,7 +21,7 @@ namespace Cobalt
             return {value, value, value, alpha};
         }
 
-        static auto from_rgb(const f32 r, const f32 g, const f32 b) -> Color {
+        static auto from_rgb_f32(const f32 r, const f32 g, const f32 b) -> Color {
             return {r, g, b, 1.0};
         }
 
@@ -38,7 +38,7 @@ namespace Cobalt
             };
         }
 
-        static auto from_rgb(const u8 r, const u8 g, const u8 b) -> Color {
+        static auto from_rgb_u8(const u8 r, const u8 g, const u8 b) -> Color {
             return {
                     static_cast<f32>(r) / 255.0f,
                     static_cast<f32>(g) / 255.0f,

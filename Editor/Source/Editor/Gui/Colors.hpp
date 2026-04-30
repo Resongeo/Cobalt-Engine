@@ -9,6 +9,8 @@
 
 namespace Cobalt::Colors
 {
+    inline Color text = Color::from_oklch(0.90f, 0.0f, 0.0f);
+
     inline Color frame         = Color::from_oklch(0.25f, 0.0f, 0.0f);
     inline Color frame_hovered = Color::from_oklch(0.28f, 0.0f, 0.0f);
     inline Color frame_active  = Color::from_oklch(0.32f, 0.0f, 0.0f);
@@ -25,4 +27,9 @@ namespace Cobalt::Colors
     inline Color node_odd     = Color::from_oklch(0.24f, 0.0f, 0.0f);
     inline Color node_active  = primary_active;
     inline Color node_hovered = primary_hovered;
+
+    inline Color arrow     = Color::from_oklch(0.65f, 0.0f, 0.0f);
+    inline Color tag       = Color::from_rgb_u8(88, 153, 232);
+    inline Color transform = Color::from_rgb_u8(232, 150, 88);
+    inline Color sprite    = Color::from_rgb_u8(195, 119, 230);
 }
