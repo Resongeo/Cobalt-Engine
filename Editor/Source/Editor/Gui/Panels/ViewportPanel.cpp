@@ -15,21 +15,33 @@
 
 namespace Cobalt
 {
+    inline auto gizmo_operation_to_imguizmo(const GizmoOperation operation) -> ImGuizmo::OPERATION {
+        switch (operation) {
+            case GizmoOperation::Universal: return ImGuizmo::UNIVERSAL;
+            case GizmoOperation::Translate: return ImGuizmo::TRANSLATE;
+            case GizmoOperation::Rotate: return ImGuizmo::ROTATE;
+            case GizmoOperation::Scale: return ImGuizmo::SCALE;
+        }
+
+        return ImGuizmo::UNIVERSAL;
+    }
+
     auto ViewportPanel::draw(EngineContext& ctx, EditorState& state) -> void {
         Widgets::begin("Viewport");
         {
-            static auto operation = ImGuizmo::TRANSLATE;
             static auto mode = ImGuizmo::LOCAL;
             static auto should_snap = false;
             f32 snap_amount = 0.0f;
 
             if (ImGui::IsWindowFocused()) {
                 if (ImGui::IsKeyPressed(ImGuiKey_Q)) {
-                    operation = ImGuizmo::TRANSLATE;
+                    state.gizmo_operation = GizmoOperation::Universal;
                 } else if (ImGui::IsKeyPressed(ImGuiKey_W)) {
-                    operation = ImGuizmo::ROTATE;
+                    state.gizmo_operation = GizmoOperation::Translate;
                 } else if (ImGui::IsKeyPressed(ImGuiKey_E)) {
-                    operation = ImGuizmo::SCALE;
+                    state.gizmo_operation = GizmoOperation::Rotate;
+                } else if (ImGui::IsKeyPressed(ImGuiKey_R)) {
+                    state.gizmo_operation = GizmoOperation::Scale;
                 }
 
                 if (ImGui::IsKeyDown(ImGuiKey_LeftShift)) {
@@ -51,16 +63,20 @@ namespace Cobalt
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});
 
             ImGui::SetCursorScreenPos(toolbar_pos);
-            if (ImGui::RadioButton("Translate", operation == ImGuizmo::TRANSLATE)) {
-                operation = ImGuizmo::TRANSLATE;
+            if (ImGui::RadioButton("Universal", state.gizmo_operation == GizmoOperation::Universal)) {
+                state.gizmo_operation = GizmoOperation::Universal;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("Rotate", operation == ImGuizmo::ROTATE)) {
-                operation = ImGuizmo::ROTATE;
+            if (ImGui::RadioButton("Translate", state.gizmo_operation == GizmoOperation::Translate)) {
+                state.gizmo_operation = GizmoOperation::Translate;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("Scale", operation == ImGuizmo::SCALE)) {
-                operation = ImGuizmo::SCALE;
+            if (ImGui::RadioButton("Rotate", state.gizmo_operation == GizmoOperation::Rotate)) {
+                state.gizmo_operation = GizmoOperation::Rotate;
+            }
+            ImGui::SameLine();
+            if (ImGui::RadioButton("Scale", state.gizmo_operation == GizmoOperation::Scale)) {
+                state.gizmo_operation = GizmoOperation::Scale;
             }
             ImGui::SameLine();
             ImGui::Dummy({20, 0});
@@ -86,20 +102,15 @@ namespace Cobalt
                 auto transform_matrix = transform_component.get_transform_matrix();
 
                 if (should_snap) {
-                    switch (operation) {
-                        case ImGuizmo::TRANSLATE: snap_amount = 0.5f; break;
-                        case ImGuizmo::ROTATE: snap_amount = 15.0f; break;
-                        case ImGuizmo::SCALE: snap_amount = 0.1f; break;
-                        default: break;
-                    }
+                    // TODO: Implement snapping
                 } else {
                     snap_amount = 0.0f;
                 }
 
                 ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.view()),
                                      glm::value_ptr(state.editor_camera.projection(state.framebuffer.get_size())),
-                                     operation, mode, glm::value_ptr(transform_matrix), nullptr,
-                                     should_snap ? &snap_amount : nullptr);
+                                     gizmo_operation_to_imguizmo(state.gizmo_operation), mode,
+                                     glm::value_ptr(transform_matrix), nullptr, should_snap ? &snap_amount : nullptr);
 
                 if (ImGuizmo::IsUsing()) {
                     Vec3 scale;
@@ -109,14 +120,19 @@ namespace Cobalt
                     Vec4 perspective;
                     glm::decompose(transform_matrix, scale, rotation, position, skew, perspective);
 
-                    switch (operation) {
-                        case ImGuizmo::OPERATION::TRANSLATE:
+                    switch (state.gizmo_operation) {
+                        case GizmoOperation::Universal:
+                            transform_component.position = {position.x, position.y};
+                            transform_component.rotation = glm::degrees(glm::eulerAngles(rotation)).z;
+                            transform_component.scale = {scale.x, scale.y};
+                            break;
+                        case GizmoOperation::Translate:
                             transform_component.position = {position.x, position.y};
                             break;
-                        case ImGuizmo::ROTATE:
+                        case GizmoOperation::Rotate:
                             transform_component.rotation = glm::degrees(glm::eulerAngles(rotation)).z;
                             break;
-                        case ImGuizmo::OPERATION::SCALE: transform_component.scale = {scale.x, scale.y}; break;
+                        case GizmoOperation::Scale: transform_component.scale = {scale.x, scale.y}; break;
                         default:;
                     }
                 }

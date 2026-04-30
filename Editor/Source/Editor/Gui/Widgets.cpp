@@ -7,8 +7,6 @@
 
 #include <imgui_internal.h>
 
-#define IMVEC4(col) ImVec4(col.r, col.g, col.b, col.a)
-
 namespace Cobalt::Widgets
 {
     auto begin(const StringView title, const ImVec2 padding) -> bool {

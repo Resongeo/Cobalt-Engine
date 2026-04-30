@@ -9,10 +9,9 @@
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
 #include "Engine/Core/Project.hpp"
-#include "Engine/Core/Logger.hpp"
-#include "Engine/Core/Types/Color.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
+#include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 
 #include <SDL3/SDL.h>
@@ -80,30 +79,12 @@ namespace Cobalt
 
         Widgets::begin("Debug", {8, 8});
         {
-            if (Widgets::button("Button")) {
-                Logger::warn("Editor", "Button pressed!");
-            }
-
-            if (Widgets::button("Convert Color")) {
-                auto [r, g, b, _] = Color::from_oklch(0.7f, 0.1, 77);
-                Logger::warn("a", "rgb({}, {}, {})", r, g, b);
-            }
-
-            ImGui::Separator();
-
-            if (Widgets::button("Default", Variant::Default)) {
-                Logger::warn("Button", "I am a default button");
-            }
-            if (Widgets::button("Primary", Variant::Primary)) {
-                Logger::warn("Button", "I am a primary button");
-            }
-            if (Widgets::button("Secondary", Variant::Secondary)) {
-                Logger::warn("Button", "I am a secondary button");
+            if (Widgets::button("Add entity")) {
+                auto entity = ctx.scene_manager.get_active_scene()->create_entity("Entity");
+                entity.add_component<SpriteComponent>();
             }
         }
         Widgets::end();
-
-        //ImGui::ShowStyleEditor();
 
         Gui::end_frame(ctx);
     }

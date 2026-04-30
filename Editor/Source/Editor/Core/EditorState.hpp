@@ -11,11 +11,20 @@
 
 namespace Cobalt
 {
+    enum class GizmoOperation
+    {
+        Universal,
+        Translate,
+        Rotate,
+        Scale
+    };
+
     struct EditorState
     {
         entt::entity selected_entity = entt::null;
         Scene* active_scene = nullptr;
         Camera editor_camera = {};
         Framebuffer framebuffer = {};
+        GizmoOperation gizmo_operation = {};
     };
 } // namespace Cobalt

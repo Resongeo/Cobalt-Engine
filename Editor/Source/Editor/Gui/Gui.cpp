@@ -3,6 +3,7 @@
 
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Fonts.hpp"
+#include "Editor/Gui/Colors.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Color.hpp"
 #include "Engine/Platform/Window.hpp"
@@ -21,8 +22,6 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-#define IMVEC4(col) ImVec4(col.r, col.g, col.b, col.a)
-
 namespace Cobalt
 {
     auto Gui::init(const Window& window) -> void {
@@ -35,7 +34,6 @@ namespace Cobalt
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
         io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
         io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         auto& style = ImGui::GetStyle();
         style.ScaleAllSizes(main_scale);
