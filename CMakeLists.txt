@@ -17,6 +17,7 @@ add_subdirectory(Vendor/GLM)
 file(GLOB IMGUI_SOURCES
 	"Vendor/IMGUI/*.cpp"
 	"Vendor/IMGUI/*.h"
+	"Vendor/IMGUI/misc/cpp/*.cpp"
 )
 add_library(imgui STATIC ${IMGUI_SOURCES})
 target_include_directories(imgui PUBLIC "Vendor/IMGUI")

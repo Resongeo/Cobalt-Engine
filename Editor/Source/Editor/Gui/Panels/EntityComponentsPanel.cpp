@@ -7,6 +7,7 @@
 #include "Engine/ECS/Entity.hpp"
 
 #include <imgui.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Cobalt
 {
@@ -19,8 +20,11 @@ namespace Cobalt
                 if (entity.has_component<TagComponent>()) {
                     if (Widgets::collapsing_header("Tag", Colors::tag)) {
                         auto& [name, uuid] = entity.get_component<TagComponent>();
-                        ImGui::Text("Name: %s", name.c_str());
+                        ImGui::InputText("Name", &name);
+
+                        ImGui::PushStyleColor(ImGuiCol_Text, IMVEC4(Colors::text_muted));
                         ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
+                        ImGui::PopStyleColor();
                     }
                 }
 

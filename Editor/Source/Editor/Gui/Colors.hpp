@@ -9,7 +9,8 @@
 
 namespace Cobalt::Colors
 {
-    inline Color text = Color::from_oklch(0.90f, 0.0f, 0.0f);
+    inline Color text       = Color::from_oklch(0.90f, 0.0f, 0.0f);
+    inline Color text_muted = Color::from_oklch(0.50f, 0.0f, 0.0f);
 
     inline Color frame         = Color::from_oklch(0.25f, 0.0f, 0.0f);
     inline Color frame_hovered = Color::from_oklch(0.28f, 0.0f, 0.0f);
