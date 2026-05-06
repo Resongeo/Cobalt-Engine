@@ -9,30 +9,6 @@
 
 namespace Cobalt::Widgets
 {
-    // NOTE: Copied from imgui_internals.h
-    static auto TreeNodeStoreStackData(const ImGuiTreeNodeFlags flags, const float x1) -> void {
-        ImGuiContext& g = *GImGui;
-        ImGuiWindow* window = g.CurrentWindow;
-
-        g.TreeNodeStack.resize(g.TreeNodeStack.Size + 1);
-        ImGuiTreeNodeStackData* tree_node_data = &g.TreeNodeStack.Data[g.TreeNodeStack.Size - 1];
-        tree_node_data->ID = g.LastItemData.ID;
-        tree_node_data->TreeFlags = flags;
-        tree_node_data->ItemFlags = g.LastItemData.ItemFlags;
-        tree_node_data->NavRect = g.LastItemData.NavRect;
-
-        // Initially I tried to latch value for GetColorU32(ImGuiCol_TreeLines) but it's not a good trade-off for very
-        // large trees.
-        const bool draw_lines = (flags & (ImGuiTreeNodeFlags_DrawLinesFull | ImGuiTreeNodeFlags_DrawLinesToNodes)) != 0;
-        tree_node_data->DrawLinesX1 = draw_lines ? (x1 + g.FontSize * 0.5f + g.Style.FramePadding.x) : +FLT_MAX;
-        tree_node_data->DrawLinesTableColumn =
-                (draw_lines && g.CurrentTable) ? (ImGuiTableColumnIdx)g.CurrentTable->CurrentColumn : -1;
-        tree_node_data->DrawLinesToNodesY2 = -FLT_MAX;
-        window->DC.TreeHasStackDataDepthMask |= (1 << window->DC.TreeDepth);
-        if (flags & ImGuiTreeNodeFlags_DrawLinesToNodes)
-            window->DC.TreeRecordsClippedNodesY2Mask |= (1 << window->DC.TreeDepth);
-    }
-
     auto begin(const StringView title, const ImVec2 padding) -> bool {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
         const auto result = ImGui::Begin(title.data());
@@ -49,7 +25,7 @@ namespace Cobalt::Widgets
         ImGui::Separator();
     }
 
-    auto button(const StringView label, Variant variant, const ImVec2 size) -> bool {
+    auto button(const StringView label, const Variant variant, const ImVec2 size) -> bool {
         const auto window = ImGui::GetCurrentWindow();
         if (window->SkipItems) {
             return false;
@@ -194,6 +170,7 @@ namespace Cobalt::Widgets
                 ImGui::TreePushOverrideID(id);
             }
 
+            ImGui::PopFont();
             return is_open;
         }
 
