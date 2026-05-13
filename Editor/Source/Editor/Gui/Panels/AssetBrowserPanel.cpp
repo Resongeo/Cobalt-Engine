@@ -4,11 +4,15 @@
 #include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Editor/Gui/Widgets.hpp"
 #include "Engine/Core/Project.hpp"
+#include "Engine/Core/Logger.hpp"
 
 #include <imgui.h>
 
 namespace Cobalt
 {
+    constexpr float THUMBNAIL_MIN_SIZE = 70.0f;
+    constexpr float THUMBNAIL_MAX_SIZE = 128.0f;
+
     void AssetBrowserPanel::begin(EngineContext& ctx, EditorState& state) {
         m_assets_base_dir = ctx.project.get_project_assets_path();
         m_current_dir = m_assets_base_dir;
@@ -31,8 +35,8 @@ namespace Cobalt
                 }
             }
 
-            static auto padding = 16.0f;
-            static auto thumbnail_size = 64.0f;
+            static auto padding = 8.0f;
+            static auto thumbnail_size = 80.0f;
             const auto cell_size = thumbnail_size + padding;
 
             const auto panel_width = ImGui::GetContentRegionAvail().x;
@@ -66,8 +70,17 @@ namespace Cobalt
 
             ImGui::Columns(1);
 
-            ImGui::SliderFloat("Thumbnail Size", &thumbnail_size, 16, 512);
-            ImGui::SliderFloat("Padding", &padding, 0, 32);
+            if (const auto& io = ImGui::GetIO(); io.MouseWheel != 0 && io.KeyCtrl && ImGui::IsWindowHovered()) {
+                thumbnail_size += 2.0f * io.MouseWheel;
+
+                if (thumbnail_size < THUMBNAIL_MIN_SIZE) {
+                    thumbnail_size = THUMBNAIL_MIN_SIZE;
+                } else if (thumbnail_size > THUMBNAIL_MAX_SIZE) {
+                    thumbnail_size = THUMBNAIL_MAX_SIZE;
+                }
+
+                Logger::warn("", "{}", thumbnail_size);
+            }
         }
         Widgets::end();
     }
