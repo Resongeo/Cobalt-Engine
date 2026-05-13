@@ -24,15 +24,18 @@ namespace Cobalt
             if (m_current_dir != std::filesystem::path(m_assets_base_dir)) {
                 if (Widgets::button("<-")) {
                     m_current_dir = m_current_dir.parent_path();
+                    m_directory_changed = true;
                 }
             }
 
-            if (Widgets::button("Refresh")) {
+            if (Widgets::button("Refresh") || m_directory_changed) {
                 for (auto& entry : std::filesystem::directory_iterator(m_current_dir)) {
                     if (!entry.is_directory()) {
                         ctx.asset_manager.register_asset(entry.path());
                     }
                 }
+
+                m_directory_changed = false;
             }
 
             static auto padding = 8.0f;
@@ -60,6 +63,7 @@ namespace Cobalt
                 if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
                     if (directory_entry.is_directory()) {
                         m_current_dir /= path.filename();
+                        m_directory_changed = true;
                     }
                 }
 

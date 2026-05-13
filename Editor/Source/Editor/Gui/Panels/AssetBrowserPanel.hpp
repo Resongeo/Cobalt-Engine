@@ -17,5 +17,6 @@ namespace Cobalt
     private:
         Filepath m_assets_base_dir = {};
         Filepath m_current_dir = {};
+        bool m_directory_changed = false;
     };
 } // namespace Cobalt
