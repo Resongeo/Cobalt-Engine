@@ -25,6 +25,8 @@ namespace Cobalt
         auto save_registry() const -> void;
         auto get_registry() const -> HashMap<UUID, AssetMetadata>&;
 
+        static auto get_asset_type_from_extension(const Filepath& path) -> AssetType;
+
         template <typename T>
         auto get_asset(const UUID id) const -> Rc<T> {
             if (!id.is_valid()) {
@@ -51,7 +53,6 @@ namespace Cobalt
         }
 
     private:
-        auto get_asset_type_from_extension(const Filepath& path) const -> AssetType;
         auto asset_type_to_string(AssetType type) const -> String;
         auto string_to_asset_type(const String& str) const -> AssetType;
         auto is_file_asset(const Filepath& path) const -> bool;

@@ -191,7 +191,7 @@ namespace Cobalt
         return m_registry;
     }
 
-    auto AssetManager::get_asset_type_from_extension(const Filepath& path) const -> AssetType {
+    auto AssetManager::get_asset_type_from_extension(const Filepath& path) -> AssetType {
         const auto extension = path.extension().string();
 
         if (extension == ".as") {
