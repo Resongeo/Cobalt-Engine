@@ -77,19 +77,13 @@ namespace Cobalt
             }
         }
 
+        ImGui::ShowDemoWindow();
+
         Widgets::begin("Debug", {8, 8});
         {
             if (Widgets::button("Add entity")) {
                 auto entity = ctx.scene_manager.get_active_scene()->create_entity("Entity");
                 entity.add_component<SpriteComponent>();
-            }
-
-            for (auto& [uuid, meta] : ctx.asset_manager.get_registry()) {
-                if (meta.type == AssetType::Texture) {
-                    ImGui::PushID(uuid.value);
-                    ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&uuid.value);
-                    ImGui::PopID();
-                }
             }
         }
         Widgets::end();

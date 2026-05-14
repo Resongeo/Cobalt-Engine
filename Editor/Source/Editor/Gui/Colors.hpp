@@ -33,4 +33,5 @@ namespace Cobalt::Colors
     inline Color tag       = Color::from_rgb_u8(88, 153, 232);
     inline Color transform = Color::from_rgb_u8(232, 150, 88);
     inline Color sprite    = Color::from_rgb_u8(195, 119, 230);
+    inline Color directory = Color::from_rgb_u8(194, 159, 83);
 }

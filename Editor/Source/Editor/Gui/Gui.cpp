@@ -4,6 +4,7 @@
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Fonts.hpp"
 #include "Editor/Gui/Colors.hpp"
+#include "Editor/Gui/FontIcons.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Color.hpp"
 #include "Engine/Platform/Window.hpp"
@@ -39,19 +40,23 @@ namespace Cobalt
         style.ScaleAllSizes(main_scale);
         style.FontScaleDpi = main_scale;
 
+        static constexpr ImWchar icon_ranges[] = { ICON_RANGE_MIN, ICON_RANGE_MAX, 0 };
+        auto icon_font_config = ImFontConfig{};
+        icon_font_config.MergeMode = false;
+        icon_font_config.GlyphMinAdvanceX = 20.0f;
+        icon_font_config.GlyphOffset = {0, 0};
+        icon_font_config.GlyphRanges = icon_ranges;
+        icon_font_config.PixelSnapV = true;
+
+        Fonts::regular = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_regular_base85);
         Fonts::semibold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_semibold_base85);
         Fonts::bold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_bold_base85);
-        Fonts::regular = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_regular_base85);
         io.FontDefault = Fonts::regular;
 
-        auto config = ImFontConfig{};
-        config.MergeMode = false;
-        config.GlyphMinAdvanceX = 20.0f;
-        config.GlyphOffset = {0, 3};
         Fonts::icon = io.Fonts->AddFontFromMemoryCompressedBase85TTF(
             lucide_fonticon_base85,
             20.0f,
-            &config
+            &icon_font_config
         );
 
         ImGui_ImplSDL3_InitForOpenGL(window.get_handle(), window.get_gl_context());

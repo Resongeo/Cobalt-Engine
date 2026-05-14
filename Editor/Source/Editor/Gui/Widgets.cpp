@@ -25,13 +25,13 @@ namespace Cobalt::Widgets
         ImGui::Separator();
     }
 
-    auto button(const StringView label, const Variant variant, const ImVec2 size) -> bool {
+    auto button(const StringView label, const Variant variant, const ImVec2 size, bool icon) -> bool {
         const auto window = ImGui::GetCurrentWindow();
         if (window->SkipItems) {
             return false;
         }
 
-        ImGui::PushFont(Fonts::semibold);
+        ImGui::PushFont(icon ? Fonts::icon : Fonts::semibold);
 
         const auto& g = *GImGui;
         const auto& style = g.Style;
