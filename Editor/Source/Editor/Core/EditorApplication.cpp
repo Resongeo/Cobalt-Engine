@@ -77,6 +77,8 @@ namespace Cobalt
             }
         }
 
+        ImGui::ShowMetricsWindow();
+
         Gui::end_frame(ctx);
     }
 } // namespace Cobalt

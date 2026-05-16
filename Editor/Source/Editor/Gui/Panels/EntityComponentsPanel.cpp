@@ -3,6 +3,8 @@
 
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Widgets.hpp"
+#include "Editor/Gui/Fonts.hpp"
+#include "Editor/Gui/FontIcons.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Entity.hpp"
 
@@ -16,6 +18,28 @@ namespace Cobalt
         {
             if (state.selected_entity != entt::null) {
                 auto entity = Entity(state.selected_entity, &state.active_scene->get_registry());
+
+                ImGui::PushFont(Fonts::icon);
+                if (Widgets::button(ICON_PLUS, Variant::Default, {0, 0}, true)) {
+                    ImGui::OpenPopup("Add Component Popup Menu");
+                }
+                ImGui::PopFont();
+
+                ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {8, 8});
+                ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8, 4});
+                if (ImGui::BeginPopupContextItem("Add Component Popup Menu")) {
+                    ImGui::SeparatorText("Add Component");
+
+                    if (!entity.has_component<SpriteComponent>()) {
+                        if (Widgets::button("Sprite Component")) {
+                            entity.add_component<SpriteComponent>();
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
+
+                    ImGui::EndPopup();
+                }
+                ImGui::PopStyleVar(2);
 
                 if (entity.has_component<TagComponent>()) {
                     if (Widgets::collapsing_header("Tag", Colors::tag)) {

@@ -155,7 +155,5 @@ namespace Cobalt
             case AssetType::Scene:
             default: return m_default_texture.get();
         }
-
-        return m_default_texture.get();
     }
 } // namespace Cobalt

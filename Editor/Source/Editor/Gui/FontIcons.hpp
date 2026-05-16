@@ -12,4 +12,5 @@ namespace Cobalt
 #define ICON_LAYOUT_LIST "\xee\x87\x99"	// U+e1d9
 #define ICON_REFRESH     "\xee\x85\x88"	// U+e148
 #define ICON_ARROW_LEFT  "\xee\x81\x88"	// U+e048
+#define ICON_PLUS        "\xee\x84\xbd"	// U+e13d
 } // namespace Cobalt
