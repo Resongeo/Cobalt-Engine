@@ -73,9 +73,37 @@ namespace Cobalt
                 ImGui::PopID();
             }
 
-            if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
-                state.selected_entity = entt::null;
+            if (ImGui::IsWindowHovered()) {
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Left)) {
+                    state.selected_entity = entt::null;
+                }
+
+                if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+                    ImGui::OpenPopup("Scene Hierarchy Context Menu");
+                }
             }
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {8, 8});
+            ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8, 4});
+            if (ImGui::BeginPopupContextItem("Scene Hierarchy Context Menu")) {
+                ImGui::SeparatorText("Create");
+                if (Widgets::button("Empty Entity")) {
+                    const auto entity = state.active_scene->create_entity("Entity");
+                    state.selected_entity = entity.get_id();
+
+                    ImGui::CloseCurrentPopup();
+                }
+                if (Widgets::button("Sprite Entity")) {
+                    auto entity = state.active_scene->create_entity("Sprite");
+                    entity.add_component<SpriteComponent>();
+                    state.selected_entity = entity.get_id();
+
+                    ImGui::CloseCurrentPopup();
+                }
+
+                ImGui::EndPopup();
+            }
+            ImGui::PopStyleVar(2);
         }
         Widgets::end();
 

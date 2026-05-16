@@ -77,17 +77,6 @@ namespace Cobalt
             }
         }
 
-        ImGui::ShowDemoWindow();
-
-        Widgets::begin("Debug", {8, 8});
-        {
-            if (Widgets::button("Add entity")) {
-                auto entity = ctx.scene_manager.get_active_scene()->create_entity("Entity");
-                entity.add_component<SpriteComponent>();
-            }
-        }
-        Widgets::end();
-
         Gui::end_frame(ctx);
     }
 } // namespace Cobalt
