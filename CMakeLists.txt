@@ -4,6 +4,8 @@ project(Cobalt)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+enable_language(ASM_MASM)
+
 # -- Change subsystem to windows on Release --
 if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "MinSizeRel")
 	set(CMAKE_WIN32_EXECUTABLE ON)
@@ -35,6 +37,22 @@ file(GLOB SIMDJSON_SOURCES
 )
 add_library(simdjson STATIC ${SIMDJSON_SOURCES})
 target_include_directories(simdjson PUBLIC "Vendor/SIMDJSON/singleheader")
+add_subdirectory(Vendor/ANGELSCRIPT/sdk/angelscript/projects/cmake)
+file(GLOB ANGELSCRIPT_ADDONS
+	"Vendor/ANGELSCRIPT/sdk/add_on/scriptstdstring/*.cpp"
+	"Vendor/ANGELSCRIPT/sdk/add_on/scriptstdstring/*.h"
+	"Vendor/ANGELSCRIPT/sdk/add_on/scriptbuilder/*.cpp"
+	"Vendor/ANGELSCRIPT/sdk/add_on/scriptbuilder/*.h"
+	"Vendor/ANGELSCRIPT/sdk/add_on/weakref/*.cpp"
+	"Vendor/ANGELSCRIPT/sdk/add_on/weakref/*.h"
+	"Vendor/ANGELSCRIPT/sdk/add_on/scripthandle/*.cpp"
+	"Vendor/ANGELSCRIPT/sdk/add_on/scripthandle/*.h"
+)
+add_library(angelscript_addons STATIC ${ANGELSCRIPT_ADDONS})
+target_link_libraries(angelscript_addons PRIVATE angelscript)
+target_include_directories(angelscript_addons PUBLIC
+	"Vendor/ANGELSCRIPT/sdk/add_on"
+)
 
 # -- Targets --
 add_subdirectory(Engine)

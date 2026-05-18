@@ -27,3 +27,6 @@
 [submodule "Vendor/STB"]
 	path = Vendor/STB
 	url = https://github.com/nothings/stb
+[submodule "Vendor/ANGELSCRIPT"]
+	path = Vendor/ANGELSCRIPT
+	url = https://github.com/anjo76/angelscript

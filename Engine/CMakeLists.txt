@@ -73,6 +73,15 @@ add_library(Engine STATIC
 	Source/Engine/Graphics/Texture2D.hpp
 	Source/Engine/Assets/Loaders/Texture2DLoader.cpp
 	Source/Engine/Assets/Loaders/Texture2DLoader.hpp
+	Source/Engine/Scripting/ScriptManager.cpp
+	Source/Engine/Scripting/ScriptManager.hpp
+	Source/Engine/Scripting/Script.cpp
+	Source/Engine/Scripting/Script.hpp
+	Source/Engine/Assets/Loaders/ScriptLoader.cpp
+	Source/Engine/Assets/Loaders/ScriptLoader.hpp
+	Source/Engine/ECS/Components/ScriptComponent.hpp
+	Source/Engine/ECS/Systems/ScriptStartSystem.cpp
+	Source/Engine/ECS/Systems/ScriptStartSystem.hpp
 )
 
 target_link_libraries(Engine PUBLIC
@@ -81,6 +90,8 @@ target_link_libraries(Engine PUBLIC
 	SDL3::SDL3
 	simdjson
 	tomlplusplus::tomlplusplus
+	angelscript
+	angelscript_addons
 )
 
 target_include_directories(Engine PUBLIC
