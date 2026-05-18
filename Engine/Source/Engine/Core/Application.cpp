@@ -30,6 +30,7 @@ namespace Cobalt
         m_ctx.asset_manager.init(m_ctx.project);
 
         if (!m_ctx.window.init(m_ctx.project)) return false;
+        if (!m_ctx.script_manager.init()) return false;
 
         return true;
     }
@@ -172,6 +173,7 @@ namespace Cobalt
 
     Application::~Application() {
         m_ctx.asset_manager.save_registry();
+        m_ctx.script_manager.destroy();
         m_ctx.window.destroy();
     }
 } // namespace Cobalt

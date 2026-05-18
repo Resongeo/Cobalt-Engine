@@ -7,4 +7,6 @@ namespace Cobalt
 {
     class Application;
     class Window;
+
+    struct EngineContext;
 } // namespace Cobalt

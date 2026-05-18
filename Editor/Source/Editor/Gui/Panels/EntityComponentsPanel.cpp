@@ -37,6 +37,13 @@ namespace Cobalt
                         }
                     }
 
+                    if (!entity.has_component<ScriptComponent>()) {
+                        if (Widgets::button("Script Component")) {
+                            entity.add_component<ScriptComponent>();
+                            ImGui::CloseCurrentPopup();
+                        }
+                    }
+
                     ImGui::EndPopup();
                 }
                 ImGui::PopStyleVar(2);
@@ -65,7 +72,14 @@ namespace Cobalt
                     if (Widgets::collapsing_header("Sprite", Colors::sprite)) {
                         auto& [tint, uuid] = entity.get_component<SpriteComponent>();
                         ImGui::ColorEdit4("Tint", &tint.r);
-                        ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&uuid.value);
+                        ImGui::InputScalar("Texture UUID", ImGuiDataType_U64, (void*)&uuid.value);
+                    }
+                }
+
+                if (entity.has_component<ScriptComponent>()) {
+                    if (Widgets::collapsing_header("Script", Colors::script)) {
+                        auto& [uuid] = entity.get_component<ScriptComponent>();
+                        ImGui::InputScalar("Script UUID", ImGuiDataType_U64, (void*)&uuid.value);
                     }
                 }
             }

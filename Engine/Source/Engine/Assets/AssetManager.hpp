@@ -28,7 +28,7 @@ namespace Cobalt
         static auto get_asset_type_from_extension(const Filepath& path) -> AssetType;
 
         template <typename T>
-        auto get_asset(const UUID id) const -> Rc<T> {
+        auto get_asset(EngineContext& ctx, const UUID id) const -> Rc<T> {
             if (!id.is_valid()) {
                 return nullptr;
             }
@@ -44,7 +44,7 @@ namespace Cobalt
                 return nullptr;
             }
 
-            if (const auto asset = loader->load(metadata)) {
+            if (const auto asset = loader->load(ctx, metadata)) {
                 m_loaded[id] = asset;
                 return std::static_pointer_cast<T>(asset);
             }

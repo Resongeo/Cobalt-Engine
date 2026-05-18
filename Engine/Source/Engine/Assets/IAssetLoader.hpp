@@ -6,6 +6,7 @@
 #include "Engine/Assets/AssetMetadata.hpp"
 #include "Engine/Assets/IAsset.hpp"
 #include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Fwd.hpp"
 
 namespace Cobalt
 {
@@ -13,6 +14,6 @@ namespace Cobalt
     {
     public:
         virtual ~IAssetLoader() = default;
-        virtual auto load(const AssetMetadata& metadata) -> Rc<IAsset> = 0;
+        virtual auto load(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> = 0;
     };
 }

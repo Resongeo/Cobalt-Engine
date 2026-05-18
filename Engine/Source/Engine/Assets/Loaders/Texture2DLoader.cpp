@@ -6,7 +6,7 @@
 
 namespace Cobalt
 {
-    auto Texture2DLoader::load(const AssetMetadata& metadata) -> Rc<IAsset> {
+    auto Texture2DLoader::load(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
         auto texture_2d = Memory::make_rc<Texture2D>();
 
         if (texture_2d->load_from_file(metadata.path)) {

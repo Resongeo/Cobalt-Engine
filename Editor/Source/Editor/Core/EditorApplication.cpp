@@ -10,6 +10,7 @@
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
+#include "Engine/ECS/Systems/ScriptStartSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Scene/SceneManager.hpp"
@@ -30,8 +31,8 @@ namespace Cobalt
         m_state.framebuffer.create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         m_state.framebuffer.unbind();
 
-        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera,
-                                                         &m_state.framebuffer);
+        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
+        ctx.scene_manager.add_system<ScriptStartSystem>(Schedule::RuntimeStart);
 
         m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
@@ -77,7 +78,33 @@ namespace Cobalt
             }
         }
 
-        ImGui::ShowMetricsWindow();
+        ImGui::Begin("Registry");
+        {
+            switch (ctx.scene_manager.get_state()) {
+                case SceneState::None: {
+                    if (Widgets::button("Start")) {
+                        ctx.scene_manager.set_state(SceneState::Start);
+                    }
+                    break;
+                }
+                case SceneState::Start: break;
+                case SceneState::Update: {
+                    if (Widgets::button("Stop")) {
+                        ctx.scene_manager.set_state(SceneState::None);
+                    }
+                    break;
+                }
+            }
+
+            Widgets::separator();
+
+            for (auto& [uuid, meta] : ctx.asset_manager.get_registry()) {
+                if (meta.type == AssetType::Script) {
+                    ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&uuid.value);
+                }
+            }
+        }
+        ImGui::End();
 
         Gui::end_frame(ctx);
     }

@@ -7,7 +7,7 @@
 
 namespace Cobalt
 {
-    class Texture2DLoader final : public IAssetLoader
+    class ScriptLoader final : public IAssetLoader
     {
     public:
         auto load(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> override;

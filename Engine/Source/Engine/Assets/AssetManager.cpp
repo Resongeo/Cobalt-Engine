@@ -3,6 +3,7 @@
 
 #include "Engine/Assets/AssetManager.hpp"
 #include "Engine/Assets/Loaders/Texture2DLoader.hpp"
+#include "Engine/Assets/Loaders/ScriptLoader.hpp"
 #include "Engine/Core/Logger.hpp"
 
 #include <ranges>
@@ -32,6 +33,7 @@ namespace Cobalt
         }
 
         m_loaders[static_cast<usize>(AssetType::Texture)] = Memory::make_rc<Texture2DLoader>();
+        m_loaders[static_cast<usize>(AssetType::Script)] = Memory::make_rc<ScriptLoader>();
     }
 
     auto AssetManager::register_asset(const Filepath& path) const -> void {

@@ -24,7 +24,7 @@ namespace Cobalt
             auto [tint, texture_id] = registry.get<SpriteComponent>(entity);
             auto [pos, scale, rotation] = registry.get<TransformComponent>(entity);
 
-            if (auto texture = ctx.asset_manager.get_asset<Texture2D>(texture_id); texture) {
+            if (auto texture = ctx.asset_manager.get_asset<Texture2D>(ctx, texture_id); texture) {
                 m_renderer->submit_quad({pos.x, pos.y, 0}, scale, rotation, tint, texture);
             } else {
                 m_renderer->submit_quad({pos.x, pos.y, 0}, scale, rotation, tint);

@@ -7,6 +7,7 @@
 #include "Engine/Core/Project.hpp"
 #include "Engine/Platform/Window.hpp"
 #include "Engine/Scene/SceneManager.hpp"
+#include "Engine/Scripting/ScriptManager.hpp"
 
 namespace Cobalt
 {
@@ -17,6 +18,7 @@ namespace Cobalt
 
         AssetManager asset_manager = {};
         SceneManager scene_manager = {};
+        ScriptManager script_manager = {};
 
         bool close_requested = false;
     };
