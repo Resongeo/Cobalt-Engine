@@ -2,8 +2,9 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Assets/AssetManager.hpp"
-#include "Engine/Assets/Loaders/Texture2DLoader.hpp"
-#include "Engine/Assets/Loaders/ScriptLoader.hpp"
+#include "Engine/Assets/Serializers/SceneSerializer.hpp"
+#include "Engine/Assets/Serializers/ScriptSerializer.hpp"
+#include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
 #include "Engine/Core/Logger.hpp"
 
 #include <ranges>
@@ -32,8 +33,9 @@ namespace Cobalt
             }
         }
 
-        m_loaders[static_cast<usize>(AssetType::Texture)] = Memory::make_rc<Texture2DLoader>();
-        m_loaders[static_cast<usize>(AssetType::Script)] = Memory::make_rc<ScriptLoader>();
+        m_serializers[static_cast<usize>(AssetType::Texture)] = Memory::make_rc<Texture2DSerializer>();
+        m_serializers[static_cast<usize>(AssetType::Script)] = Memory::make_rc<ScriptSerializer>();
+        m_serializers[static_cast<usize>(AssetType::Scene)] = Memory::make_rc<SceneSerializer>();
     }
 
     auto AssetManager::register_asset(const Filepath& path) const -> void {
@@ -207,6 +209,17 @@ namespace Cobalt
         }
 
         return AssetType::None;
+    }
+
+    auto AssetManager::save_asset(const UUID id) const -> bool {
+        auto meta = get_metadata(id);
+        const auto serializer = m_serializers[static_cast<usize>(meta.type)];
+
+        if (!serializer) {
+            return false;
+        }
+
+        return serializer->serialize(m_loaded[id], meta);
     }
 
     auto AssetManager::asset_type_to_string(const AssetType type) const -> String {

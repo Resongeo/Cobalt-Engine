@@ -2,25 +2,26 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Scene/SceneManager.hpp"
+#include "Engine/Core/EngineContext.hpp"
+#include "Engine/Core/Logger.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 
 namespace Cobalt
 {
-    auto SceneManager::get_scenes() -> Vector<Box<Scene>>& {
-        return m_scenes;
+    auto SceneManager::init(EngineContext& ctx) -> void {
+        const auto startup_scene_uuid = ctx.project.get_startup_scene_uuid();
+        m_active_scene = startup_scene_uuid;
+        if (!ctx.asset_manager.get_asset<Scene>(ctx, m_active_scene)) {
+            Logger::warn("Engine::SceneManager", "No valid startup scene found in project. Creating default one.");
+        }
     }
 
-    auto SceneManager::get_active_scene() const -> Scene* {
+    auto SceneManager::get_active_scene(EngineContext& ctx) const -> Rc<Scene> {
+        return ctx.asset_manager.get_asset<Scene>(ctx, m_active_scene);
+    }
+
+    auto SceneManager::get_active_scene_uuid() const -> UUID {
         return m_active_scene;
-    }
-
-    auto SceneManager::create_default_scene() -> void {
-        const auto& default_scene = m_scenes.emplace_back(Memory::make_box<Scene>("Default"));
-
-        auto entity = default_scene->create_entity("Entity");
-        entity.add_component<SpriteComponent>();
-
-        m_active_scene = default_scene.get();
     }
 
     auto SceneManager::set_state(const SceneState state) -> void {
@@ -32,11 +33,13 @@ namespace Cobalt
     }
 
     auto SceneManager::update(EngineContext& ctx) -> void {
-        if (m_active_scene == nullptr) {
+        const auto active_scene = get_active_scene(ctx);
+
+        if (active_scene == nullptr) {
             return;
         }
 
-        auto& registry = m_active_scene->get_registry();
+        auto& registry = active_scene->get_registry();
 
         switch (m_state) {
             case SceneState::None: {

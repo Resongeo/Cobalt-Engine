@@ -12,6 +12,10 @@ namespace Cobalt
         return m_name;
     }
 
+    auto Scene::set_name(const String& name) -> void {
+        m_name = name;
+    }
+
     auto Scene::get_registry() -> entt::registry& {
         return m_registry;
     }

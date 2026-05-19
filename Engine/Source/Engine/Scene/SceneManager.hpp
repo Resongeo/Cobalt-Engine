@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Fwd.hpp"
 #include "Engine/ECS/Systems/ISystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Scene/Scene.hpp"
@@ -16,11 +17,12 @@ namespace Cobalt
     public:
         ~SceneManager() = default;
 
-        auto get_scenes() -> Vector<Box<Scene>>&;
-        auto get_active_scene() const -> Scene*;
+        auto init(EngineContext& ctx) -> void;
+
+        auto get_active_scene(EngineContext& ctx) const -> Rc<Scene>;
+        auto get_active_scene_uuid() const -> UUID;
         auto get_state() const -> SceneState;
         auto set_state(SceneState state) -> void;
-        auto create_default_scene() -> void;
         auto update(EngineContext& ctx) -> void;
 
         template <typename T, typename... Args>
@@ -42,8 +44,7 @@ namespace Cobalt
         }
 
     private:
-        Vector<Box<Scene>> m_scenes = {};
-        Scene* m_active_scene = nullptr;
+        UUID m_active_scene;
         SceneState m_state = SceneState::None;
 
         Vector<Box<ISystem>> m_runtime_start_systems = {};

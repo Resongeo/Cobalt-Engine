@@ -8,6 +8,7 @@
 #include <scriptbuilder/scriptbuilder.h>
 #include <scripthandle/scripthandle.h>
 #include <weakref/weakref.h>
+
 #include <format>
 
 namespace Cobalt

@@ -5,6 +5,7 @@
 
 #include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/UUID.hpp"
 
 namespace Cobalt
 {
@@ -16,6 +17,7 @@ namespace Cobalt
         auto get_version() -> String&;
         auto get_editor_assets_path() const -> Filepath;
         auto get_project_assets_path() const -> Filepath;
+        auto get_startup_scene_uuid() const -> UUID;
 
     private:
         Vector<String> m_args = {};
@@ -23,5 +25,6 @@ namespace Cobalt
         Filepath m_editor_path = {};
         String m_name = {};
         String m_version = {};
+        UUID m_startup_scene;
     };
 } // namespace Cobalt

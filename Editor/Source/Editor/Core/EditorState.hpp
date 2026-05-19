@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Scene/Scene.hpp"
@@ -22,7 +23,7 @@ namespace Cobalt
     struct EditorState
     {
         entt::entity selected_entity = entt::null;
-        Scene* active_scene = nullptr;
+        Rc<Scene> active_scene = nullptr;
         Camera editor_camera = {};
         Framebuffer framebuffer = {};
         GizmoOperation gizmo_operation = {};

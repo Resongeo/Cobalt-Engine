@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include "Engine/Assets/IAssetLoader.hpp"
+#include "Engine/Assets/IAssetSerializer.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
@@ -27,6 +27,8 @@ namespace Cobalt
 
         static auto get_asset_type_from_extension(const Filepath& path) -> AssetType;
 
+        auto save_asset(UUID id) const -> bool;
+
         template <typename T>
         auto get_asset(EngineContext& ctx, const UUID id) const -> Rc<T> {
             if (!id.is_valid()) {
@@ -38,13 +40,13 @@ namespace Cobalt
             }
 
             const auto& metadata = get_metadata(id);
-            const auto& loader = m_loaders[static_cast<usize>(metadata.type)];
+            const auto& loader = m_serializers[static_cast<usize>(metadata.type)];
 
             if (!loader) {
                 return nullptr;
             }
 
-            if (const auto asset = loader->load(ctx, metadata)) {
+            if (const auto asset = loader->deserialize(ctx, metadata)) {
                 m_loaded[id] = asset;
                 return std::static_pointer_cast<T>(asset);
             }
@@ -58,9 +60,9 @@ namespace Cobalt
         auto is_file_asset(const Filepath& path) const -> bool;
 
     private:
-        mutable HashMap<UUID, Rc<void>> m_loaded = {};
+        mutable HashMap<UUID, Rc<IAsset>> m_loaded = {};
         mutable HashMap<UUID, AssetMetadata> m_registry = {};
-        Array<Rc<IAssetLoader>, static_cast<usize>(AssetType::SIZE)> m_loaders = {};
+        Array<Rc<IAssetSerializer>, static_cast<usize>(AssetType::SIZE)> m_serializers = {};
         Filepath m_registry_path = {};
         Filepath m_assets_dir = {};
     };

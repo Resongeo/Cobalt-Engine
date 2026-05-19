@@ -10,10 +10,12 @@
 
 namespace Cobalt
 {
-    class IAssetLoader
+    class IAssetSerializer
     {
     public:
-        virtual ~IAssetLoader() = default;
-        virtual auto load(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> = 0;
+        virtual ~IAssetSerializer() = default;
+
+        virtual auto deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> = 0;
+        virtual auto serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool = 0;
     };
 }

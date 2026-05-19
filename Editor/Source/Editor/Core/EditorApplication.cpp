@@ -24,8 +24,6 @@ namespace Cobalt
         Gui::init(ctx.window);
         Gui::setup_style();
 
-        ctx.scene_manager.create_default_scene();
-
         m_renderer.init(10000, ctx.project.get_editor_assets_path());
 
         m_state.framebuffer.create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
@@ -54,7 +52,19 @@ namespace Cobalt
 
         Gui::begin_frame(ctx);
         {
-            if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
+            ImGui::BeginMainMenuBar();
+            {
+                if (ImGui::BeginMenu("File")) {
+                    if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
+                        ctx.asset_manager.save_asset(ctx.scene_manager.get_active_scene_uuid());
+                    }
+
+                    ImGui::EndMenu();
+                }
+            }
+            ImGui::EndMainMenuBar();
+
+            if (const auto active_scene = scene_manager.get_active_scene(ctx); active_scene != nullptr) {
                 const auto viewport = ImGui::GetMainViewport();
                 ImGui::SetNextWindowPos(viewport->Pos);
                 ImGui::SetNextWindowSize(viewport->Size);
@@ -78,32 +88,16 @@ namespace Cobalt
             }
         }
 
-        ImGui::Begin("Registry");
-        {
-            switch (ctx.scene_manager.get_state()) {
-                case SceneState::None: {
-                    if (Widgets::button("Start")) {
-                        ctx.scene_manager.set_state(SceneState::Start);
-                    }
-                    break;
-                }
-                case SceneState::Start: break;
-                case SceneState::Update: {
-                    if (Widgets::button("Stop")) {
-                        ctx.scene_manager.set_state(SceneState::None);
-                    }
-                    break;
-                }
-            }
+        ImGui::Begin("Assets");
 
-            Widgets::separator();
-
-            for (auto& [uuid, meta] : ctx.asset_manager.get_registry()) {
-                if (meta.type == AssetType::Script) {
-                    ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&uuid.value);
-                }
-            }
+        for (auto [id, meta] : ctx.asset_manager.get_registry()) {
+            auto name_string = meta.path.string();
+            ImGui::Text("Name %s", name_string.c_str());
+            ImGui::PushID(id.value);
+            ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&id.value);
+            ImGui::PopID();
         }
+
         ImGui::End();
 
         Gui::end_frame(ctx);

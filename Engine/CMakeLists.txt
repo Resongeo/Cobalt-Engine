@@ -68,17 +68,19 @@ add_library(Engine STATIC
 	Source/Engine/Assets/AssetMetadata.hpp
 	Source/Engine/Core/EngineContext.hpp
 	Source/Engine/Assets/IAsset.hpp
-	Source/Engine/Assets/IAssetLoader.hpp
+	Source/Engine/Assets/IAssetSerializer.hpp
 	Source/Engine/Graphics/Texture2D.cpp
 	Source/Engine/Graphics/Texture2D.hpp
-	Source/Engine/Assets/Loaders/Texture2DLoader.cpp
-	Source/Engine/Assets/Loaders/Texture2DLoader.hpp
+	Source/Engine/Assets/Serializers/Texture2DSerializer.cpp
+	Source/Engine/Assets/Serializers/Texture2DSerializer.hpp
+	Source/Engine/Assets/Serializers/ScriptSerializer.cpp
+	Source/Engine/Assets/Serializers/ScriptSerializer.hpp
+	Source/Engine/Assets/Serializers/SceneSerializer.cpp
+	Source/Engine/Assets/Serializers/SceneSerializer.hpp
 	Source/Engine/Scripting/ScriptManager.cpp
 	Source/Engine/Scripting/ScriptManager.hpp
 	Source/Engine/Scripting/Script.cpp
 	Source/Engine/Scripting/Script.hpp
-	Source/Engine/Assets/Loaders/ScriptLoader.cpp
-	Source/Engine/Assets/Loaders/ScriptLoader.hpp
 	Source/Engine/ECS/Components/ScriptComponent.hpp
 	Source/Engine/ECS/Systems/ScriptStartSystem.cpp
 	Source/Engine/ECS/Systems/ScriptStartSystem.hpp
