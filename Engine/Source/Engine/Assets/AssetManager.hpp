@@ -54,6 +54,21 @@ namespace Cobalt
             return nullptr;
         }
 
+        template <typename T>
+        auto create_memory_asset(const AssetType type) -> UUID {
+            auto asset = Memory::make_rc<T>();
+            const auto uuid = UUID::generate();
+            const auto meta = AssetMetadata{
+                .type = type,
+                .is_memory = true
+            };
+
+            m_registry[uuid] = meta;
+            m_loaded[uuid] = asset;
+
+            return uuid;
+        }
+
     private:
         auto asset_type_to_string(AssetType type) const -> String;
         auto string_to_asset_type(const String& str) const -> AssetType;

@@ -12,5 +12,7 @@ namespace Cobalt
     {
         Filepath path = {};
         AssetType type = AssetType::None;
+        std::filesystem::file_time_type last_modified = {};
+        bool is_memory = false;
     };
 } // namespace Cobalt

@@ -21,6 +21,7 @@ namespace Cobalt
 
         auto get_active_scene(EngineContext& ctx) const -> Rc<Scene>;
         auto get_active_scene_uuid() const -> UUID;
+        auto set_active_scene(EngineContext& ctx, UUID uuid) -> void;
         auto get_state() const -> SceneState;
         auto set_state(SceneState state) -> void;
         auto update(EngineContext& ctx) -> void;
@@ -44,7 +45,8 @@ namespace Cobalt
         }
 
     private:
-        UUID m_active_scene;
+        Rc<Scene> m_active_scene = nullptr;
+        UUID m_active_scene_uuid;
         SceneState m_state = SceneState::None;
 
         Vector<Box<ISystem>> m_runtime_start_systems = {};

@@ -10,18 +10,28 @@ namespace Cobalt
 {
     auto SceneManager::init(EngineContext& ctx) -> void {
         const auto startup_scene_uuid = ctx.project.get_startup_scene_uuid();
-        m_active_scene = startup_scene_uuid;
-        if (!ctx.asset_manager.get_asset<Scene>(ctx, m_active_scene)) {
-            Logger::warn("Engine::SceneManager", "No valid startup scene found in project. Creating default one.");
+        if (ctx.asset_manager.is_asset_registered(startup_scene_uuid)) {
+            m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, startup_scene_uuid);
+        } else {
+            m_active_scene_uuid = ctx.asset_manager.create_memory_asset<Scene>(AssetType::Scene);
+            set_active_scene(ctx, m_active_scene_uuid);
+
+            if (m_active_scene) {
+                m_active_scene->set_name("Empty");
+            }
         }
     }
 
     auto SceneManager::get_active_scene(EngineContext& ctx) const -> Rc<Scene> {
-        return ctx.asset_manager.get_asset<Scene>(ctx, m_active_scene);
+        return m_active_scene;
     }
 
     auto SceneManager::get_active_scene_uuid() const -> UUID {
-        return m_active_scene;
+        return m_active_scene_uuid;
+    }
+
+    auto SceneManager::set_active_scene(EngineContext& ctx, const UUID uuid) -> void {
+        m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, uuid);
     }
 
     auto SceneManager::set_state(const SceneState state) -> void {

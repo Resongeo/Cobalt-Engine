@@ -16,8 +16,7 @@ namespace Cobalt
 {
     namespace Helpers
     {
-        static auto color_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Color& col)
-                -> void {
+        static auto color_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Color& col) -> void {
             sb.escape_and_append_with_quotes(name);
             sb.append_colon();
             sb.start_object();
@@ -33,8 +32,7 @@ namespace Cobalt
             sb.end_object();
         }
 
-        static auto vec_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Vec3& vec)
-                -> void {
+        static auto vec_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Vec3& vec) -> void {
             sb.escape_and_append_with_quotes(name);
             sb.append_colon();
             sb.start_object();
@@ -48,8 +46,7 @@ namespace Cobalt
             sb.end_object();
         }
 
-        static auto vec_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Vec2& vec)
-                -> void {
+        static auto vec_to_json_object(simdjson::builder::string_builder& sb, const String& name, const Vec2& vec) -> void {
             sb.escape_and_append_with_quotes(name);
             sb.append_colon();
             sb.start_object();
@@ -61,10 +58,9 @@ namespace Cobalt
             sb.end_object();
         }
 
-        static auto parse_float(simdjson::ondemand::object& obj, const StringView key, const f32 default_val = 0.0f)
-                -> f32 {
+        static auto parse_float(simdjson::ondemand::object& obj, const StringView key, const f32 default_val = 0.0f) -> f32 {
             f32 value = default_val;
-            std::string_view str_view;
+            StringView str_view;
             if (obj[key].get_string().get(str_view) == simdjson::SUCCESS) {
                 std::from_chars(str_view.data(), str_view.data() + str_view.size(), value);
             }
@@ -85,10 +81,9 @@ namespace Cobalt
             return nullptr;
         }
 
-        std::string_view scene_name;
+        StringView scene_name;
         if (const auto error = doc["name"].get_string().get(scene_name)) {
-            Logger::error("Engine::Assets::Loaders::SceneLoader", "{} Expected: \"name\"",
-                          simdjson::error_message(error));
+            Logger::error("Engine::Assets::Loaders::SceneLoader", "{} Expected: \"name\"", simdjson::error_message(error));
         } else {
             scene->set_name(std::string(scene_name));
         }
@@ -109,7 +104,7 @@ namespace Cobalt
             auto entity = Entity(entity_id, &registry);
 
             for (auto field : entity_obj) {
-                std::string_view component_type = field.unescaped_key();
+                StringView component_type = field.unescaped_key();
                 auto value = field.value();
 
                 if (component_type == "tag") {
@@ -117,11 +112,11 @@ namespace Cobalt
                     if (value.get_object().get(comp_obj) == simdjson::SUCCESS) {
                         auto& tag = entity.add_component<TagComponent>();
 
-                        uint64_t uuid_val = 0;
+                        u64 uuid_val = 0;
                         comp_obj["uuid"].get(uuid_val);
                         tag.uuid.value = uuid_val;
 
-                        std::string_view name_view;
+                        StringView name_view;
                         if (comp_obj["name"].get_string().get(name_view) == simdjson::SUCCESS) {
                             tag.name = std::string(name_view);
                         }
@@ -143,7 +138,7 @@ namespace Cobalt
                             transform.scale.y = Helpers::parse_float(scale_obj, "y", 1.0f);
                         }
 
-                        std::string_view rot_view;
+                        StringView rot_view;
                         if (comp_obj["rotation"].get_string().get(rot_view) == simdjson::SUCCESS) {
                             float rot_val = 0.0f;
                             std::from_chars(rot_view.data(), rot_view.data() + rot_view.size(), rot_val);
@@ -164,7 +159,7 @@ namespace Cobalt
                             sprite.tint = Color{r, g, b, a};
                         }
 
-                        uint64_t texture_uuid = 0;
+                        u64 texture_uuid = 0;
                         comp_obj["uuid"].get(texture_uuid);
                         sprite.texture_id.value = texture_uuid;
                     }
@@ -173,7 +168,7 @@ namespace Cobalt
                     if (value.get_object().get(comp_obj) == simdjson::SUCCESS) {
                         auto& script = entity.add_component<ScriptComponent>();
 
-                        uint64_t script_uuid = 0;
+                        u64 script_uuid = 0;
                         comp_obj["uuid"].get(script_uuid);
                         script.script_id.value = script_uuid;
                     }

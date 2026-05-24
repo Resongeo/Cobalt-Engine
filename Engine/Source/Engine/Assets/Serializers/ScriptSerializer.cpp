@@ -2,7 +2,6 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Assets/Serializers/ScriptSerializer.hpp"
-
 #include "Engine/Core/EngineContext.hpp"
 
 namespace Cobalt
