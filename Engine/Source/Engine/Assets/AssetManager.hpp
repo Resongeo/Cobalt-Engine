@@ -8,6 +8,7 @@
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"
+#include "Engine/Platform/DialogManager.hpp"
 
 namespace Cobalt
 {
@@ -27,7 +28,7 @@ namespace Cobalt
 
         static auto get_asset_type_from_extension(const Filepath& path) -> AssetType;
 
-        auto save_asset(UUID id) const -> bool;
+        auto save_asset(EngineContext& ctx, UUID id) const -> bool;
 
         template <typename T>
         auto get_asset(EngineContext& ctx, const UUID id) const -> Rc<T> {
@@ -40,13 +41,13 @@ namespace Cobalt
             }
 
             const auto& metadata = get_metadata(id);
-            const auto& loader = m_serializers[static_cast<usize>(metadata.type)];
+            const auto& serializer = m_serializers[static_cast<usize>(metadata.type)];
 
-            if (!loader) {
+            if (!serializer) {
                 return nullptr;
             }
 
-            if (const auto asset = loader->deserialize(ctx, metadata)) {
+            if (const auto asset = serializer->deserialize(ctx, metadata)) {
                 m_loaded[id] = asset;
                 return std::static_pointer_cast<T>(asset);
             }
@@ -55,7 +56,7 @@ namespace Cobalt
         }
 
         template <typename T>
-        auto create_memory_asset(const AssetType type) -> UUID {
+        auto create_memory_asset(const AssetType type) const -> UUID {
             auto asset = Memory::make_rc<T>();
             const auto uuid = UUID::generate();
             const auto meta = AssetMetadata{
@@ -71,6 +72,7 @@ namespace Cobalt
 
     private:
         auto asset_type_to_string(AssetType type) const -> String;
+        auto asset_type_to_filters(AssetType type) const -> Vector<DialogFileFilter>;
         auto string_to_asset_type(const String& str) const -> AssetType;
         auto is_file_asset(const Filepath& path) const -> bool;
 

@@ -33,6 +33,8 @@ namespace Cobalt
         if (!m_ctx.window.init(m_ctx.project)) return false;
         if (!m_ctx.script_manager.init()) return false;
 
+        m_ctx.dialog_manager.init(m_ctx.window);
+
         return true;
     }
 

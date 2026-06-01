@@ -5,11 +5,14 @@
 #include "Engine/Assets/Serializers/SceneSerializer.hpp"
 #include "Engine/Assets/Serializers/ScriptSerializer.hpp"
 #include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
+#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Logger.hpp"
 
+#include <fstream>
 #include <ranges>
 #include <simdjson.h>
-#include <fstream>
+
+#include <SDL3/SDL.h>
 
 namespace Cobalt
 {
@@ -47,10 +50,7 @@ namespace Cobalt
             return;
         }
 
-        const auto meta = AssetMetadata{
-            .path = path,
-            .type = get_asset_type_from_extension(path)
-        };
+        const auto meta = AssetMetadata{.path = path, .type = get_asset_type_from_extension(path)};
 
         m_registry[UUID::generate()] = meta;
     }
@@ -96,17 +96,13 @@ namespace Cobalt
         auto doc = simdjson::ondemand::document{};
 
         if (const auto error = parser.iterate(json).get(doc)) {
-            Logger::error("Engine::AssetManager", "{}",
-                simdjson::error_message(error)
-            );
+            Logger::error("Engine::AssetManager", "{}", simdjson::error_message(error));
             return;
         }
 
         auto assets = simdjson::ondemand::array{};
         if (const auto error = doc["assets"].get_array().get(assets)) {
-            Logger::error("Engine::AssetManager", "{} Expected: \"assets\"",
-                simdjson::error_message(error)
-            );
+            Logger::error("Engine::AssetManager", "{} Expected: \"assets\"", simdjson::error_message(error));
             return;
         }
 
@@ -115,20 +111,14 @@ namespace Cobalt
             auto meta = AssetMetadata{};
 
             if (const auto error = asset["uuid"].get_uint64().get(id.value)) {
-                Logger::error(
-                    "Engine::AssetManager", "{} Expected: \"{}\"",
-                    simdjson::error_message(error), "uuid"
-                );
+                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "uuid");
 
                 continue;
             }
 
             auto relative_path_string = String{};
             if (const auto error = asset["path"].get_string().get(relative_path_string)) {
-                Logger::error(
-                    "Engine::AssetManager", "{} Expected: \"{}\"",
-                    simdjson::error_message(error), "path"
-                );
+                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "path");
 
                 continue;
             }
@@ -136,10 +126,7 @@ namespace Cobalt
 
             auto type_string = String{};
             if (const auto error = asset["type"].get_string().get(type_string)) {
-                Logger::error(
-                    "Engine::AssetManager", "{} Expected: \"{}\"",
-                    simdjson::error_message(error), "type"
-                );
+                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "type");
 
                 continue;
             }
@@ -211,11 +198,41 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::save_asset(const UUID id) const -> bool {
+    auto AssetManager::save_asset(EngineContext& ctx, const UUID id) const -> bool {
         auto meta = get_metadata(id);
         const auto serializer = m_serializers[static_cast<usize>(meta.type)];
 
         if (!serializer) {
+            return false;
+        }
+
+        if (meta.is_memory || meta.path.empty()) {
+            struct DialogSync {
+                Filepath path = {};
+                bool completed = false;
+            };
+            auto sync_data = Memory::make_rc<DialogSync>();
+
+            static auto filter = asset_type_to_filters(meta.type);
+            const auto default_path = ctx.project.get_project_assets_path().string();
+
+            ctx.dialog_manager.show_save_dialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
+                sync_data->path = chosen_path;
+                sync_data->completed = true;
+            });
+
+            // TODO: Handle async better. I made this blocking for now
+            while (!sync_data->completed) {
+                SDL_PumpEvents();
+                SDL_Delay(16);
+            }
+
+            meta.path = sync_data->path;
+            meta.is_memory = false;
+
+        }
+
+        if (meta.path.empty()) {
             return false;
         }
 
@@ -229,6 +246,16 @@ namespace Cobalt
             case AssetType::Script: return "Script";
             case AssetType::None:
             default: return "None";
+        }
+    }
+
+    auto AssetManager::asset_type_to_filters(const AssetType type) const -> Vector<DialogFileFilter> {
+        switch (type) {
+            case AssetType::Texture: return {{.name = "Texture", .pattern = "png;jpg"}};
+            case AssetType::Scene: return {{.name = "Cobalt Scene", .pattern = "cbscene"}};
+            case AssetType::Script: return {{.name = "Angel Script", .pattern = "as"}};
+            case AssetType::None:
+            default: return {};
         }
     }
 

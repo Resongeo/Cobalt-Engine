@@ -9,6 +9,7 @@
 #include <array>
 #include <string>
 #include <string_view>
+#include <span>
 
 namespace Cobalt
 {
@@ -27,4 +28,7 @@ namespace Cobalt
 
     template <typename T, size_t S>
     using Array = std::array<T, S>;
+
+    template <typename T>
+    using Span = std::span<T>;
 } // namespace Cobalt
