@@ -12,6 +12,7 @@ namespace Cobalt
         const auto startup_scene_uuid = ctx.project.get_startup_scene_uuid();
         if (ctx.asset_manager.is_asset_registered(startup_scene_uuid)) {
             m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, startup_scene_uuid);
+            m_active_scene_uuid = startup_scene_uuid;
         } else {
             m_active_scene_uuid = ctx.asset_manager.create_memory_asset<Scene>(AssetType::Scene);
             set_active_scene(ctx, m_active_scene_uuid);

@@ -229,7 +229,6 @@ namespace Cobalt
 
             meta.path = sync_data->path;
             meta.is_memory = false;
-
         }
 
         if (meta.path.empty()) {
