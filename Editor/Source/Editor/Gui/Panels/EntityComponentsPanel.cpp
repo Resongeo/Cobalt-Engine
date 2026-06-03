@@ -78,7 +78,7 @@ namespace Cobalt
 
                 if (entity.has_component<ScriptComponent>()) {
                     if (Widgets::collapsing_header("Script", Colors::script)) {
-                        auto& [uuid] = entity.get_component<ScriptComponent>();
+                        auto& [uuid, _] = entity.get_component<ScriptComponent>();
                         ImGui::InputScalar("Script UUID", ImGuiDataType_U64, (void*)&uuid.value);
                     }
                 }

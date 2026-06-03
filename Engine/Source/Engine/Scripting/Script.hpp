@@ -14,7 +14,6 @@ namespace Cobalt
     {
         String module = {};
         asITypeInfo* type_info = nullptr;
-        asIScriptObject* instance = nullptr;
         asIScriptFunction* factory_func = nullptr;
         asIScriptFunction* update_func = nullptr;
         asIScriptFunction* start_func = nullptr;

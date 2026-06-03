@@ -12,6 +12,10 @@ namespace Cobalt
     public:
         Entity(const entt::entity id, entt::registry* registry) : m_id(id), m_registry(registry) {}
 
+        auto is_valid() const -> bool {
+            return m_registry || m_id != entt::null;
+        }
+
         template <typename T, typename... Args>
         auto add_component(Args&&... args) -> T& {
             return m_registry->emplace<T>(m_id, std::forward<Args>(args)...);

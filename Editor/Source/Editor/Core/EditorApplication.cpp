@@ -7,13 +7,12 @@
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
-#include "Engine/Core/Logger.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/ECS/Systems/ScriptStartSystem.hpp"
-#include "Engine/Platform/DialogManager.hpp"
+#include "Engine/ECS/Systems/ScriptUpdateSystem.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 
 #include <SDL3/SDL.h>
@@ -31,7 +30,10 @@ namespace Cobalt
         m_state.framebuffer.unbind();
 
         ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
+        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::RuntimeUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
+
         ctx.scene_manager.add_system<ScriptStartSystem>(Schedule::RuntimeStart);
+        ctx.scene_manager.add_system<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
 
         m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
@@ -88,6 +90,25 @@ namespace Cobalt
                 }
             }
         }
+
+        ImGui::Begin("Debug");
+        {
+            switch (ctx.scene_manager.get_state()) {
+                case SceneState::None: {
+                    if (ImGui::Button("Play")) {
+                        ctx.scene_manager.set_state(SceneState::Start);
+                    }
+                    break;
+                }
+                case SceneState::Update: {
+                    if (ImGui::Button("Stop")) {
+                        ctx.scene_manager.set_state(SceneState::None);
+                    }
+                    break;
+                }
+            }
+        }
+        ImGui::End();
 
         ImGui::Begin("Assets");
 

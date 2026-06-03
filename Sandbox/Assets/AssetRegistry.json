@@ -1,1 +1,24 @@
-{"assets":[{"uuid":13147059504893597947,"path":"Scripts\\Player.as","type":"Script"},{"uuid":18080704940706557286,"path":"Textures\\debug.png","type":"Texture"},{"uuid":14840828298533932651,"path":"Textures\\no.png","type":"Texture"},{"uuid":3394310060268736811,"path":"AssetRegistry.json","type":"None"},{"uuid":4795676459754095853,"path":"Scenes\\Default.cbscene","type":"Scene"}]}
+{
+    "assets": [
+        {
+            "uuid": 1867173616593825470,
+            "path": "Textures\\debug.png",
+            "type": "Texture"
+        },
+        {
+            "uuid": 2569821454292035618,
+            "path": "Scenes\\Sandbox.cbscene",
+            "type": "Scene"
+        },
+        {
+            "uuid": 14339946236928199339,
+            "path": "Scripts\\Player.as",
+            "type": "Script"
+        },
+        {
+            "uuid": 1142540210266448711,
+            "path": "Textures\\no.png",
+            "type": "Texture"
+        }
+    ]
+}

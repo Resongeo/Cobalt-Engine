@@ -5,8 +5,10 @@
 
 #include "Engine/Scripting/Script.hpp"
 #include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Fwd.hpp"
 
 #include <angelscript.h>
+#include <entt/entity/entity.hpp>
 
 namespace Cobalt
 {
@@ -17,8 +19,10 @@ namespace Cobalt
         auto destroy() const -> void;
 
         auto load_script(const String& script_path) const -> Rc<Script>;
-        auto instantiate_script(const Rc<Script>& script) const -> void;
-        auto execute_start(const Rc<Script>& script) const -> void;
+        auto compile_script(Rc<Script>& script) const -> bool;
+        auto instantiate_script(EngineContext& ctx, entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
+        auto execute_start(const Rc<Script>& script, asIScriptObject* instance) const -> void;
+        auto execute_update(const Rc<Script>& script, asIScriptObject* instance) const -> void;
 
         auto get_engine() const -> asIScriptEngine*;
         auto get_context() const -> asIScriptContext*;

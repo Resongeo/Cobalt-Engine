@@ -86,6 +86,10 @@ add_library(Engine STATIC
 	Source/Engine/ECS/Systems/ScriptStartSystem.hpp
 	Source/Engine/Platform/DialogManager.cpp
 	Source/Engine/Platform/DialogManager.hpp
+	Source/Engine/Scripting/ScriptEntity.cpp
+	Source/Engine/Scripting/ScriptEntity.hpp
+	Source/Engine/ECS/Systems/ScriptUpdateSystem.cpp
+	Source/Engine/ECS/Systems/ScriptUpdateSystem.hpp
 )
 
 target_link_libraries(Engine PUBLIC

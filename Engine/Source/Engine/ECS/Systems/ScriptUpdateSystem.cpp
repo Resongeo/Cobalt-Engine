@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2026 Somogyvári Benedek
 
-#include "Engine/ECS/Systems/ScriptStartSystem.hpp"
-#include "Engine/ECS/Components/ScriptComponent.hpp"
+#include "Engine/ECS/Systems/ScriptUpdateSystem.hpp"
+#include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Core/EngineContext.hpp"
 #include "Engine/Scripting/Script.hpp"
 
 namespace Cobalt
 {
-    void ScriptStartSystem::update(EngineContext& ctx, entt::registry& registry) {
+    void ScriptUpdateSystem::update(EngineContext& ctx, entt::registry& registry) {
         for (const auto entity : registry.view<ScriptComponent>()) {
             auto& [script_id, instance] = registry.get<ScriptComponent>(entity);
 
@@ -17,9 +17,7 @@ namespace Cobalt
             }
 
             if (auto script = ctx.asset_manager.get_asset<Script>(ctx, script_id); script) {
-                ctx.script_manager.compile_script(script);
-                instance = ctx.script_manager.instantiate_script(ctx, entity, script);
-                ctx.script_manager.execute_start(script, instance);
+                ctx.script_manager.execute_update(script, instance);
             }
         }
     }
