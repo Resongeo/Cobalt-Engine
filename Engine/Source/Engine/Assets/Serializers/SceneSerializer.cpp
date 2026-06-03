@@ -197,7 +197,8 @@ namespace Cobalt
                 const auto view = registry.view<entt::entity>();
                 bool first_entity = true;
 
-                for (const auto& entity_id : view) {
+                for (auto it = view.rbegin(); it != view.rend(); ++it) {
+                    const auto entity_id = *it;
                     auto entity = Entity(entity_id, &registry);
 
                     if (!first_entity) {
