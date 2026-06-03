@@ -46,6 +46,10 @@ namespace Cobalt
             return;
         }
 
+        if (!is_file_asset(path)) {
+            return;
+        }
+
         if (!std::filesystem::exists(path)) {
             return;
         }
@@ -148,6 +152,11 @@ namespace Cobalt
             {
                 auto asset_index = 0;
                 for (const auto& [id, meta] : m_registry) {
+                    if (meta.is_memory) {
+                        asset_index++;
+                        continue;
+                    }
+
                     asset_index++;
                     sb.start_object();
                     {
@@ -162,7 +171,7 @@ namespace Cobalt
                     }
                     sb.end_object();
 
-                    if (asset_index != m_registry.size()) {
+                    if (asset_index < m_registry.size()) {
                         sb.append_comma();
                     }
                 }
