@@ -162,7 +162,7 @@ namespace Cobalt
 
             if (self_prop_idx >= 0) {
                 if (auto* self_property = static_cast<ScriptEntity*>(instance->GetAddressOfProperty(self_prop_idx))) {
-                    self_property->entity = {entity, &ctx.scene_manager.get_active_scene(ctx)->get_registry()};
+                    self_property->entity = {entity, &ctx.scene_manager.get_active_scene()->get_registry()};
                 }
             }
         }

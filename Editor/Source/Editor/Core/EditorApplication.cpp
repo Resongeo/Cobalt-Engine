@@ -67,7 +67,7 @@ namespace Cobalt
             }
             ImGui::EndMainMenuBar();
 
-            if (const auto active_scene = scene_manager.get_active_scene(ctx); active_scene != nullptr) {
+            if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
                 const auto viewport = ImGui::GetMainViewport();
                 ImGui::SetNextWindowPos(viewport->Pos);
                 ImGui::SetNextWindowSize(viewport->Size);
@@ -96,13 +96,17 @@ namespace Cobalt
             switch (ctx.scene_manager.get_state()) {
                 case SceneState::None: {
                     if (ImGui::Button("Play")) {
+                        m_state.active_scene = m_state.active_scene->clone();
+                        ctx.scene_manager.set_active_scene(m_state.active_scene);
                         ctx.scene_manager.set_state(SceneState::Start);
                     }
                     break;
                 }
                 case SceneState::Update: {
                     if (ImGui::Button("Stop")) {
+                        ctx.scene_manager.set_active_scene(ctx, ctx.scene_manager.get_active_scene_uuid());
                         ctx.scene_manager.set_state(SceneState::None);
+                        m_state.active_scene = ctx.scene_manager.get_active_scene();
                     }
                     break;
                 }

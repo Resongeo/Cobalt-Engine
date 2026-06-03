@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/UUID.hpp"
 #include "Engine/ECS/Entity.hpp"
 #include "Engine/Assets/IAsset.hpp"
@@ -23,6 +24,7 @@ namespace Cobalt
         auto create_entity(const String& name) -> Entity;
         auto create_entity(const String& name, UUID uuid) -> Entity;
         auto create_empty_entity() -> Entity;
+        auto clone() -> Rc<Scene>;
 
     private:
         String m_name = {};

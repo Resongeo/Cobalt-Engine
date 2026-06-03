@@ -19,9 +19,10 @@ namespace Cobalt
 
         auto init(EngineContext& ctx) -> void;
 
-        auto get_active_scene(EngineContext& ctx) const -> Rc<Scene>;
+        auto get_active_scene() const -> Rc<Scene>;
         auto get_active_scene_uuid() const -> UUID;
         auto set_active_scene(EngineContext& ctx, UUID uuid) -> void;
+        auto set_active_scene(const Rc<Scene>& scene) -> void;
         auto get_state() const -> SceneState;
         auto set_state(SceneState state) -> void;
         auto update(EngineContext& ctx) -> void;

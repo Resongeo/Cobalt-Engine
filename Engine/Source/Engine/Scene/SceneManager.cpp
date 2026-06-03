@@ -23,7 +23,7 @@ namespace Cobalt
         }
     }
 
-    auto SceneManager::get_active_scene(EngineContext& ctx) const -> Rc<Scene> {
+    auto SceneManager::get_active_scene() const -> Rc<Scene> {
         return m_active_scene;
     }
 
@@ -35,6 +35,10 @@ namespace Cobalt
         m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, uuid);
     }
 
+    auto SceneManager::set_active_scene(const Rc<Scene>& scene) -> void {
+        m_active_scene = scene;
+    }
+
     auto SceneManager::set_state(const SceneState state) -> void {
         m_state = state;
     }
@@ -44,7 +48,7 @@ namespace Cobalt
     }
 
     auto SceneManager::update(EngineContext& ctx) -> void {
-        const auto active_scene = get_active_scene(ctx);
+        const auto active_scene = get_active_scene();
 
         if (active_scene == nullptr) {
             return;
