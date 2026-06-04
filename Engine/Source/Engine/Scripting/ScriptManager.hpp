@@ -15,7 +15,7 @@ namespace Cobalt
     class ScriptManager final
     {
     public:
-        auto init() -> bool;
+        auto init(EngineContext& ctx) -> bool;
         auto destroy() const -> void;
 
         auto load_script(const String& script_path) const -> Rc<Script>;

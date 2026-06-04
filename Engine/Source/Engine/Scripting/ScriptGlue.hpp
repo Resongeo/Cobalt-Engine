@@ -7,7 +7,7 @@
 
 namespace Cobalt::ScriptGlue
 {
-    auto register_global_functions(asIScriptEngine* engine) -> void;
     auto register_types(asIScriptEngine* engine) -> void;
+    auto register_global_functions(asIScriptEngine* engine) -> void;
     auto register_entity_api(asIScriptEngine* engine) -> void;
 } // namespace Cobalt::ScriptGlue

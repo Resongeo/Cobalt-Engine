@@ -16,7 +16,7 @@
 
 namespace Cobalt
 {
-    auto ScriptManager::init() -> bool {
+    auto ScriptManager::init(EngineContext& ctx) -> bool {
         m_engine = asCreateScriptEngine();
         if (m_engine == nullptr) {
             return false;
@@ -33,6 +33,8 @@ namespace Cobalt
             return false;
         }
 
+        m_engine->SetUserData(&ctx);
+
         RegisterStdString(m_engine);
         RegisterScriptHandle(m_engine);
         RegisterScriptWeakRef(m_engine);
@@ -42,8 +44,8 @@ namespace Cobalt
             return false;
         }
 
-        ScriptGlue::register_global_functions(m_engine);
         ScriptGlue::register_types(m_engine);
+        ScriptGlue::register_global_functions(m_engine);
         ScriptGlue::register_entity_api(m_engine);
 
         return true;

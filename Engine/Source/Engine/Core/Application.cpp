@@ -31,7 +31,7 @@ namespace Cobalt
         m_ctx.scene_manager.init(m_ctx);
 
         if (!m_ctx.window.init(m_ctx.project)) return false;
-        if (!m_ctx.script_manager.init()) return false;
+        if (!m_ctx.script_manager.init(m_ctx)) return false;
 
         m_ctx.dialog_manager.init(m_ctx.window);
 

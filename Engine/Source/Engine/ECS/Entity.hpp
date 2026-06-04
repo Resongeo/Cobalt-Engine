@@ -11,6 +11,7 @@ namespace Cobalt
     {
     public:
         Entity(const entt::entity id, entt::registry* registry) : m_id(id), m_registry(registry) {}
+        Entity() = default;
 
         auto is_valid() const -> bool {
             return m_registry || m_id != entt::null;
