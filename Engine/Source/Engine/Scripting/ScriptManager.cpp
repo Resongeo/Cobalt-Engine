@@ -2,6 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Scripting/ScriptManager.hpp"
+#include "Engine/Scripting/ScriptGlue.hpp"
 #include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Logger.hpp"
 #include "Engine/Scripting/ScriptEntity.hpp"
@@ -15,10 +16,6 @@
 
 namespace Cobalt
 {
-    void test_print(String& msg) {
-        Logger::warn("Test AngelScript", "{}", msg);
-    }
-
     auto ScriptManager::init() -> bool {
         m_engine = asCreateScriptEngine();
         if (m_engine == nullptr) {
@@ -45,11 +42,9 @@ namespace Cobalt
             return false;
         }
 
-        m_engine->RegisterGlobalFunction("void Print(string& in)", asFUNCTION(test_print), asCALL_CDECL);
-        m_engine->RegisterObjectType("Entity", sizeof(ScriptEntity), asOBJ_VALUE | asOBJ_POD);
-        m_engine->RegisterObjectMethod("Entity", "void set_position(float, float)", asMETHOD(ScriptEntity, set_position), asCALL_THISCALL);
-
-        m_engine->RegisterObjectMethod("Entity", "float get_position_x()", asMETHOD(ScriptEntity, get_position_x), asCALL_THISCALL);
+        ScriptGlue::register_global_functions(m_engine);
+        ScriptGlue::register_types(m_engine);
+        ScriptGlue::register_entity_api(m_engine);
 
         return true;
     }

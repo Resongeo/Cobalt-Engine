@@ -90,6 +90,8 @@ add_library(Engine STATIC
 	Source/Engine/Scripting/ScriptEntity.hpp
 	Source/Engine/ECS/Systems/ScriptUpdateSystem.cpp
 	Source/Engine/ECS/Systems/ScriptUpdateSystem.hpp
+	Source/Engine/Scripting/ScriptGlue.cpp
+	Source/Engine/Scripting/ScriptGlue.hpp
 )
 
 target_link_libraries(Engine PUBLIC
