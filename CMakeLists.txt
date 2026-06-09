@@ -12,47 +12,7 @@ if (WIN32 AND CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "
 endif ()
 
 # -- Vendor libraries --
-add_subdirectory(Vendor/TOML)
-add_subdirectory(Vendor/CATCH2)
-add_subdirectory(Vendor/ENTT)
-add_subdirectory(Vendor/GLM)
-file(GLOB IMGUI_SOURCES
-	"Vendor/IMGUI/*.cpp"
-	"Vendor/IMGUI/*.h"
-	"Vendor/IMGUI/misc/cpp/*.cpp"
-)
-add_library(imgui STATIC ${IMGUI_SOURCES})
-target_include_directories(imgui PUBLIC "Vendor/IMGUI")
-file(GLOB IMGUIZMO_SOURCES
-	"Vendor/IMGUIZMO/ImGuizmo.cpp"
-	"Vendor/IMGUIZMO/ImGuizmo.h"
-)
-add_library(imguizmo STATIC ${IMGUIZMO_SOURCES})
-target_link_libraries(imguizmo PRIVATE imgui)
-target_include_directories(imguizmo PUBLIC "Vendor/IMGUIZMO")
-add_subdirectory(Vendor/SDL)
-file(GLOB SIMDJSON_SOURCES
-	"Vendor/SIMDJSON/singleheader/simdjson.cpp"
-	"Vendor/SIMDJSON/singleheader/simdjson.h"
-)
-add_library(simdjson STATIC ${SIMDJSON_SOURCES})
-target_include_directories(simdjson PUBLIC "Vendor/SIMDJSON/singleheader")
-add_subdirectory(Vendor/ANGELSCRIPT/sdk/angelscript/projects/cmake)
-file(GLOB ANGELSCRIPT_ADDONS
-	"Vendor/ANGELSCRIPT/sdk/add_on/scriptstdstring/*.cpp"
-	"Vendor/ANGELSCRIPT/sdk/add_on/scriptstdstring/*.h"
-	"Vendor/ANGELSCRIPT/sdk/add_on/scriptbuilder/*.cpp"
-	"Vendor/ANGELSCRIPT/sdk/add_on/scriptbuilder/*.h"
-	"Vendor/ANGELSCRIPT/sdk/add_on/weakref/*.cpp"
-	"Vendor/ANGELSCRIPT/sdk/add_on/weakref/*.h"
-	"Vendor/ANGELSCRIPT/sdk/add_on/scripthandle/*.cpp"
-	"Vendor/ANGELSCRIPT/sdk/add_on/scripthandle/*.h"
-)
-add_library(angelscript_addons STATIC ${ANGELSCRIPT_ADDONS})
-target_link_libraries(angelscript_addons PRIVATE angelscript)
-target_include_directories(angelscript_addons PUBLIC
-	"Vendor/ANGELSCRIPT/sdk/add_on"
-)
+add_subdirectory(Vendor)
 
 # -- Targets --
 add_subdirectory(Engine)
