@@ -1,11 +1,9 @@
-add_library(Engine STATIC
+set(ENGINE_SOURCES
 	Source/Engine/Core/Application.cpp
 	Source/Engine/Core/Application.hpp
 	Source/Engine/Core/Logger.hpp
 	Source/Engine/Core/Defines.hpp
 	Source/Engine/Platform/Window.hpp
-	Source/Engine/Platform/Linux/LinuxWindow.cpp
-	Source/Engine/Platform/Windows/WindowsWindow.cpp
 	Source/Engine/Platform/Platform.cpp
 	Source/Engine/Platform/Platform.hpp
 	Source/Engine/Scene/SceneManager.cpp
@@ -93,6 +91,15 @@ add_library(Engine STATIC
 	Source/Engine/Scripting/ScriptGlue.cpp
 	Source/Engine/Scripting/ScriptGlue.hpp
 )
+
+# -- Platform specific source files --
+if(WIN32)
+	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Windows/WindowsWindow.cpp)
+elseif(UNIX AND NOT APPLE)
+	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Linux/LinuxWindow.cpp)
+endif()
+
+add_library(Engine STATIC ${ENGINE_SOURCES})
 
 target_link_libraries(Engine PUBLIC
 	glm::glm

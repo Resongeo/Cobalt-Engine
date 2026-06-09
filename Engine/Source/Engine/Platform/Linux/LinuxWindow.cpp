@@ -1,10 +1,6 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2026 Somogyvári Benedek
 
-#include "Engine/Core/Defines.hpp"
-
-#ifdef PLATFORM_LINUX
-
 #include "Engine/Core/Logger.hpp"
 #include "Engine/Platform/Window.hpp"
 
@@ -120,5 +116,3 @@ namespace Cobalt
         SDL_DestroyWindow(m_handle);
     }
 } // namespace Cobalt
-
-#endif
