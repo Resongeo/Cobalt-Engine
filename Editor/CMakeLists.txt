@@ -38,6 +38,13 @@ target_compile_definitions(Editor PRIVATE
 	$<$<CONFIG:MinSizeRel>:CONFIG_RELEASE>
 )
 
+if (WIN32)
+	set_target_properties(Editor PROPERTIES
+		WIN32_EXECUTABLE $<$<CONFIG:Release>:ON>
+		WIN32_EXECUTABLE $<$<CONFIG:MinSizeRel>:ON>
+	)
+endif ()
+
 # -- Copy Engine assets to Editor build output --
 add_custom_command(TARGET Editor POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
