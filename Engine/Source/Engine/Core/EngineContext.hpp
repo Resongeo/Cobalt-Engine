@@ -10,6 +10,8 @@
 #include "Engine/Scene/SceneManager.hpp"
 #include "Engine/Scripting/ScriptManager.hpp"
 
+#include <entt/signal/dispatcher.hpp>
+
 namespace Cobalt
 {
     struct EngineContext
@@ -21,6 +23,8 @@ namespace Cobalt
         SceneManager scene_manager = {};
         ScriptManager script_manager = {};
         DialogManager dialog_manager = {};
+
+        entt::dispatcher dispatcher = {};
 
         bool close_requested = false;
     };

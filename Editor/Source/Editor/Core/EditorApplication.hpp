@@ -16,7 +16,6 @@ namespace Cobalt
     public:
         auto begin(EngineContext& ctx) -> void override;
         auto update(EngineContext& ctx) -> void override;
-        auto on_sdl_event(SDL_Event* event) -> void override;
 
     private:
         Renderer m_renderer = {};

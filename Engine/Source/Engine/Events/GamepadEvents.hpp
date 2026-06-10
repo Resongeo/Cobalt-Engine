@@ -3,47 +3,30 @@
 
 #pragma once
 
-#include "Engine/Events/IEvent.hpp"
-
 namespace Cobalt
 {
-    class GamepadAxisMotionEvent : public IEvent
+    struct GamepadAxisMotionEvent
     {
-    public:
-        explicit GamepadAxisMotionEvent() = default;
-        EVENT_BUILDER(EventType::GamepadAxisMotion)
         // TODO: Implement GamepadAxisMotionEvent properly when working on Input
     };
 
-    class GamepadButtonDownEvent : public IEvent
+    struct GamepadButtonDownEvent
     {
-    public:
-        explicit GamepadButtonDownEvent() = default;
-        EVENT_BUILDER(EventType::GamepadButtonDown)
         // TODO: Implement GamepadButtonDownEvent properly when working on Input
     };
 
-    class GamepadButtonUpEvent : public IEvent
+    struct GamepadButtonUpEvent
     {
-    public:
-        explicit GamepadButtonUpEvent() = default;
-        EVENT_BUILDER(EventType::GamepadButtonUp)
         // TODO: Implement GamepadButtonUpEvent properly when working on Input
     };
 
-    class GamepadAddedEvent : public IEvent
+    struct GamepadAddedEvent
     {
-    public:
-        explicit GamepadAddedEvent() = default;
-        EVENT_BUILDER(EventType::GamepadAdded)
         // TODO: Implement GamepadAddedEvent properly when working on Input
     };
 
-    class GamepadRemovedEvent : public IEvent
+    struct GamepadRemovedEvent
     {
-    public:
-        explicit GamepadRemovedEvent() = default;
-        EVENT_BUILDER(EventType::GamepadRemoved)
         // TODO: Implement GamepadRemovedEvent properly when working on Input
     };
 } // namespace Cobalt

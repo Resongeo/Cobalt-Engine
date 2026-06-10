@@ -3,7 +3,5 @@
 
 #pragma once
 
-#include "Engine/Events/IEvent.hpp"
-
 namespace Cobalt
 {}

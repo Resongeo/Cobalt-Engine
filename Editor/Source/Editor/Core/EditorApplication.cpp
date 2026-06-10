@@ -40,13 +40,14 @@ namespace Cobalt
         m_panels.emplace_back(Memory::make_box<SceneHierarchyPanel>());
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
 
+        ctx.window.set_native_event_callback([](void* event) {
+            const auto* sdl_event = static_cast<SDL_Event*>(event);
+            Gui::process_event(sdl_event);
+        });
+
         for (const auto& panel : m_panels) {
             panel->begin(ctx, m_state);
         }
-    }
-
-    void EditorApplication::on_sdl_event(SDL_Event* event) {
-        Gui::process_event(event);
     }
 
     auto EditorApplication::update(EngineContext& ctx) -> void {

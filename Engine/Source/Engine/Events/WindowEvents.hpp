@@ -3,62 +3,27 @@
 
 #pragma once
 
-#include "Engine/Events/IEvent.hpp"
-
 namespace Cobalt
 {
-    class WindowMovedEvent : public IEvent
+    struct WindowMovedEvent
     {
-    public:
-        explicit WindowMovedEvent(const u32 x, const u32 y) : x(x), y(y) {}
         u32 x = 0;
         u32 y = 0;
-
-        EVENT_BUILDER(EventType::WindowMoved)
     };
 
-    class WindowResizedEvent : public IEvent
+    struct WindowResizedEvent
     {
-    public:
-        explicit WindowResizedEvent(const u32 width, const u32 height) : width(width), height(height) {}
         u32 width = 0;
         u32 height = 0;
-
-        EVENT_BUILDER(EventType::WindowResized)
     };
 
-    class WindowMinimizedEvent : public IEvent
-    {
-    public:
-        explicit WindowMinimizedEvent() = default;
-        EVENT_BUILDER(EventType::WindowMinimized)
-    };
+    struct WindowMinimizedEvent {};
 
-    class WindowMaximizedEvent : public IEvent
-    {
-    public:
-        explicit WindowMaximizedEvent() = default;
-        EVENT_BUILDER(EventType::WindowMaximized)
-    };
+    struct WindowMaximizedEvent {};
 
-    class WindowRestoredEvent : public IEvent
-    {
-    public:
-        explicit WindowRestoredEvent() = default;
-        EVENT_BUILDER(EventType::WindowRestored)
-    };
+    struct WindowRestoredEvent {};
 
-    class WindowEnterFullscreenEvent : public IEvent
-    {
-    public:
-        explicit WindowEnterFullscreenEvent() = default;
-        EVENT_BUILDER(EventType::WindowEnterFullscreen)
-    };
+    struct WindowEnterFullscreenEvent {};
 
-    class WindowLeaveFullscreenEvent : public IEvent
-    {
-    public:
-        explicit WindowLeaveFullscreenEvent() = default;
-        EVENT_BUILDER(EventType::WindowLeaveFullscreen)
-    };
+    struct WindowLeaveFullscreenEvent {};
 } // namespace Cobalt
