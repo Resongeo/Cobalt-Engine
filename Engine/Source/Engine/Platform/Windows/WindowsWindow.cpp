@@ -15,9 +15,6 @@
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
 
-constexpr int WINDOW_WIDTH = 1600;
-constexpr int WINDOW_HEIGHT = 900;
-
 namespace Cobalt
 {
     SDL_GLContext gl_context = nullptr;
@@ -33,12 +30,14 @@ namespace Cobalt
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
+        const auto primary_display = SDL_GetPrimaryDisplay();
         constexpr auto window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
         const auto title = ctx.project.get_name();
 
-        m_handle = SDL_CreateWindow(title.c_str(), static_cast<int>(WINDOW_WIDTH * main_scale),
-                                    static_cast<int>(WINDOW_HEIGHT * main_scale), window_flags);
+        auto* display_mode = SDL_GetCurrentDisplayMode(primary_display);
+
+        m_handle = SDL_CreateWindow(title.c_str(), static_cast<int>(display_mode->w * 0.8),
+                                    static_cast<int>(display_mode->h * 0.8), window_flags);
         if (m_handle == nullptr) {
             CORE_CRITICAL("Platform: Failed to create window: {}", SDL_GetError());
             return false;
