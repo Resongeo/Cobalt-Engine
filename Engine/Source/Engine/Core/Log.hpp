@@ -14,6 +14,7 @@ namespace Cobalt
     {
     public:
         static auto init(EngineContext& ctx) -> void;
+        static auto flush_events(EngineContext& ctx) -> void;
         static auto get_core_logger() -> Rc<spdlog::logger>&;
 
     private:

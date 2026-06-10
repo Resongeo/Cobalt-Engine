@@ -35,6 +35,8 @@ namespace Cobalt
 
     auto Application::main_loop() -> void {
         while (!m_ctx.close_requested) {
+            Log::flush_events(m_ctx);
+
             m_ctx.window.poll_events(m_ctx);
             update(m_ctx);
             m_ctx.window.swap_buffers();

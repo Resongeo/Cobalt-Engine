@@ -88,6 +88,7 @@ set(ENGINE_SOURCES
 	Source/Engine/ECS/Systems/ScriptUpdateSystem.hpp
 	Source/Engine/Scripting/ScriptGlue.cpp
 	Source/Engine/Scripting/ScriptGlue.hpp
+	Source/Engine/Events/LogEvents.hpp
 )
 
 # -- Platform specific source files --
