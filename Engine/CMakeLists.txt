@@ -1,7 +1,8 @@
 set(ENGINE_SOURCES
 	Source/Engine/Core/Application.cpp
 	Source/Engine/Core/Application.hpp
-	Source/Engine/Core/Logger.hpp
+	Source/Engine/Core/Log.hpp
+	Source/Engine/Core/Log.cpp
 	Source/Engine/Core/Defines.hpp
 	Source/Engine/Platform/Window.hpp
 	Source/Engine/Platform/Platform.cpp
@@ -106,6 +107,7 @@ target_link_libraries(Engine PUBLIC
 	tomlplusplus::tomlplusplus
 	angelscript
 	angelscript_addons
+	spdlog::spdlog
 )
 
 target_include_directories(Engine PUBLIC

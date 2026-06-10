@@ -3,6 +3,7 @@ add_subdirectory(CATCH2)
 add_subdirectory(ENTT)
 add_subdirectory(GLM)
 add_subdirectory(SDL)
+add_subdirectory(SPDLOG)
 
 file(GLOB IMGUI_SOURCES
 	"IMGUI/*.cpp"
