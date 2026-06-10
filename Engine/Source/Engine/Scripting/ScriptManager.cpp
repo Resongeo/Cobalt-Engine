@@ -2,10 +2,10 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Scripting/ScriptManager.hpp"
-#include "Engine/Scripting/ScriptGlue.hpp"
 #include "Engine/Core/EngineContext.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Scripting/ScriptEntity.hpp"
+#include "Engine/Scripting/ScriptGlue.hpp"
 
 #include <scriptbuilder/scriptbuilder.h>
 #include <scripthandle/scripthandle.h>
@@ -178,7 +178,7 @@ namespace Cobalt
         result = m_context->Execute();
 
         if (result == asEXECUTION_EXCEPTION) {
-            Logger::error("Script Manager", "Runtime exception: {}", m_context->GetExceptionString());
+            CORE_ERROR("ScriptManager: Runtime exception: {}", m_context->GetExceptionString());
         }
 
         m_context->Unprepare();
@@ -195,7 +195,7 @@ namespace Cobalt
         result = m_context->Execute();
 
         if (result == asEXECUTION_EXCEPTION) {
-            Logger::error("Script Manager", "Runtime exception: {}", m_context->GetExceptionString());
+            CORE_ERROR("ScriptManager: Runtime exception: {}", m_context->GetExceptionString());
         }
 
         m_context->Unprepare();
@@ -211,15 +211,15 @@ namespace Cobalt
 
     auto ScriptManager::message_callback(const asSMessageInfo& msg) const -> void {
         if (msg.type == asMSGTYPE_INFORMATION) {
-            Logger::trace("Script Manager", "{} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
+            CORE_INFO("ScriptManager: {} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
         }
 
         if (msg.type == asMSGTYPE_WARNING) {
-            Logger::warn("Script Manager", "{} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
+            CORE_WARN("ScriptManager: {} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
         }
 
         if (msg.type == asMSGTYPE_ERROR) {
-            Logger::error("Script Manager", "{} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
+            CORE_ERROR("ScriptManager: {} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);
         }
     }
 } // namespace Cobalt

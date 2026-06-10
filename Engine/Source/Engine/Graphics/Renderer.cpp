@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Renderer.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <glad/gl.h>
 
@@ -33,10 +33,10 @@ namespace Cobalt
         const auto fragment_path_str = fragment_path.string();
         if (auto result = m_default_shader->create_from_file(vertex_path_str.c_str(), fragment_path_str.c_str());
             !result) {
-            Logger::error("Engine::Shader", "Failed to create default quad shader.");
+            CORE_ERROR("Graphics::Shader: Failed to create default quad shader!");
             result = m_default_shader->create_fallback();
             if (!result) {
-                Logger::fatal("Engine::Shader", "Failed to create fallback default quad shader.");
+            CORE_ERROR("Graphics::Shader: Failed to create fallback quad shader!");
                 std::exit(1);
             }
         }

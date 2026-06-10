@@ -1,0 +1,27 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2026 Somogyvári Benedek
+
+#pragma once
+
+#include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Fwd.hpp"
+
+#include <spdlog/spdlog.h>
+
+namespace Cobalt
+{
+    class Log final
+    {
+    public:
+        static auto init(EngineContext& ctx) -> void;
+        static auto get_core_logger() -> Rc<spdlog::logger>&;
+
+    private:
+        static Rc<spdlog::logger> s_core_logger;
+    };
+} // namespace Cobalt
+
+#define CORE_INFO(...)     ::Cobalt::Log::get_core_logger()->info(__VA_ARGS__)
+#define CORE_WARN(...)     ::Cobalt::Log::get_core_logger()->warn(__VA_ARGS__)
+#define CORE_ERROR(...)    ::Cobalt::Log::get_core_logger()->error(__VA_ARGS__)
+#define CORE_CRITICAL(...) ::Cobalt::Log::get_core_logger()->critical(__VA_ARGS__)

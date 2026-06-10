@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Framebuffer.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <glad/gl.h>
 
@@ -72,8 +72,10 @@ namespace Cobalt
         m_attachment_ids.resize(m_attachment_types.size());
         _create();
 
-        Logger::trace("Engine::Graphics::Framebuffer", "Created ID: {} Attachment count: {} Size {}x{}", m_renderer_id,
-                      m_attachment_types.size(), m_size.x, m_size.y);
+        CORE_INFO(
+            "Graphics::Framebuffer: Created. ID: {}. Attachment count: {}. Size {}x{}",
+            m_renderer_id, m_attachment_types.size(), m_size.x, m_size.y
+        );
     }
 
     auto Framebuffer::resize(const u32 width, const u32 height) -> void {
@@ -154,7 +156,7 @@ namespace Cobalt
         }
 
         if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-            Logger::error("framebuffer", "Framebuffer is not complete!");
+            CORE_ERROR("Graphics::Framebuffer: Framebuffer is not complete!");
         }
     }
 

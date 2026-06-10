@@ -2,12 +2,12 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
-#include "Editor/Gui/Widgets.hpp"
-#include "Editor/Gui/Fonts.hpp"
 #include "Editor/Gui/Colors.hpp"
 #include "Editor/Gui/FontIcons.hpp"
+#include "Editor/Gui/Fonts.hpp"
+#include "Editor/Gui/Widgets.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
-#include "Engine/Core/Logger.hpp"
 
 #include <imgui.h>
 
@@ -133,7 +133,7 @@ namespace Cobalt
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {8, 8});
             if (ImGui::BeginPopupContextItem("Asset Context Menu")) {
                 if (Widgets::button("Change Color")) {
-                    Logger::warn("Asset Browser", "Pressed Change Color");
+                    CORE_INFO("Editor::AssetBrowser: Pressed Change Color");
                 }
 
                 ImGui::EndPopup();

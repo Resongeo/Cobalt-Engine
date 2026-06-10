@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2026 Somogyvári Benedek
 
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Platform/Window.hpp"
 #include "Engine/Core/EngineContext.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Events/ApplicationEvents.hpp"
 #include "Engine/Events/DropEvents.hpp"
 #include "Engine/Events/GamepadEvents.hpp"
 #include "Engine/Events/KeyboardEvents.hpp"
 #include "Engine/Events/WindowEvents.hpp"
-#include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
 
@@ -24,30 +24,29 @@ namespace Cobalt
 
     auto Window::init(EngineContext& ctx) -> bool {
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
-            Logger::fatal("Engine::Platform", "Failed to initialize SDL3: {}", SDL_GetError());
+            CORE_CRITICAL("Platform: Failed to initialize SDL3: {}", SDL_GetError());
             return false;
         }
-        Logger::trace("Engine::Platform", "SDL3 initialized");
+        CORE_INFO("Platform: SDL3 initialized.");
 
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
         SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
         const auto main_scale = SDL_GetDisplayContentScale(SDL_GetPrimaryDisplay());
-        constexpr auto window_flags =
-                SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
+        constexpr auto window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
         const auto title = ctx.project.get_name();
 
         m_handle = SDL_CreateWindow(title.c_str(), static_cast<int>(WINDOW_WIDTH * main_scale),
                                     static_cast<int>(WINDOW_HEIGHT * main_scale), window_flags);
         if (m_handle == nullptr) {
-            Logger::fatal("Engine::Platform::Window", "Failed to create window: {}", SDL_GetError());
+            CORE_CRITICAL("Platform: Failed to create window: {}", SDL_GetError());
             return false;
         }
 
         gl_context = SDL_GL_CreateContext(m_handle);
         if (gl_context == nullptr) {
-            Logger::fatal("Engine::Platform::Window", "Failed to create OpenGL context: {}", SDL_GetError());
+            CORE_CRITICAL("Platform: Failed to create OpenGL context: {}", SDL_GetError());
             return false;
         }
 
@@ -65,8 +64,8 @@ namespace Cobalt
             glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
 
             glDebugMessageCallbackARB(
-                    [](const GLenum source, GLenum type, GLuint id, const GLenum severity, GLsizei length,
-                       const GLchar* message, const void* userParam) {
+                    [](const GLenum source, GLenum type, GLuint id, const GLenum severity, GLsizei length, const GLchar* message,
+                       const void* userParam) {
                         if (severity != GL_DEBUG_SEVERITY_HIGH_ARB && severity != GL_DEBUG_SEVERITY_MEDIUM_ARB) {
                             return;
                         }
@@ -90,7 +89,7 @@ namespace Cobalt
                             default: sev = "NONE"; break;
                         }
 
-                        Logger::trace("Engine::Platform::OpenGL", "[src={} | sev={}] {}", src, sev, message);
+                        CORE_INFO("Platform: OpenGL: [src={} | sev={}] {}", src, sev, message);
                     },
                     nullptr);
         }
@@ -98,7 +97,7 @@ namespace Cobalt
         auto major = GLAD_VERSION_MAJOR(version);
         auto minor = GLAD_VERSION_MINOR(version);
 
-        Logger::trace("Engine::Platform", "OpenGL version: {}", major, minor);
+        CORE_INFO("Platform: OpenGL version: {}", major, minor);
         return true;
     }
 
@@ -120,17 +119,13 @@ namespace Cobalt
 
                 // Window events
                 case SDL_EVENT_WINDOW_MOVED: {
-                    ctx.dispatcher.trigger<WindowMovedEvent>({
-                        static_cast<u32>(sdl_event.window.data1),
-                        static_cast<u32>(sdl_event.window.data2)
-                    });
+                    ctx.dispatcher.trigger<WindowMovedEvent>(
+                            {static_cast<u32>(sdl_event.window.data1), static_cast<u32>(sdl_event.window.data2)});
                     break;
                 }
                 case SDL_EVENT_WINDOW_RESIZED: {
-                    ctx.dispatcher.trigger<WindowResizedEvent>({
-                        static_cast<u32>(sdl_event.window.data1),
-                        static_cast<u32>(sdl_event.window.data2)
-                    });
+                    ctx.dispatcher.trigger<WindowResizedEvent>(
+                            {static_cast<u32>(sdl_event.window.data1), static_cast<u32>(sdl_event.window.data2)});
                     break;
                 }
                 case SDL_EVENT_WINDOW_MINIMIZED: {
@@ -208,10 +203,7 @@ namespace Cobalt
                     break;
                 }
                 case SDL_EVENT_DROP_POSITION: {
-                    ctx.dispatcher.trigger<DropPositionEvent>({
-                        static_cast<u32>(sdl_event.drop.x),
-                        static_cast<u32>(sdl_event.drop.y)
-                    });
+                    ctx.dispatcher.trigger<DropPositionEvent>({static_cast<u32>(sdl_event.drop.x), static_cast<u32>(sdl_event.drop.y)});
                     break;
                 }
 

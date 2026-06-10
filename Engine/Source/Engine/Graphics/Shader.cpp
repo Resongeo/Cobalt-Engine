@@ -3,7 +3,7 @@
 
 #include "Engine/Graphics/Shader.hpp"
 #include "Engine/Core/File.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <glad/gl.h>
 
@@ -75,7 +75,7 @@ namespace Cobalt
             Vector<GLchar> info_log(max_length);
             glGetShaderInfoLog(vertex_shader, max_length, &max_length, info_log.data());
 
-            Logger::error("shader", "Vertex shader compilation error:\n{}", info_log.data());
+            CORE_ERROR("Graphics::Shader: Vertex shader compilation error:\n{}", info_log.data());
             glDeleteShader(vertex_shader);
 
             return false;
@@ -93,7 +93,7 @@ namespace Cobalt
             Vector<GLchar> info_log(max_length);
             glGetShaderInfoLog(fragment_shader, max_length, &max_length, info_log.data());
 
-            Logger::error("shader", "Fragment shader compilation error:\n{}", info_log.data());
+            CORE_ERROR("Graphics::Shader: Fragment shader compilation error:\n{}", info_log.data());
             glDeleteShader(fragment_shader);
 
             return false;
@@ -113,7 +113,7 @@ namespace Cobalt
             Vector<GLchar> info_log(max_length);
             glGetProgramInfoLog(m_renderer_id, max_length, &max_length, info_log.data());
 
-            Logger::error("shader", "Shader linking error:\n{}", info_log.data());
+            CORE_ERROR("Graphics::Shader: Shader linking error:\n{}", info_log.data());
             glDeleteShader(vertex_shader);
             glDeleteShader(fragment_shader);
             glDeleteProgram(m_renderer_id);
@@ -127,7 +127,7 @@ namespace Cobalt
         glDeleteShader(vertex_shader);
         glDeleteShader(fragment_shader);
 
-        Logger::trace("Engine::Graphics::Shader", "Created ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::Shader: Creating. ID: {}", m_renderer_id);
 
         return true;
     }

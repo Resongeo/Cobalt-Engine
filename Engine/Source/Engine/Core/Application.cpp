@@ -2,14 +2,14 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Core/Application.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Platform/Window.hpp"
 
 namespace Cobalt
 {
     auto Application::run(const CommandLineArgs& args) -> void {
         if (!initialize(args)) {
-            Logger::fatal("Engine::Core::Application", "Initialization failed. Exiting program.");
+            CORE_CRITICAL("Application: Initialization failed! Exiting program...");
             return;
         }
 
@@ -19,6 +19,8 @@ namespace Cobalt
     }
 
     auto Application::initialize(const CommandLineArgs& args) -> bool {
+        Log::init(m_ctx);
+
         m_ctx.project.init(args);
         m_ctx.asset_manager.init(m_ctx.project);
         m_ctx.scene_manager.init(m_ctx);

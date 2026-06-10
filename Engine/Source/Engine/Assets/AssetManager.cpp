@@ -6,7 +6,7 @@
 #include "Engine/Assets/Serializers/ScriptSerializer.hpp"
 #include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
 #include "Engine/Core/EngineContext.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <fstream>
 #include <ranges>
@@ -100,13 +100,13 @@ namespace Cobalt
         auto doc = simdjson::ondemand::document{};
 
         if (const auto error = parser.iterate(json).get(doc)) {
-            Logger::error("Engine::AssetManager", "{}", simdjson::error_message(error));
+            CORE_ERROR("AssetManager: {}", simdjson::error_message(error));
             return;
         }
 
         auto assets = simdjson::ondemand::array{};
         if (const auto error = doc["assets"].get_array().get(assets)) {
-            Logger::error("Engine::AssetManager", "{} Expected: \"assets\"", simdjson::error_message(error));
+            CORE_ERROR("AssetManager: {} Expected: \"assets\"", simdjson::error_message(error));
             return;
         }
 
@@ -115,14 +115,14 @@ namespace Cobalt
             auto meta = AssetMetadata{};
 
             if (const auto error = asset["uuid"].get_uint64().get(id.value)) {
-                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "uuid");
+                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "uuid");
 
                 continue;
             }
 
             auto relative_path_string = String{};
             if (const auto error = asset["path"].get_string().get(relative_path_string)) {
-                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "path");
+                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "path");
 
                 continue;
             }
@@ -130,7 +130,7 @@ namespace Cobalt
 
             auto type_string = String{};
             if (const auto error = asset["type"].get_string().get(type_string)) {
-                Logger::error("Engine::AssetManager", "{} Expected: \"{}\"", simdjson::error_message(error), "type");
+                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "type");
 
                 continue;
             }

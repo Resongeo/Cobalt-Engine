@@ -2,22 +2,24 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/VertexArray.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <glad/gl.h>
 
 namespace Cobalt
 {
     VertexArray::~VertexArray() {
-        Logger::trace("Engine::Graphics::VertexArray", "Deleting ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", m_renderer_id);
+
         glDeleteVertexArrays(1, &m_renderer_id);
         m_renderer_id = 0;
     }
 
     auto VertexArray::create() -> void {
+        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", m_renderer_id);
+
         glGenVertexArrays(1, &m_renderer_id);
         bind();
-        Logger::trace("Engine::Graphics::VertexArray", "Created ID: {}", m_renderer_id);
     }
 
     auto VertexArray::bind() const -> void {

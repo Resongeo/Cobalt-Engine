@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Assets/Serializers/SceneSerializer.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Core/Types/UUID.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Scene/Scene.hpp"
@@ -77,20 +77,20 @@ namespace Cobalt
         auto doc = simdjson::ondemand::document{};
 
         if (const auto error = parser.iterate(json).get(doc)) {
-            Logger::error("Engine::Assets::Loaders::SceneLoader", "{}", simdjson::error_message(error));
+            CORE_ERROR("Assets::Loaders::SceneLoader: {}", simdjson::error_message(error));
             return nullptr;
         }
 
         StringView scene_name;
         if (const auto error = doc["name"].get_string().get(scene_name)) {
-            Logger::error("Engine::Assets::Loaders::SceneLoader", "{} Expected: \"name\"", simdjson::error_message(error));
+            CORE_ERROR("Assets::Loaders::SceneLoader: {} Expected: \"name\"", simdjson::error_message(error));
         } else {
             scene->set_name(std::string(scene_name));
         }
 
         simdjson::ondemand::array entities;
         if (const auto error = doc["entities"].get_array().get(entities)) {
-            Logger::error("Engine::AssetManager", "{} Expected: \"entities\"", simdjson::error_message(error));
+            CORE_ERROR("Assets::Loaders::SceneLoader: {} Expected: \"entities\"", simdjson::error_message(error));
             return nullptr;
         }
 

@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Platform/Platform.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #include <SDL3/SDL.h>
 

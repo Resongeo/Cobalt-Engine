@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Core/Project.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #define TOML_EXCEPTIONS 0
 #include <toml++/toml.hpp>
@@ -18,13 +18,12 @@ namespace Cobalt
         m_editor_path = Filepath(m_args[0]).parent_path();
 
         if (m_args.size() < 2) {
-            Logger::warn("Editor::Project",
-                         "No project file is provided. Please provide a valid path to a .cbproj file");
+            CORE_WARN("Project: No file is provided. Please provide a valid path to a .cbproj file");
             return;
         }
 
         if (!std::filesystem::exists(m_args[1])) {
-            Logger::error("Editor::Project", "Project file path does not exists: {}", m_args[1]);
+            CORE_ERROR("Project: File path does not exists: {}", m_args[1]);
             return;
         }
 
@@ -41,12 +40,12 @@ namespace Cobalt
         if (!result) {
             auto error_msg = std::ostringstream();
             error_msg << result.error();
-            Logger::error("Editor::Project", "Error while parsing {}: {}", project_file_path.string(), error_msg.str());
+            CORE_ERROR("Project: Could not parse {}: {}", project_file_path.string(), error_msg.str());
             valid_file = false;
         }
 
         if (!valid_file) {
-            Logger::error("Editor::Project", "{} is not a valid project file", project_file_path.string());
+            CORE_ERROR("Project: {} is not a valid project file", project_file_path.string());
 
             return;
         }
@@ -56,7 +55,7 @@ namespace Cobalt
         m_version = table["project"]["version"].value_or<String>("0.0.0");
         m_startup_scene = UUID(table["project"]["startup_scene"].value_or<u64>(0));
 
-        Logger::trace("Editor::Project", "Loading project.\n  Name: {}\n  Version: {}", m_name, m_version);
+        CORE_INFO("Project: Loading.\n  Name: {}\n  Version: {}", m_name, m_version);
     }
 
     auto Project::get_name() -> String& {

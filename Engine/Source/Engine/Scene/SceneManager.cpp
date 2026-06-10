@@ -3,7 +3,7 @@
 
 #include "Engine/Scene/SceneManager.hpp"
 #include "Engine/Core/EngineContext.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 
 namespace Cobalt

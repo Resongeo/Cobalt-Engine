@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Texture2D.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <glad/gl.h>
@@ -20,6 +20,8 @@ namespace Cobalt
         m_width = width;
         m_height = height;
 
+        CORE_INFO("Graphics::Texture2D: Loading from file: {} Size: {}x{}", path_str, m_width, m_height);
+
         const auto internal_format = channels == 4 ? GL_RGBA8 : GL_RGB8;
         const auto data_format = channels == 4 ? GL_RGBA : GL_RGB;
 
@@ -36,12 +38,6 @@ namespace Cobalt
 
         stbi_image_free(data);
 
-        Logger::trace(
-            "Engine::Graphics::Texture2D",
-            "Loaded from file: {} Size: {}x{}",
-            path_str, m_width, m_height
-        );
-
         return true;
     }
 
@@ -51,6 +47,8 @@ namespace Cobalt
 
         m_width = width;
         m_height = height;
+
+        CORE_INFO("Graphics::Texture2D: Creating. Size: {}x{}", m_width, m_height);
 
         auto temp_buffer = Vector<unsigned char>{};
         temp_buffer.resize(m_width * m_height * 4, 255);
@@ -66,12 +64,6 @@ namespace Cobalt
 
         glTextureSubImage2D(m_renderer_id, 0, 0, 0, m_width, m_height, data_format, GL_UNSIGNED_BYTE,
                             temp_buffer.data());
-
-        Logger::trace(
-            "Engine::Graphics::Texture2D",
-            "Created with size: {}x{}",
-            m_width, m_height
-        );
 
         return true;
     }
@@ -94,7 +86,8 @@ namespace Cobalt
     }
 
     Texture2D::~Texture2D() {
-        Logger::trace("Engine::Graphics::Texture2D", "Unloaded ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::Texture2D Deleting. ID: {}", m_renderer_id);
+
         glDeleteTextures(1, &m_renderer_id);
         m_renderer_id = 0;
     }

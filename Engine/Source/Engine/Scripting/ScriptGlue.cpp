@@ -3,11 +3,11 @@
 
 #include "Engine/Scripting/ScriptGlue.hpp"
 #include "Engine/Core/EngineContext.hpp"
-#include "Engine/Core/Logger.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Math.hpp"
-#include "Engine/Scripting/ScriptEntity.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
+#include "Engine/Scripting/ScriptEntity.hpp"
 
 namespace Cobalt
 {
@@ -33,7 +33,7 @@ namespace Cobalt
     }
 
     auto test_print(String& msg) -> void {
-        Logger::trace("Script", "{}", msg);
+        CORE_INFO("Script: {}", msg);
     }
 
     auto vec2_default_constructor(void* memory) -> void {

@@ -21,7 +21,7 @@ namespace Cobalt
         auto create_dynamic(u32 size) -> void;
         auto set_attribute_layout(const AttributeLayout& layout) -> void;
         auto attribute_layout() -> AttributeLayout&;
-        auto copy_data(u32 size, const void* data) -> void;
+        auto copy_data(u32 size, const void* data) const -> void;
 
     private:
         u32 m_renderer_id = 0;
