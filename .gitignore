@@ -6,3 +6,5 @@ cmake*/
 build*/
 .cache/
 compile_commands.json*
+
+Sandbox/Assets/AssetRegistry.json
