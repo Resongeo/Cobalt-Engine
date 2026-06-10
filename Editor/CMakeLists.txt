@@ -20,6 +20,8 @@ add_executable(Editor
 	Source/Editor/Gui/Widgets.cpp
 	Source/Editor/Gui/Helpers.hpp
 	Source/Editor/Gui/Colors.hpp
+	Source/Editor/Gui/Panels/LogPanel.cpp
+	Source/Editor/Gui/Panels/LogPanel.hpp
 )
 
 target_link_libraries(Editor PRIVATE

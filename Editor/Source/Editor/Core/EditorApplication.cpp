@@ -5,9 +5,11 @@
 #include "Editor/Gui/Gui.hpp"
 #include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
+#include "Editor/Gui/Panels/LogPanel.hpp"
 #include "Editor/Gui/Panels/SceneHierarchyPanel.hpp"
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
 #include "Engine/Core/Project.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
@@ -17,6 +19,8 @@
 
 #include <SDL3/SDL.h>
 #include <imgui.h>
+
+#include "Editor/Gui/Widgets.hpp"
 
 namespace Cobalt
 {
@@ -39,6 +43,7 @@ namespace Cobalt
         m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
         m_panels.emplace_back(Memory::make_box<SceneHierarchyPanel>());
         m_panels.emplace_back(Memory::make_box<ViewportPanel>());
+        m_panels.emplace_back(Memory::make_box<LogPanel>());
 
         ctx.window.set_native_event_callback([](void* event) {
             const auto* sdl_event = static_cast<SDL_Event*>(event);
@@ -111,20 +116,28 @@ namespace Cobalt
                     }
                     break;
                 }
+                case SceneState::Start: break;
+            }
+
+            if (Widgets::button("Log")) {
+                CORE_INFO("ASD");
+                CORE_WARN("ASD");
+                CORE_ERROR("ASD");
+                CORE_CRITICAL("ASD");
             }
         }
         ImGui::End();
 
         ImGui::Begin("Assets");
-
-        for (auto [id, meta] : ctx.asset_manager.get_registry()) {
-            auto name_string = meta.path.string();
-            ImGui::Text("Name %s", name_string.c_str());
-            ImGui::PushID(id.value);
-            ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&id.value);
-            ImGui::PopID();
+        {
+            for (auto [id, meta] : ctx.asset_manager.get_registry()) {
+                auto name_string = meta.path.string();
+                ImGui::Text("Name %s", name_string.c_str());
+                ImGui::PushID(id.value);
+                ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&id.value);
+                ImGui::PopID();
+            }
         }
-
         ImGui::End();
 
         Gui::end_frame(ctx);
