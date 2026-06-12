@@ -1,14 +1,26 @@
-<div class="center">
-  # Cobalt Engine <br>
-  ![Screenshot of the Editor](Docs/Editor.png)
+<div align="center">
+
+# Cobalt Engine
+
+![Screenshot of the Editor](Docs/Editor.png)
+
+[![License](https://img.shields.io/github/license/Resongeo/Cobalt-Engine)](LICENSE)
+[![C++](https://img.shields.io/badge/C++-23-blue)](https://github.com/Resongeo/Cobalt-Engine)
+[![Graphics](https://img.shields.io/badge/Graphics-OpenGL-blue)](https://www.opengl.org/)
+
 </div>
+
 Cobalt Engine is a simple 2D game engine written in C++, using OpenGL as its graphics API.
+
 > [!NOTE]
 > The engine is currently in an early stage and not yet capable of making games.
 
 ## Platform support
 - Windows
 - Linux
+
+> [!NOTE]
+> Only tested on Fedora Workstation 44
 
 ## 0.1 Roadmap
 The primary goal for version 0.1 is to make the engine capable of creating a simple game through its editor.
@@ -41,13 +53,23 @@ cd Cobalt-Engine
 
 #### If you’re building from an IDE, use its built-in CMake tools to configure and build the project. For manual builds, run the following commands:
 
-Create a build directory and generate the build files:
-``` sh
-cmake -B build
+Configure the project:
+
+```sh
+cmake --preset debug
 ```
+
 Build the project:
-``` sh
-cmake --build build
+
+```sh
+cmake --build --preset engine-debug
+```
+
+For a minimum size release build:
+
+```sh
+cmake --preset min-size-release
+cmake --build cmake-min-size-release
 ```
 
 ## Dependencies
