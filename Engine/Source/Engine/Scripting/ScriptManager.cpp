@@ -10,6 +10,7 @@
 #include <scriptbuilder/scriptbuilder.h>
 #include <scripthandle/scripthandle.h>
 #include <scriptstdstring/scriptstdstring.h>
+#include <scriptmath/scriptmath.h>
 #include <weakref/weakref.h>
 
 #include <format>
@@ -36,6 +37,7 @@ namespace Cobalt
         m_engine->SetUserData(&ctx);
 
         RegisterStdString(m_engine);
+        RegisterScriptMath(m_engine);
         RegisterScriptHandle(m_engine);
         RegisterScriptWeakRef(m_engine);
 
@@ -184,13 +186,14 @@ namespace Cobalt
         m_context->Unprepare();
     }
 
-    auto ScriptManager::execute_update(const Rc<Script>& script, asIScriptObject* instance) const -> void {
+    auto ScriptManager::execute_update(const Rc<Script>& script, asIScriptObject* instance, const f32 delta_time) const -> void {
         if (!instance || !script->update_func) {
             return;
         }
 
         auto result = 0;
         m_context->Prepare(script->update_func);
+        m_context->SetArgFloat(0, delta_time);
         m_context->SetObject(instance);
         result = m_context->Execute();
 

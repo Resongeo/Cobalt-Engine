@@ -17,7 +17,7 @@ namespace Cobalt
             }
 
             if (auto script = ctx.asset_manager.get_asset<Script>(ctx, script_id); script) {
-                ctx.script_manager.execute_update(script, instance);
+                ctx.script_manager.execute_update(script, instance, ctx.delta_time);
             }
         }
     }

@@ -5,6 +5,8 @@
 #include "Engine/Core/Log.hpp"
 #include "Engine/Platform/Window.hpp"
 
+#include <SDL3/SDL.h>
+
 namespace Cobalt
 {
     auto Application::run(const CommandLineArgs& args) -> void {
@@ -34,7 +36,13 @@ namespace Cobalt
     }
 
     auto Application::main_loop() -> void {
+        u64 current_time = SDL_GetTicks();
+        u64 last_time = current_time;
         while (!m_ctx.close_requested) {
+            current_time = SDL_GetTicks();
+            m_ctx.delta_time = static_cast<f32>(current_time - last_time) / 1000.0f;
+            last_time = current_time;
+
             Log::flush_events(m_ctx);
 
             m_ctx.window.poll_events(m_ctx);

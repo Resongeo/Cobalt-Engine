@@ -26,6 +26,7 @@ namespace Cobalt
 
         entt::dispatcher dispatcher = {};
 
+        f32 delta_time = 0.0f;
         bool close_requested = false;
     };
 } // namespace Cobalt

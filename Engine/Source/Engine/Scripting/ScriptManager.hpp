@@ -5,6 +5,7 @@
 
 #include "Engine/Scripting/Script.hpp"
 #include "Engine/Core/Types/Memory.hpp"
+#include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Fwd.hpp"
 
 #include <angelscript.h>
@@ -22,7 +23,7 @@ namespace Cobalt
         auto compile_script(Rc<Script>& script) const -> bool;
         auto instantiate_script(EngineContext& ctx, entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
         auto execute_start(const Rc<Script>& script, asIScriptObject* instance) const -> void;
-        auto execute_update(const Rc<Script>& script, asIScriptObject* instance) const -> void;
+        auto execute_update(const Rc<Script>& script, asIScriptObject* instance, f32 delta_time) const -> void;
 
         auto get_engine() const -> asIScriptEngine*;
         auto get_context() const -> asIScriptContext*;
