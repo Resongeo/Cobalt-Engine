@@ -4,7 +4,7 @@
 
 ![Screenshot of the Editor](Docs/Editor.png)
 
-[![License](https://img.shields.io/github/license/Resongeo/Cobalt-Engine)](LICENSE)
+[![License](https://img.shields.io/badge/License-Apache--2.0-green)](LICENSE)
 [![C++](https://img.shields.io/badge/C++-23-blue)](https://github.com/Resongeo/Cobalt-Engine)
 [![Graphics](https://img.shields.io/badge/Graphics-OpenGL-blue)](https://www.opengl.org/)
 
