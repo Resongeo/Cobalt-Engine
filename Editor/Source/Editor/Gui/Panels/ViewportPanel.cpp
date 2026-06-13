@@ -91,7 +91,7 @@ namespace Cobalt
 
             ImGui::PopStyleVar();
 
-            if (state.selected_entity != entt::null) {
+            if (state.selected_entity != entt::null && ctx.scene_manager.get_state() == SceneState::None) {
                 ImGuizmo::SetOrthographic(true);
                 ImGuizmo::SetDrawlist();
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(),
