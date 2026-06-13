@@ -73,6 +73,14 @@ namespace Cobalt
                         auto& [tint, uuid] = entity.get_component<SpriteComponent>();
                         ImGui::ColorEdit4("Tint", &tint.r);
                         ImGui::InputScalar("Texture UUID", ImGuiDataType_U64, (void*)&uuid.value);
+
+                        if (ImGui::BeginDragDropTarget()) {
+                            if (const auto* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_AND_DROP")) {
+                                const u64 uid = *static_cast<u64*>(payload->Data);
+                                uuid.value = uid;
+                            }
+                            ImGui::EndDragDropTarget();
+                        }
                     }
                 }
 
@@ -80,6 +88,14 @@ namespace Cobalt
                     if (Widgets::collapsing_header("Script", Colors::script)) {
                         auto& [uuid, _] = entity.get_component<ScriptComponent>();
                         ImGui::InputScalar("Script UUID", ImGuiDataType_U64, (void*)&uuid.value);
+
+                        if (ImGui::BeginDragDropTarget()) {
+                            if (const auto* payload = ImGui::AcceptDragDropPayload("ASSET_DRAG_AND_DROP")) {
+                                const u64 uid = *static_cast<u64*>(payload->Data);
+                                uuid.value = uid;
+                            }
+                            ImGui::EndDragDropTarget();
+                        }
                     }
                 }
             }

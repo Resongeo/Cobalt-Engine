@@ -20,6 +20,7 @@ namespace Cobalt
         auto register_asset(const Filepath& path) const -> void;
         auto register_asset(UUID id, const AssetMetadata& metadata) const -> void;
         auto get_metadata(UUID id) const -> AssetMetadata;
+        auto get_uuid(const Filepath& path) const -> UUID;
         auto is_asset_registered(UUID id) const -> bool;
         auto is_asset_registered(const Filepath& path) const -> bool;
         auto load_registry() const -> void;

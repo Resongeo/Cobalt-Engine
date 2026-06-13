@@ -91,6 +91,12 @@ namespace Cobalt
                 auto cursor_pos = ImGui::GetCursorScreenPos();
                 ImGui::InvisibleButton(filename_string.c_str(), {thumbnail_size, thumbnail_size});
 
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                    auto uuid = ctx.asset_manager.get_uuid(path);
+                    ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &uuid.value, sizeof(u64));
+                    ImGui::EndDragDropSource();
+                }
+
                 if (ImGui::IsItemHovered()) {
                     tint_col *= 0.9f;
 

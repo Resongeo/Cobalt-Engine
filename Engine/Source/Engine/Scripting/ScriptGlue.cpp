@@ -103,6 +103,6 @@ namespace Cobalt
         engine->RegisterObjectMethod("Entity", "float get_scale_x()", asMETHOD(ScriptEntity, get_scale_x), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float get_scale_y()", asMETHOD(ScriptEntity, get_scale_y), asCALL_THISCALL);
 
-        
+
     }
 } // namespace Cobalt

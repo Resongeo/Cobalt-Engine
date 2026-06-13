@@ -75,6 +75,16 @@ namespace Cobalt
         return {};
     }
 
+    auto AssetManager::get_uuid(const Filepath& path) const -> UUID {
+        for (auto& [id, meta] : m_registry) {
+            if (meta.path == path) {
+                return id;
+            }
+        }
+
+        return UUID{};
+    }
+
     auto AssetManager::is_asset_registered(const UUID id) const -> bool {
         const auto it = m_registry.find(id);
         return it != m_registry.end();
