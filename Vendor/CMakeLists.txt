@@ -36,6 +36,8 @@ file(GLOB ANGELSCRIPT_ADDONS
 	"ANGELSCRIPT/sdk/add_on/weakref/*.h"
 	"ANGELSCRIPT/sdk/add_on/scripthandle/*.cpp"
 	"ANGELSCRIPT/sdk/add_on/scripthandle/*.h"
+	"ANGELSCRIPT/sdk/add_on/scriptmath/*.cpp"
+	"ANGELSCRIPT/sdk/add_on/scriptmath/*.h"
 )
 add_library(angelscript_addons STATIC ${ANGELSCRIPT_ADDONS})
 target_link_libraries(angelscript_addons PRIVATE angelscript)

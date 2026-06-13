@@ -6,13 +6,13 @@
 
 namespace Cobalt
 {
-    auto ScriptEntity::set_position(f32 x, f32 y) -> void {
+    auto ScriptEntity::set_position(const Vec2& pos) -> void {
         if (!entity.is_valid()) {
             return;
         }
 
         auto& transform = entity.get_component<TransformComponent>();
-        transform.position = { x, y };
+        transform.position = pos;
     }
 
     auto ScriptEntity::set_position_x(const f32 x) -> void {
@@ -74,13 +74,13 @@ namespace Cobalt
         return entity.get_component<TransformComponent>().rotation;
     }
 
-    auto ScriptEntity::set_scale(f32 x, f32 y) -> void {
+    auto ScriptEntity::set_scale(const Vec2& scale) -> void {
         if (!entity.is_valid()) {
             return;
         }
 
         auto& transform = entity.get_component<TransformComponent>();
-        transform.scale = { x, y };
+        transform.scale = scale;
     }
 
     auto ScriptEntity::set_scale_x(const f32 x) -> void {

@@ -1,0 +1,90 @@
+class string {}
+
+////////////// Math Functions //////////////
+// Trigonometric functions
+float cos(float rad);
+float sin(float rad);
+float tan(float rad);
+
+// Inverse trigonometric functions
+float acos(float val);
+float asin(float val);
+float atan(float val);
+float atan2(float y, float x);
+
+// Hyperbolic functions
+float cosh(float rad);
+float sinh(float rad);
+float tanh(float rad);
+
+// Logarithmic functions
+float log(float val);
+float log10(float val);
+
+// Power to
+float pow(float val, float exp);
+
+// Square root
+float sqrt(float val);
+
+// Absolute value
+float abs(float val);
+
+// Ceil and floor functions
+float ceil(float val);
+float floor(float val);
+
+// Returns the fraction
+float fraction(float val);
+
+// Approximate float comparison, to deal with numeric imprecision
+bool closeTo(float a, float b, float epsilon = 0.00001f);
+bool closeTo(double a, double b, double epsilon = 0.0000000001);
+
+// Conversion between floating point and IEEE 754 representations
+float  fpFromIEEE(uint raw); 
+double fpFromIEEE(uint64 raw);
+uint   fpToIEEE(float fp);
+uint64 fpToIEEE(double fp);
+
+////////////// Interfaces //////////////
+interface IEntity {}
+
+////////////// Global Functions //////////////
+void Print(string& in msg);
+
+////////////// Engine Types //////////////
+class vec2 {
+    vec2();
+    vec2(float scalar);
+    vec2(float x, float y);
+
+    float x;
+    float y;
+}
+
+class Entity {
+    void set_position(vec2& in pos);
+    void set_position_x(float x);
+    void set_position_y(float y);
+    
+    vec2 get_position();
+    float get_position_x();
+    float get_position_y();
+
+    void set_rotation(float deg);
+    float get_rotation();
+
+    void set_scale(vec2& in scale);
+    void set_scale_x(float x);
+    void set_scale_y(float y);
+    
+    vec2 get_scale();
+    float get_scale_x();
+    float get_scale_y();
+}
+
+// Engine namespaces
+namespace Scene {
+    Entity find_by_name(string& in name);
+}

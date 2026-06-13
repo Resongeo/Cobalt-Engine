@@ -87,22 +87,22 @@ namespace Cobalt
     }
 
     auto ScriptGlue::register_entity_api(asIScriptEngine* engine) -> void {
-        engine->RegisterObjectMethod("Entity", "void set_position(float, float)", asMETHOD(ScriptEntity, set_position), asCALL_THISCALL);
+        // -- Transform APIs --
+        engine->RegisterObjectMethod("Entity", "void set_position(vec2& in)", asMETHOD(ScriptEntity, set_position), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "void set_position_x(float)", asMETHOD(ScriptEntity, set_position_x), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "void set_position_y(float)", asMETHOD(ScriptEntity, set_position_y), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "vec2 get_position()", asMETHOD(ScriptEntity, get_position), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float get_position_x()", asMETHOD(ScriptEntity, get_position_x), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float get_position_y()", asMETHOD(ScriptEntity, get_position_y), asCALL_THISCALL);
-
-        engine->RegisterObjectMethod("Entity", "float get_rotation()", asMETHOD(ScriptEntity, get_rotation), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float set_rotation(float)", asMETHOD(ScriptEntity, set_rotation), asCALL_THISCALL);
-
-        engine->RegisterObjectMethod("Entity", "void set_scale(float, float)", asMETHOD(ScriptEntity, set_scale), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Entity", "float get_rotation()", asMETHOD(ScriptEntity, get_rotation), asCALL_THISCALL);
+        engine->RegisterObjectMethod("Entity", "void set_scale(vec2& in)", asMETHOD(ScriptEntity, set_scale), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "void set_scale_x(float)", asMETHOD(ScriptEntity, set_scale_x), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "void set_scale_y(float)", asMETHOD(ScriptEntity, set_scale_y), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "vec2 get_scale()", asMETHOD(ScriptEntity, get_scale), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float get_scale_x()", asMETHOD(ScriptEntity, get_scale_x), asCALL_THISCALL);
         engine->RegisterObjectMethod("Entity", "float get_scale_y()", asMETHOD(ScriptEntity, get_scale_y), asCALL_THISCALL);
-    }
 
+        
+    }
 } // namespace Cobalt
