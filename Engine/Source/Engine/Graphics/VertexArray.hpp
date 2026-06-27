@@ -16,18 +16,18 @@ namespace Cobalt
         VertexArray() = default;
         ~VertexArray();
 
-        auto bind() const -> void;
-        auto unbind() const -> void;
+        auto Bind() const -> void;
+        auto Unbind() const -> void;
 
-        auto create() -> void;
-        auto add_vertex_buffer(const Rc<VertexBuffer>& vertex_buffer) -> void;
-        auto set_index_buffer(const Rc<IndexBuffer>& index_buffer) -> void;
-        auto vertex_buffers() const -> const Vector<Rc<VertexBuffer>>&;
-        auto index_buffer() const -> const Rc<IndexBuffer>&;
+        auto Create() -> void;
+        auto AddVertexBuffer(const Rc<VertexBuffer>& vertex_buffer) -> void;
+        auto SetIndexBuffer(const Rc<IndexBuffer>& buffer) -> void;
+        auto GetVertexBuffers() const -> const Vector<Rc<VertexBuffer>>&;
+        auto GetIndexBuffer() const -> const Rc<IndexBuffer>&;
 
     private:
-        u32 m_renderer_id = 0;
-        Rc<IndexBuffer> m_index_buffer = {};
-        Vector<Rc<VertexBuffer>> m_vertex_buffers = {};
+        u32 _renderer_id = 0;
+        Rc<IndexBuffer> _index_buffer = {};
+        Vector<Rc<VertexBuffer>> _vertex_buffers = {};
     };
 } // namespace Cobalt

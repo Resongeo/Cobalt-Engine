@@ -14,17 +14,17 @@ namespace Cobalt
         VertexBuffer() = default;
         ~VertexBuffer();
 
-        auto bind() const -> void;
-        auto unbind() const -> void;
+        auto Bind() const -> void;
+        auto Unbind() const -> void;
 
-        auto create_static(const f32* vertices, u32 size) -> void;
-        auto create_dynamic(u32 size) -> void;
-        auto set_attribute_layout(const AttributeLayout& layout) -> void;
-        auto attribute_layout() -> AttributeLayout&;
-        auto copy_data(u32 size, const void* data) const -> void;
+        auto CreateStatic(const f32* vertices, u32 size) -> void;
+        auto CreateDynamic(u32 size) -> void;
+        auto SetAttributeLayout(const AttributeLayout& layout) -> void;
+        auto GetAttributeLayout() -> AttributeLayout&;
+        auto CopyData(u32 size, const void* data) const -> void;
 
     private:
-        u32 m_renderer_id = 0;
-        AttributeLayout m_attribute_layout = {};
+        u32 _renderer_id = 0;
+        AttributeLayout _attribute_layout = {};
     };
 } // namespace Cobalt

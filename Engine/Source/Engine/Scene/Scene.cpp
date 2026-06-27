@@ -6,82 +6,82 @@
 
 namespace Cobalt
 {
-    Scene::Scene(const String& name) : m_name(name) {}
+    Scene::Scene(const String& name) : _name(name) {}
 
-    auto Scene::get_name() -> String& {
-        return m_name;
+    auto Scene::GetName() -> String& {
+        return _name;
     }
 
-    auto Scene::set_name(const String& name) -> void {
-        m_name = name;
+    auto Scene::SetName(const String& name) -> void {
+        this->_name = name;
     }
 
-    auto Scene::get_registry() -> entt::registry& {
-        return m_registry;
+    auto Scene::GetRegistry() -> entt::registry& {
+        return _registry;
     }
 
-    auto Scene::create_entity(const String& name) -> Entity {
-        const auto id = m_registry.create();
-        auto entity = Entity(id, &m_registry);
+    auto Scene::CreateEntity(const String& name) -> Entity {
+        const auto id = _registry.create();
+        auto entity = Entity(id, &_registry);
 
-        entity.add_component<TagComponent>(name);
-        entity.add_component<TransformComponent>();
+        entity.AddComponent<TagComponent>(name);
+        entity.AddComponent<TransformComponent>();
 
         return entity;
     }
 
-    auto Scene::create_entity(const String& name, const UUID uuid) -> Entity {
-        const auto id = m_registry.create();
-        auto entity = Entity(id, &m_registry);
+    auto Scene::CreateEntity(const String& name, const UUID uuid) -> Entity {
+        const auto id = _registry.create();
+        auto entity = Entity(id, &_registry);
 
-        entity.add_component<TagComponent>(name, uuid);
-        entity.add_component<TransformComponent>();
+        entity.AddComponent<TagComponent>(name, uuid);
+        entity.AddComponent<TransformComponent>();
 
         return entity;
     }
 
-    auto Scene::create_empty_entity() -> Entity {
-        const auto id = m_registry.create();
-        return Entity(id, &m_registry);
+    auto Scene::CreateEmptyEntity() -> Entity {
+        const auto id = _registry.create();
+        return Entity(id, &_registry);
     }
 
-    auto Scene::clone() -> Rc<Scene> {
-        auto scene = Memory::make_rc<Scene>();
-        scene->set_name(m_name);
+    auto Scene::Clone() -> Rc<Scene> {
+        auto scene = Memory::MakeRc<Scene>();
+        scene->SetName(_name);
 
-        const auto view = m_registry.view<entt::entity>();
+        const auto view = _registry.view<entt::entity>();
         for (auto it = view.rbegin(); it != view.rend(); ++it) {
             const auto src_entity = *it;
-            const auto dst_entity = scene->m_registry.create();
+            const auto dst_entity = scene->_registry.create();
 
-            if (m_registry.any_of<TagComponent>(src_entity)) {
-                const auto src_comp = m_registry.get<TagComponent>(src_entity);
-                auto& dst_comp = scene->m_registry.emplace<TagComponent>(dst_entity);
+            if (_registry.any_of<TagComponent>(src_entity)) {
+                const auto src_comp = _registry.get<TagComponent>(src_entity);
+                auto& dst_comp = scene->_registry.emplace<TagComponent>(dst_entity);
 
                 dst_comp.name = src_comp.name;
                 dst_comp.uuid.value = src_comp.uuid.value;
             }
 
-            if (m_registry.any_of<TransformComponent>(src_entity)) {
-                const auto src_comp = m_registry.get<TransformComponent>(src_entity);
-                auto& dst_comp = scene->m_registry.emplace<TransformComponent>(dst_entity);
+            if (_registry.any_of<TransformComponent>(src_entity)) {
+                const auto src_comp = _registry.get<TransformComponent>(src_entity);
+                auto& dst_comp = scene->_registry.emplace<TransformComponent>(dst_entity);
 
                 dst_comp.position = src_comp.position;
                 dst_comp.scale = src_comp.scale;
                 dst_comp.rotation = src_comp.rotation;
             }
 
-            if (m_registry.any_of<SpriteComponent>(src_entity)) {
-                const auto src_comp = m_registry.get<SpriteComponent>(src_entity);
-                auto& dst_comp = scene->m_registry.emplace<SpriteComponent>(dst_entity);
+            if (_registry.any_of<SpriteComponent>(src_entity)) {
+                const auto src_comp = _registry.get<SpriteComponent>(src_entity);
+                auto& dst_comp = scene->_registry.emplace<SpriteComponent>(dst_entity);
 
                 dst_comp.texture_id.value = src_comp.texture_id.value;
                 dst_comp.tint = src_comp.tint;
             }
 
-            if (m_registry.any_of<ScriptComponent>(src_entity)) {
-                const auto src_comp = m_registry.get<ScriptComponent>(src_entity);
-                auto& dst_comp = scene->m_registry.emplace<ScriptComponent>(dst_entity);
+            if (_registry.any_of<ScriptComponent>(src_entity)) {
+                const auto src_comp = _registry.get<ScriptComponent>(src_entity);
+                auto& dst_comp = scene->_registry.emplace<ScriptComponent>(dst_entity);
 
                 dst_comp.script_id.value = src_comp.script_id.value;
             }

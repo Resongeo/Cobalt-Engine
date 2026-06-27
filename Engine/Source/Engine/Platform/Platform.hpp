@@ -5,7 +5,7 @@
 
 namespace Cobalt::Platform
 {
-    auto sdl3_init() -> bool;
-    auto opengl_init() -> bool;
-    auto destroy() -> void;
+    auto InitSDL3() -> bool;
+    auto InitOpenGL() -> bool;
+    auto ShutDown() -> void;
 } // namespace Cobalt::Platform

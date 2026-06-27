@@ -6,12 +6,12 @@
 
 namespace Cobalt
 {
-    auto ScriptSerializer::deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
+    auto ScriptSerializer::Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
         // TODO: Load bytecode when implemented
-        return ctx.script_manager.load_script(metadata.path.string());
+        return ctx.script_manager.LoadScript(metadata.path.string());
     }
 
-    auto ScriptSerializer::serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool {
+    auto ScriptSerializer::Serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool {
         return true;
     }
 } // namespace Cobalt

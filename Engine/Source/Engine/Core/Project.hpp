@@ -12,19 +12,19 @@ namespace Cobalt
     class Project final
     {
     public:
-        auto init(const CommandLineArgs& cli_args) -> void;
-        auto get_name() -> String&;
-        auto get_version() -> String&;
-        auto get_editor_assets_path() const -> Filepath;
-        auto get_project_assets_path() const -> Filepath;
-        auto get_startup_scene_uuid() const -> UUID;
+        auto Init(const CommandLineArgs& cli_args) -> void;
+        auto Name() -> String&;
+        auto Version() -> String&;
+        auto EditorAssetsPath() const -> Filepath;
+        auto ProjectAssetsPath() const -> Filepath;
+        auto StartupSceneUUID() const -> UUID;
 
     private:
-        Vector<String> m_args = {};
-        Filepath m_project_path = {};
-        Filepath m_editor_path = {};
-        String m_name = {};
-        String m_version = {};
-        UUID m_startup_scene;
+        Vector<String> _args = {};
+        Filepath _project_path = {};
+        Filepath _editor_path = {};
+        String _name = {};
+        String _version = {};
+        UUID _startup_scene;
     };
 } // namespace Cobalt

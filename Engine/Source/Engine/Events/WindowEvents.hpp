@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Engine/Core/Types/Base.hpp"
+
 namespace Cobalt
 {
     struct WindowMovedEvent

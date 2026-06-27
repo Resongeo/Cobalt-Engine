@@ -12,10 +12,10 @@
 
 namespace Cobalt
 {
-    auto SceneHierarchyPanel::draw(EngineContext& ctx, EditorState& state) -> void {
+    auto SceneHierarchyPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0, 0});
 
-        Widgets::begin("Scene Hierarchy");
+        Widgets::Begin("Scene Hierarchy");
         {
             // Fix annoyance of have to click into the viewport in order to change the gizmo operation
             if (ImGui::IsWindowFocused()) {
@@ -31,10 +31,10 @@ namespace Cobalt
             }
 
             auto index = 0;
-            const auto view = state.active_scene->get_registry().view<entt::entity>();
+            const auto view = state.active_scene->GetRegistry().view<entt::entity>();
             for (auto it = view.rbegin(); it != view.rend(); ++it) {
                 const auto entity = *it;
-                auto [name, id] = state.active_scene->get_registry().get<TagComponent>(entity);
+                auto [name, id] = state.active_scene->GetRegistry().get<TagComponent>(entity);
 
                 ImGui::PushID(id.value);
 
@@ -87,16 +87,16 @@ namespace Cobalt
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8, 4});
             if (ImGui::BeginPopupContextItem("Scene Hierarchy Context Menu")) {
                 ImGui::SeparatorText("Create");
-                if (Widgets::button("Empty Entity")) {
-                    const auto entity = state.active_scene->create_entity("Entity");
-                    state.selected_entity = entity.get_id();
+                if (Widgets::Button("Empty Entity")) {
+                    const auto entity = state.active_scene->CreateEntity("Entity");
+                    state.selected_entity = entity.ID();
 
                     ImGui::CloseCurrentPopup();
                 }
-                if (Widgets::button("Sprite Entity")) {
-                    auto entity = state.active_scene->create_entity("Sprite");
-                    entity.add_component<SpriteComponent>();
-                    state.selected_entity = entity.get_id();
+                if (Widgets::Button("Sprite Entity")) {
+                    auto entity = state.active_scene->CreateEntity("Sprite");
+                    entity.AddComponent<SpriteComponent>();
+                    state.selected_entity = entity.ID();
 
                     ImGui::CloseCurrentPopup();
                 }
@@ -105,7 +105,7 @@ namespace Cobalt
             }
             ImGui::PopStyleVar(2);
         }
-        Widgets::end();
+        Widgets::End();
 
         ImGui::PopStyleVar();
     }

@@ -21,7 +21,7 @@ namespace Cobalt
         }
     }
 
-    auto Attribute::element_count() const -> u32 {
+    auto Attribute::GetElementCount() const -> u32 {
         switch (type) {
             case AttributeDataType::Bool: return 1;
             case AttributeDataType::Int: return 1;
@@ -37,36 +37,36 @@ namespace Cobalt
         }
     }
 
-    auto AttributeLayout::create(const InitializerList<Attribute>& attributes) -> void {
-        m_attributes = attributes;
-        m_stride = 0;
+    auto AttributeLayout::Create(const InitializerList<Attribute>& attributes) -> void {
+        _attributes = attributes;
+        _stride = 0;
         u32 offset = 0;
 
-        for (auto& attribute : m_attributes) {
+        for (auto& attribute : _attributes) {
             attribute.offset = offset;
             offset += attribute.size;
-            m_stride += attribute.size;
+            _stride += attribute.size;
         }
     }
 
-    auto AttributeLayout::attributes() -> Vector<Attribute>& {
-        return m_attributes;
+    auto AttributeLayout::GetAttributes() -> Vector<Attribute>& {
+        return _attributes;
     }
 
-    auto AttributeLayout::stride() -> u32 {
-        return m_stride;
+    auto AttributeLayout::GetStride() -> u32 {
+        return _stride;
     }
 
     auto AttributeLayout::begin() -> Vector<Attribute>::iterator {
-        return m_attributes.begin();
+        return _attributes.begin();
     }
     auto AttributeLayout::end() -> Vector<Attribute>::iterator {
-        return m_attributes.end();
+        return _attributes.end();
     }
     auto AttributeLayout::begin() const -> Vector<Attribute>::const_iterator {
-        return m_attributes.begin();
+        return _attributes.begin();
     }
     auto AttributeLayout::end() const -> Vector<Attribute>::const_iterator {
-        return m_attributes.end();
+        return _attributes.end();
     }
 } // namespace Cobalt

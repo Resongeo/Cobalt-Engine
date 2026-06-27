@@ -21,27 +21,27 @@ namespace Cobalt
     public:
         Framebuffer() = default;
 
-        auto bind() -> void;
-        auto unbind() const -> void;
+        auto Bind() -> void;
+        auto Unbind() const -> void;
 
-        auto create(Vector<FramebufferAttachmentType> types, const Vec<2, u32> size, const u32 samples) -> void;
-        auto resize(u32 width, u32 height) -> void;
-        auto get_size() const -> Vec<2, u32>;
-        auto clear_attachment(u32 index, i32 value) const -> void;
-        auto get_color_attachment_id(u32 index) const -> i32;
-        auto get_integer_at(u32 index, u32 x, u32 y) const -> i32;
-
-    private:
-        auto _create() -> void;
-        auto _clear() -> void;
-        auto _reallocate_textures() const -> void;
+        auto Create(const Vector<FramebufferAttachmentType>& types, const Vec<2, u32> size, const u32 samples) -> void;
+        auto Resize(u32 width, u32 height) -> void;
+        auto ClearAttachment(u32 index, i32 value) const -> void;
+        auto GetSize() const -> Vec<2, u32>;
+        auto GetColorAttachmentID(u32 index) const -> i32;
+        auto GetIntegerAt(u32 index, u32 x, u32 y) const -> i32;
 
     private:
-        Vector<FramebufferAttachmentType> m_attachment_types = {};
-        Vector<u32> m_attachment_ids = {};
-        Vec<2, u32> m_size = {};
-        u32 m_renderer_id = 0;
-        u32 m_samples = 0;
-        bool m_is_resized = false;
+        auto ReCreate() -> void;
+        auto Clear() -> void;
+        auto ReallocateTextures() const -> void;
+
+    private:
+        Vector<FramebufferAttachmentType> _attachment_types = {};
+        Vector<u32> _attachment_ids = {};
+        Vec<2, u32> _size = {};
+        u32 _renderer_id = 0;
+        u32 _samples = 0;
+        bool _is_resized = false;
     };
 } // namespace Cobalt

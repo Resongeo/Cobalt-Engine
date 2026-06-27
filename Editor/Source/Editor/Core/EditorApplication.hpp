@@ -14,13 +14,13 @@ namespace Cobalt
     class EditorApplication final : public Application
     {
     public:
-        auto begin(EngineContext& ctx) -> void override;
-        auto update(EngineContext& ctx) -> void override;
+        auto OnBegin(EngineContext& ctx) -> void override;
+        auto OnUpdate(EngineContext& ctx) -> void override;
 
     private:
-        Renderer m_renderer = {};
-        Camera m_camera = {};
-        EditorState m_state = {};
-        Vector<Box<IPanel>> m_panels = {};
+        Renderer _renderer = {};
+        Camera _camera = {};
+        EditorState _state = {};
+        Vector<Box<IPanel>> _panels = {};
     };
 } // namespace Cobalt

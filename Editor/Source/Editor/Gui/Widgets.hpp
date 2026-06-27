@@ -20,11 +20,11 @@ namespace Cobalt
 
     namespace Widgets
     {
-        auto begin(StringView title, ImVec2 padding = {0, 0}) -> bool;
-        auto end() -> void;
+        auto Begin(StringView title, ImVec2 padding = {0, 0}) -> bool;
+        auto End() -> void;
 
-        auto separator() -> void;
-        auto button(StringView label, Variant variant = Variant::Default, ImVec2 size = {0, 0}, bool icon = false) -> bool;
-        auto collapsing_header(StringView label, const Color& text_color = Colors::text, bool default_opened = true) -> bool;
+        auto Separator() -> void;
+        auto Button(StringView label, Variant variant = Variant::Default, ImVec2 size = {0, 0}, bool icon = false) -> bool;
+        auto CollapsingHeader(StringView label, const Color& text_color = Colors::text, bool default_opened = true) -> bool;
     }
 }

@@ -11,6 +11,6 @@ namespace Cobalt
     {
     public:
         ScriptStartSystem() = default;
-        auto update(EngineContext& ctx, entt::registry& registry) -> void override;
+        auto Update(EngineContext& ctx, entt::registry& registry) -> void override;
     };
 } // namespace Cobalt

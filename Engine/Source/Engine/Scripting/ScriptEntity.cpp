@@ -6,122 +6,122 @@
 
 namespace Cobalt
 {
-    auto ScriptEntity::set_position(const Vec2& pos) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetPosition(const Vec2& pos) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.position = pos;
     }
 
-    auto ScriptEntity::set_position_x(const f32 x) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetPositionX(const f32 x) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.position.x = x;
     }
 
-    auto ScriptEntity::set_position_y(const f32 y) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetPositionY(const f32 y) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.position.y = y;
     }
 
-    auto ScriptEntity::get_position() -> Vec2 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetPosition() -> Vec2 {
+        if (!entity.IsValid()) {
             return Vec2{};
         }
 
-        return entity.get_component<TransformComponent>().position;
+        return entity.GetComponent<TransformComponent>().position;
     }
 
-    auto ScriptEntity::get_position_x() -> f32 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetPositionX() -> f32 {
+        if (!entity.IsValid()) {
             return 0.0f;
         }
 
-        return entity.get_component<TransformComponent>().position.x;
+        return entity.GetComponent<TransformComponent>().position.x;
     }
 
-    auto ScriptEntity::get_position_y() -> f32 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetPositionY() -> f32 {
+        if (!entity.IsValid()) {
             return 0.0f;
         }
 
-        return entity.get_component<TransformComponent>().position.y;
+        return entity.GetComponent<TransformComponent>().position.y;
     }
 
-    auto ScriptEntity::set_rotation(const f32 degree) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetRotation(const f32 degree) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.rotation = degree;
     }
 
-    auto ScriptEntity::get_rotation() -> f32 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetRotation() -> f32 {
+        if (!entity.IsValid()) {
             return 0.0f;
         }
 
-        return entity.get_component<TransformComponent>().rotation;
+        return entity.GetComponent<TransformComponent>().rotation;
     }
 
-    auto ScriptEntity::set_scale(const Vec2& scale) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetScale(const Vec2& scale) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.scale = scale;
     }
 
-    auto ScriptEntity::set_scale_x(const f32 x) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetScaleX(const f32 x) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.scale.x = x;
     }
 
-    auto ScriptEntity::set_scale_y(const f32 y) -> void {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::SetScaleY(const f32 y) -> void {
+        if (!entity.IsValid()) {
             return;
         }
 
-        auto& transform = entity.get_component<TransformComponent>();
+        auto& transform = entity.GetComponent<TransformComponent>();
         transform.scale.y = y;
     }
 
-    auto ScriptEntity::get_scale() -> Vec2 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetScale() -> Vec2 {
+        if (!entity.IsValid()) {
             return Vec2{};
         }
 
-        return entity.get_component<TransformComponent>().scale;
+        return entity.GetComponent<TransformComponent>().scale;
     }
 
-    auto ScriptEntity::get_scale_x() -> f32 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetScaleX() -> f32 {
+        if (!entity.IsValid()) {
             return 0;
         }
 
-        return entity.get_component<TransformComponent>().scale.x;
+        return entity.GetComponent<TransformComponent>().scale.x;
     }
 
-    auto ScriptEntity::get_scale_y() -> f32 {
-        if (!entity.is_valid()) {
+    auto ScriptEntity::GetScaleY() -> f32 {
+        if (!entity.IsValid()) {
             return 0;
         }
 
-        return entity.get_component<TransformComponent>().scale.y;
+        return entity.GetComponent<TransformComponent>().scale.y;
     }
 } // namespace Cobalt

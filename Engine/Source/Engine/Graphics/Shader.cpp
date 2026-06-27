@@ -9,18 +9,18 @@
 
 namespace Cobalt
 {
-    auto Shader::create_from_file(const char* vertex_path, const char* fragment_path) -> bool {
-        if (!File::exists(vertex_path) || !File::exists(fragment_path)) {
+    auto Shader::CreateFromFile(const char* vertex_path, const char* fragment_path) -> bool {
+        if (!File::Exists(vertex_path) || !File::Exists(fragment_path)) {
             return false;
         }
 
-        const auto vertex_source = File::read(vertex_path);
-        const auto fragment_source = File::read(fragment_path);
+        const auto vertex_source = File::Read(vertex_path);
+        const auto fragment_source = File::Read(fragment_path);
 
-        return create(vertex_source, fragment_source);
+        return Create(vertex_source, fragment_source);
     }
 
-    auto Shader::create_fallback() -> bool {
+    auto Shader::CreateFallback() -> bool {
         const auto vertex_source = R"(
             #version 330 core
             layout(location = 0) in vec2 a_Position;
@@ -41,26 +41,26 @@ namespace Cobalt
             }
         )";
 
-        return create(vertex_source, fragment_source);
+        return Create(vertex_source, fragment_source);
     }
 
-    auto Shader::bind() const -> void {
-        glUseProgram(m_renderer_id);
+    auto Shader::Bind() const -> void {
+        glUseProgram(_renderer_id);
     }
 
-    auto Shader::unbind() const -> void {
+    auto Shader::Unbind() const -> void {
         glUseProgram(0);
     }
 
-    auto Shader::set_mat4(const char* name, const Mat4& value) -> void {
-        glUniformMatrix4fv(uniform_location(name), 1, GL_FALSE, glm::value_ptr(value));
+    auto Shader::SetMat4(const char* name, const Mat4& value) -> void {
+        glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, glm::value_ptr(value));
     }
 
-    auto Shader::set_int_array(const char* name, const i32* values, const u32 count) -> void {
-        glUniform1iv(uniform_location(name), count, values);
+    auto Shader::SetIntArray(const char* name, const i32* values, const u32 count) -> void {
+        glUniform1iv(GetUniformLocation(name), count, values);
     }
 
-    auto Shader::create(const String& vertex_source, const String& fragment_source) -> bool {
+    auto Shader::Create(const String& vertex_source, const String& fragment_source) -> bool {
         GLint is_compiled = 0;
 
         const auto vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -99,46 +99,46 @@ namespace Cobalt
             return false;
         }
 
-        m_renderer_id = glCreateProgram();
-        glAttachShader(m_renderer_id, vertex_shader);
-        glAttachShader(m_renderer_id, fragment_shader);
-        glLinkProgram(m_renderer_id);
+        _renderer_id = glCreateProgram();
+        glAttachShader(_renderer_id, vertex_shader);
+        glAttachShader(_renderer_id, fragment_shader);
+        glLinkProgram(_renderer_id);
 
         GLint is_linked = 0;
-        glGetProgramiv(m_renderer_id, GL_LINK_STATUS, &is_linked);
+        glGetProgramiv(_renderer_id, GL_LINK_STATUS, &is_linked);
         if (is_linked == GL_FALSE) {
             GLint max_length = 0;
-            glGetProgramiv(m_renderer_id, GL_INFO_LOG_LENGTH, &max_length);
+            glGetProgramiv(_renderer_id, GL_INFO_LOG_LENGTH, &max_length);
 
             Vector<GLchar> info_log(max_length);
-            glGetProgramInfoLog(m_renderer_id, max_length, &max_length, info_log.data());
+            glGetProgramInfoLog(_renderer_id, max_length, &max_length, info_log.data());
 
             CORE_ERROR("Graphics::Shader: Shader linking error:\n{}", info_log.data());
             glDeleteShader(vertex_shader);
             glDeleteShader(fragment_shader);
-            glDeleteProgram(m_renderer_id);
-            m_renderer_id = 0;
+            glDeleteProgram(_renderer_id);
+            _renderer_id = 0;
 
             return false;
         }
 
-        glDetachShader(m_renderer_id, vertex_shader);
-        glDetachShader(m_renderer_id, fragment_shader);
+        glDetachShader(_renderer_id, vertex_shader);
+        glDetachShader(_renderer_id, fragment_shader);
         glDeleteShader(vertex_shader);
         glDeleteShader(fragment_shader);
 
-        CORE_INFO("Graphics::Shader: Creating. ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::Shader: Creating. ID: {}", _renderer_id);
 
         return true;
     }
 
-    auto Shader::uniform_location(const char* name) -> i32 {
-        if (m_uniform_locations.contains(name)) {
-            return m_uniform_locations[name];
+    auto Shader::GetUniformLocation(const char* name) -> i32 {
+        if (_uniform_locations.contains(name)) {
+            return _uniform_locations[name];
         }
 
-        const auto location = glGetUniformLocation(m_renderer_id, name);
-        m_uniform_locations[name] = location;
+        const auto location = glGetUniformLocation(_renderer_id, name);
+        _uniform_locations[name] = location;
 
         return location;
     }

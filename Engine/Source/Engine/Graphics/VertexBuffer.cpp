@@ -9,46 +9,46 @@
 namespace Cobalt
 {
     VertexBuffer::~VertexBuffer() {
-        CORE_INFO("Graphics::VertexBuffer: Deleting. ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::VertexBuffer: Deleting. ID: {}", _renderer_id);
 
-        glDeleteBuffers(1, &m_renderer_id);
-        m_renderer_id = 0;
+        glDeleteBuffers(1, &_renderer_id);
+        _renderer_id = 0;
     }
 
-    auto VertexBuffer::create_static(const f32* vertices, const u32 size) -> void {
-        CORE_INFO("Graphics::VertexBuffer: Creating. ID: {}", m_renderer_id);
+    auto VertexBuffer::CreateStatic(const f32* vertices, const u32 size) -> void {
+        CORE_INFO("Graphics::VertexBuffer: Creating. ID: {}", _renderer_id);
 
-        glGenBuffers(1, &m_renderer_id);
-        bind();
+        glGenBuffers(1, &_renderer_id);
+        Bind();
         glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
     }
 
-    auto VertexBuffer::create_dynamic(const u32 size) -> void {
-        CORE_INFO("Graphics::VertexBuffer: Creating. ID: {}", m_renderer_id);
+    auto VertexBuffer::CreateDynamic(const u32 size) -> void {
+        CORE_INFO("Graphics::VertexBuffer: Creating. ID: {}", _renderer_id);
 
-        glGenBuffers(1, &m_renderer_id);
-        bind();
+        glGenBuffers(1, &_renderer_id);
+        Bind();
         glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
     }
 
-    auto VertexBuffer::set_attribute_layout(const AttributeLayout& layout) -> void {
-        m_attribute_layout = layout;
+    auto VertexBuffer::SetAttributeLayout(const AttributeLayout& layout) -> void {
+        _attribute_layout = layout;
     }
 
-    auto VertexBuffer::bind() const -> void {
-        glBindBuffer(GL_ARRAY_BUFFER, m_renderer_id);
+    auto VertexBuffer::Bind() const -> void {
+        glBindBuffer(GL_ARRAY_BUFFER, _renderer_id);
     }
 
-    auto VertexBuffer::unbind() const -> void {
+    auto VertexBuffer::Unbind() const -> void {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    auto VertexBuffer::attribute_layout() -> AttributeLayout& {
-        return m_attribute_layout;
+    auto VertexBuffer::GetAttributeLayout() -> AttributeLayout& {
+        return _attribute_layout;
     }
 
-    auto VertexBuffer::copy_data(const u32 size, const void* data) const -> void {
-        bind();
+    auto VertexBuffer::CopyData(const u32 size, const void* data) const -> void {
+        Bind();
         glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
     }
 } // namespace Cobalt

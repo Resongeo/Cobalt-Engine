@@ -15,41 +15,41 @@ namespace Cobalt
     class AssetManager final
     {
     public:
-        auto init(const Project& project) -> void;
+        auto Init(const Project& project) -> void;
 
-        auto register_asset(const Filepath& path) const -> void;
-        auto register_asset(UUID id, const AssetMetadata& metadata) const -> void;
-        auto get_metadata(UUID id) const -> AssetMetadata;
-        auto get_uuid(const Filepath& path) const -> UUID;
-        auto is_asset_registered(UUID id) const -> bool;
-        auto is_asset_registered(const Filepath& path) const -> bool;
-        auto load_registry() const -> void;
-        auto save_registry() const -> void;
-        auto get_registry() const -> HashMap<UUID, AssetMetadata>&;
+        auto RegisterAsset(const Filepath& path) const -> void;
+        auto RegisterAsset(UUID id, const AssetMetadata& metadata) const -> void;
+        auto GetMetadata(UUID id) const -> AssetMetadata;
+        auto GetUUID(const Filepath& path) const -> UUID;
+        auto IsAssetRegistered(UUID id) const -> bool;
+        auto IsAssetRegistered(const Filepath& path) const -> bool;
+        auto LoadRegistry() const -> void;
+        auto SaveRegistry() const -> void;
+        auto GetRegistry() const -> HashMap<UUID, AssetMetadata>&;
 
-        static auto get_asset_type_from_extension(const Filepath& path) -> AssetType;
+        static auto GetAssetTypeFromExtension(const Filepath& path) -> AssetType;
 
-        auto save_asset(EngineContext& ctx, UUID id) const -> bool;
+        auto SaveAsset(EngineContext& ctx, UUID id) const -> bool;
 
         template <typename T>
-        auto get_asset(EngineContext& ctx, const UUID id) const -> Rc<T> {
-            if (!id.is_valid()) {
+        auto GetAsset(EngineContext& ctx, const UUID id) const -> Rc<T> {
+            if (!id.IsValid()) {
                 return nullptr;
             }
 
-            if (const auto it = m_loaded.find(id); it != m_loaded.end()) {
+            if (const auto it = _loaded.find(id); it != _loaded.end()) {
                 return std::static_pointer_cast<T>(it->second);
             }
 
-            const auto& metadata = get_metadata(id);
-            const auto& serializer = m_serializers[static_cast<usize>(metadata.type)];
+            const auto& metadata = GetMetadata(id);
+            const auto& serializer = _serializers[static_cast<usize>(metadata.type)];
 
             if (!serializer) {
                 return nullptr;
             }
 
-            if (const auto asset = serializer->deserialize(ctx, metadata)) {
-                m_loaded[id] = asset;
+            if (const auto asset = serializer->Deserialize(ctx, metadata)) {
+                _loaded[id] = asset;
                 return std::static_pointer_cast<T>(asset);
             }
 
@@ -57,31 +57,31 @@ namespace Cobalt
         }
 
         template <typename T>
-        auto create_memory_asset(const AssetType type) const -> UUID {
-            auto asset = Memory::make_rc<T>();
-            const auto uuid = UUID::generate();
+        auto CreateInMemoryAsset(const AssetType type) const -> UUID {
+            auto asset = Memory::MakeRc<T>();
+            const auto uuid = UUID::Generate();
             const auto meta = AssetMetadata{
                 .type = type,
                 .is_memory = true
             };
 
-            m_registry[uuid] = meta;
-            m_loaded[uuid] = asset;
+            _registry[uuid] = meta;
+            _loaded[uuid] = asset;
 
             return uuid;
         }
 
     private:
-        auto asset_type_to_string(AssetType type) const -> String;
-        auto asset_type_to_filters(AssetType type) const -> Vector<DialogFileFilter>;
-        auto string_to_asset_type(const String& str) const -> AssetType;
-        auto is_file_asset(const Filepath& path) const -> bool;
+        auto AssetTypeToString(AssetType type) const -> String;
+        auto AssetTypeToFilters(AssetType type) const -> Vector<DialogFileFilter>;
+        auto StringToAssetType(const String& str) const -> AssetType;
+        auto IsFileAsset(const Filepath& path) const -> bool;
 
     private:
-        mutable HashMap<UUID, Rc<IAsset>> m_loaded = {};
-        mutable HashMap<UUID, AssetMetadata> m_registry = {};
-        Array<Rc<IAssetSerializer>, static_cast<usize>(AssetType::SIZE)> m_serializers = {};
-        Filepath m_registry_path = {};
-        Filepath m_assets_dir = {};
+        mutable HashMap<UUID, Rc<IAsset>> _loaded = {};
+        mutable HashMap<UUID, AssetMetadata> _registry = {};
+        Array<Rc<IAssetSerializer>, static_cast<usize>(AssetType::SIZE)> _serializers = {};
+        Filepath _registry_path = {};
+        Filepath _assets_dir = {};
     };
 } // namespace Cobalt

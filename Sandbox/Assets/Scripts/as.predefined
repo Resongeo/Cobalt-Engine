@@ -48,7 +48,8 @@ uint   fpToIEEE(float fp);
 uint64 fpToIEEE(double fp);
 
 ////////////// Interfaces //////////////
-interface IEntity {}
+interface IEntity {
+}
 
 ////////////// Global Functions //////////////
 void Print(string& in msg);

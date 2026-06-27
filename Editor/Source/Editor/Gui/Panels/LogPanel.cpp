@@ -11,22 +11,22 @@
 
 namespace Cobalt
 {
-    void LogPanel::begin(EngineContext& ctx, EditorState& state) {
-        ctx.dispatcher.sink<LogEvent>().connect<&LogPanel::log_event>(this);
+    void LogPanel::Begin(EngineContext& ctx, EditorState& state) {
+        ctx.dispatcher.sink<LogEvent>().connect<&LogPanel::AddLogEvent>(this);
     }
 
-    auto LogPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        Widgets::begin("Logs", {8, 8});
+    auto LogPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+        Widgets::Begin("Logs", {8, 8});
         {
-            if (Widgets::button(ICON_TRASH, Variant::Default, {0, 0}, true)) {
-                m_log_entries.clear();
+            if (Widgets::Button(ICON_TRASH, Variant::Default, {0, 0}, true)) {
+                _log_entries.clear();
             }
             ImGui::SameLine();
-            ImGui::Checkbox("Scroll to bottom", &m_scroll_to_bottom);
+            ImGui::Checkbox("Scroll to bottom", &_scroll_to_bottom);
             ImGui::SameLine();
-            ImGui::TextDisabled("Entries: %zu", m_log_entries.size());
+            ImGui::TextDisabled("Entries: %zu", _log_entries.size());
 
-            Widgets::separator();
+            Widgets::Separator();
 
             ImGui::BeginChild("Logs Region", ImVec2(0, 0), ImGuiChildFlags_None, ImGuiWindowFlags_HorizontalScrollbar);
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0, 0});
@@ -34,7 +34,7 @@ namespace Cobalt
             //ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 3));
 
             auto index = 0;
-            for (const auto& entry : m_log_entries) {
+            for (const auto& entry : _log_entries) {
                 auto color = ImVec4{};
                 auto icon = "";
 
@@ -88,17 +88,17 @@ namespace Cobalt
                 ImGui::Dummy(size);
             }
 
-            if (m_scroll_to_bottom && ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 10.0f) {
+            if (_scroll_to_bottom && ImGui::GetScrollY() >= ImGui::GetScrollMaxY() - 10.0f) {
                 ImGui::SetScrollHereY(1.0f);
             }
 
             ImGui::PopStyleVar();
             ImGui::EndChild();
         }
-        Widgets::end();
+        Widgets::End();
     }
 
-    auto LogPanel::log_event(const LogEvent& event) -> void {
-        m_log_entries.push_back(event);
+    auto LogPanel::AddLogEvent(const LogEvent& event) -> void {
+        _log_entries.push_back(event);
     }
 } // namespace Cobalt

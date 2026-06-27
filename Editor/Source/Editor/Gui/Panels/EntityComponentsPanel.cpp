@@ -13,14 +13,14 @@
 
 namespace Cobalt
 {
-    auto EntityComponentsPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        Widgets::begin("Components", {8, 8});
+    auto EntityComponentsPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+        Widgets::Begin("Components", {8, 8});
         {
             if (state.selected_entity != entt::null) {
-                auto entity = Entity(state.selected_entity, &state.active_scene->get_registry());
+                auto entity = Entity(state.selected_entity, &state.active_scene->GetRegistry());
 
                 ImGui::PushFont(Fonts::icon);
-                if (Widgets::button(ICON_PLUS, Variant::Default, {0, 0}, true)) {
+                if (Widgets::Button(ICON_PLUS, Variant::Default, {0, 0}, true)) {
                     ImGui::OpenPopup("Add Component Popup Menu");
                 }
                 ImGui::PopFont();
@@ -30,16 +30,16 @@ namespace Cobalt
                 if (ImGui::BeginPopupContextItem("Add Component Popup Menu")) {
                     ImGui::SeparatorText("Add Component");
 
-                    if (!entity.has_component<SpriteComponent>()) {
-                        if (Widgets::button("Sprite Component")) {
-                            entity.add_component<SpriteComponent>();
+                    if (!entity.HasComponent<SpriteComponent>()) {
+                        if (Widgets::Button("Sprite Component")) {
+                            entity.AddComponent<SpriteComponent>();
                             ImGui::CloseCurrentPopup();
                         }
                     }
 
-                    if (!entity.has_component<ScriptComponent>()) {
-                        if (Widgets::button("Script Component")) {
-                            entity.add_component<ScriptComponent>();
+                    if (!entity.HasComponent<ScriptComponent>()) {
+                        if (Widgets::Button("Script Component")) {
+                            entity.AddComponent<ScriptComponent>();
                             ImGui::CloseCurrentPopup();
                         }
                     }
@@ -48,9 +48,9 @@ namespace Cobalt
                 }
                 ImGui::PopStyleVar(2);
 
-                if (entity.has_component<TagComponent>()) {
-                    if (Widgets::collapsing_header("Tag", Colors::tag)) {
-                        auto& [name, uuid] = entity.get_component<TagComponent>();
+                if (entity.HasComponent<TagComponent>()) {
+                    if (Widgets::CollapsingHeader("Tag", Colors::tag)) {
+                        auto& [name, uuid] = entity.GetComponent<TagComponent>();
                         ImGui::InputText("Name", &name);
 
                         ImGui::PushStyleColor(ImGuiCol_Text, IMVEC4(Colors::text_muted));
@@ -59,18 +59,18 @@ namespace Cobalt
                     }
                 }
 
-                if (entity.has_component<TransformComponent>()) {
-                    if (Widgets::collapsing_header("Transform", Colors::transform)) {
-                        auto& [position, scale, rotation] = entity.get_component<TransformComponent>();
+                if (entity.HasComponent<TransformComponent>()) {
+                    if (Widgets::CollapsingHeader("Transform", Colors::transform)) {
+                        auto& [position, scale, rotation] = entity.GetComponent<TransformComponent>();
                         ImGui::DragFloat2("Position", &position[0], 0.1f);
                         ImGui::DragFloat2("Scale", &scale[0], 0.1f);
                         ImGui::DragFloat("Rotation", &rotation, 0.1f);
                     }
                 }
 
-                if (entity.has_component<SpriteComponent>()) {
-                    if (Widgets::collapsing_header("Sprite", Colors::sprite)) {
-                        auto& [tint, uuid] = entity.get_component<SpriteComponent>();
+                if (entity.HasComponent<SpriteComponent>()) {
+                    if (Widgets::CollapsingHeader("Sprite", Colors::sprite)) {
+                        auto& [tint, uuid] = entity.GetComponent<SpriteComponent>();
                         ImGui::ColorEdit4("Tint", &tint.r);
                         ImGui::InputScalar("Texture UUID", ImGuiDataType_U64, (void*)&uuid.value);
 
@@ -84,9 +84,9 @@ namespace Cobalt
                     }
                 }
 
-                if (entity.has_component<ScriptComponent>()) {
-                    if (Widgets::collapsing_header("Script", Colors::script)) {
-                        auto& [uuid, _] = entity.get_component<ScriptComponent>();
+                if (entity.HasComponent<ScriptComponent>()) {
+                    if (Widgets::CollapsingHeader("Script", Colors::script)) {
+                        auto& [uuid, _] = entity.GetComponent<ScriptComponent>();
                         ImGui::InputScalar("Script UUID", ImGuiDataType_U64, (void*)&uuid.value);
 
                         if (ImGui::BeginDragDropTarget()) {
@@ -100,6 +100,6 @@ namespace Cobalt
                 }
             }
         }
-        Widgets::end();
+        Widgets::End();
     }
 } // namespace Cobalt

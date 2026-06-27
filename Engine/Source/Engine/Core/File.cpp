@@ -7,7 +7,7 @@
 
 namespace Cobalt
 {
-    auto File::read(const Filepath& path) -> String {
+    auto File::Read(const Filepath& path) -> String {
         if (std::ifstream stream(path, std::ios::in | std::ios::binary); stream) {
             String result = {};
 
@@ -24,7 +24,7 @@ namespace Cobalt
         return {};
     }
 
-    auto File::exists(const Filepath& path) -> bool {
+    auto File::Exists(const Filepath& path) -> bool {
         return std::filesystem::exists(path);
     }
 } // namespace Cobalt

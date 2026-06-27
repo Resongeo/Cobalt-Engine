@@ -13,16 +13,16 @@ namespace Cobalt
     class Log final
     {
     public:
-        static auto init(EngineContext& ctx) -> void;
-        static auto flush_events(EngineContext& ctx) -> void;
-        static auto get_core_logger() -> Rc<spdlog::logger>&;
+        static auto Init(EngineContext& ctx) -> void;
+        static auto FlushEvents(EngineContext& ctx) -> void;
+        static auto CoreLogger() -> Rc<spdlog::logger>&;
 
     private:
-        static Rc<spdlog::logger> s_core_logger;
+        static Rc<spdlog::logger> _core_logger;
     };
 } // namespace Cobalt
 
-#define CORE_INFO(...)     ::Cobalt::Log::get_core_logger()->info(__VA_ARGS__)
-#define CORE_WARN(...)     ::Cobalt::Log::get_core_logger()->warn(__VA_ARGS__)
-#define CORE_ERROR(...)    ::Cobalt::Log::get_core_logger()->error(__VA_ARGS__)
-#define CORE_CRITICAL(...) ::Cobalt::Log::get_core_logger()->critical(__VA_ARGS__)
+#define CORE_INFO(...)     ::Cobalt::Log::CoreLogger()->info(__VA_ARGS__)
+#define CORE_WARN(...)     ::Cobalt::Log::CoreLogger()->warn(__VA_ARGS__)
+#define CORE_ERROR(...)    ::Cobalt::Log::CoreLogger()->error(__VA_ARGS__)
+#define CORE_CRITICAL(...) ::Cobalt::Log::CoreLogger()->critical(__VA_ARGS__)

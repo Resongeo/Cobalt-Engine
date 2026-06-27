@@ -18,32 +18,32 @@ namespace Cobalt
     class Renderer final
     {
     public:
-        auto init(u32 max_quads, const Filepath& base_assets_path) -> void;
-        auto begin_frame(Camera& camera) -> void;
-        auto submit_quad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
-        auto submit_quad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color) -> void;
-        auto submit_quad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color, const Rc<Texture2D>& texture) -> void;
-        auto end_frame() const -> void;
-        auto set_viewport_size(const Vec<2, i32>& size) -> void;
+        auto Init(u32 max_quads, const Filepath& base_assets_path) -> void;
+        auto BeginFrame(Camera& camera) -> void;
+        auto SubmitQuad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
+        auto SubmitQuad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color) -> void;
+        auto SubmitQuad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color, const Rc<Texture2D>& texture) -> void;
+        auto EndFrame() const -> void;
+        auto SetViewportSize(const Vec<2, i32>& size) -> void;
 
     private:
-        auto start_batch() -> void;
-        auto flush_batch() const -> void;
-        auto is_batch_full() const -> bool;
+        auto StartBatch() -> void;
+        auto FlushBatch() const -> void;
+        auto IsBatchFull() const -> bool;
 
     private:
         static constexpr int MAX_TEXTURES = 32;
 
-        u32 m_max_quads = 0;
-        u32 m_quad_index_count = 0;
-        Rc<Shader> m_default_shader = {};
-        Rc<VertexArray> m_vertex_array = {};
-        Rc<VertexBuffer> m_vertex_buffer = {};
-        Rc<Texture2D> m_default_texture = {};
-        u32 m_texture_index = 1;
-        Array<Rc<Texture2D>, MAX_TEXTURES> m_texture_slots = {};
-        QuadVertexData* m_vertex_buffer_base = nullptr;
-        QuadVertexData* m_vertex_buffer_ptr = nullptr;
-        Vec<2, u32> m_viewport_size = {};
+        u32 _max_quads = 0;
+        u32 _quad_index_count = 0;
+        Rc<Shader> _default_shader = {};
+        Rc<VertexArray> _vertex_array = {};
+        Rc<VertexBuffer> _vertex_buffer = {};
+        Rc<Texture2D> _default_texture = {};
+        u32 _texture_index = 1;
+        Array<Rc<Texture2D>, MAX_TEXTURES> _texture_slots = {};
+        QuadVertexData* _vertex_buffer_base = nullptr;
+        QuadVertexData* _vertex_buffer_ptr = nullptr;
+        Vec<2, u32> _viewport_size = {};
     };
 } // namespace Cobalt

@@ -9,12 +9,12 @@ TEST_CASE("UUID") {
     SECTION("Default constructor") {
         const auto id = Cobalt::UUID();
         REQUIRE(id.value == 0);
-        REQUIRE(id.is_valid() == false);
+        REQUIRE(id.IsValid() == false);
     }
 
     SECTION("Generate function") {
-        const auto id = Cobalt::UUID::generate();
+        const auto id = Cobalt::UUID::Generate();
         REQUIRE(id.value != 0);
-        REQUIRE(id.is_valid() == true);
+        REQUIRE(id.IsValid() == true);
     }
 }

@@ -12,11 +12,11 @@ namespace Cobalt
     {
     public:
         EditorRenderSystem(Renderer* renderer, Camera* camera, Framebuffer* framebuffer);
-        auto update(EngineContext& ctx, entt::registry& registry) -> void override;
+        auto Update(EngineContext& ctx, entt::registry& registry) -> void override;
 
     private:
-        Renderer* m_renderer = nullptr;
-        Camera* m_camera = nullptr;
-        Framebuffer* m_framebuffer = nullptr;
+        Renderer* _renderer = nullptr;
+        Camera* _camera = nullptr;
+        Framebuffer* _framebuffer = nullptr;
     };
 } // namespace Cobalt

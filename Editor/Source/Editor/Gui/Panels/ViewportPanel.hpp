@@ -10,6 +10,6 @@ namespace Cobalt
     class ViewportPanel final : public IPanel
     {
     public:
-        auto draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
     };
 } // namespace Cobalt

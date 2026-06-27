@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/Base.hpp"
 
 namespace Cobalt
 {

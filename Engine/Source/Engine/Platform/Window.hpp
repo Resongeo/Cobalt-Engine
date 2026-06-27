@@ -14,18 +14,18 @@ namespace Cobalt
     class Window final
     {
     public:
-        auto init(EngineContext& ctx) -> bool;
-        auto poll_events(EngineContext& ctx) const -> void;
-        auto swap_buffers() const -> void;
-        auto destroy() const -> void;
+        auto Init(EngineContext& ctx) -> bool;
+        auto PollEvents(EngineContext& ctx) const -> void;
+        auto SwapBuffers() const -> void;
+        auto ShutDown() const -> void;
 
-        auto set_native_event_callback(NativeEventCallback callback) -> void;
-        auto get_handle() const -> SDL_Window*;
-        auto get_gl_context() const -> SDL_GLContextState*;
-        auto get_size() const -> Vec<2, i32>;
+        auto SetNativeEventCallback(NativeEventCallback callback) -> void;
+        auto GetHandle() const -> SDL_Window*;
+        auto GetGLContext() const -> SDL_GLContextState*;
+        auto GetSize() const -> Vec<2, i32>;
 
     private:
-        SDL_Window* m_handle = nullptr;
-        NativeEventCallback m_native_event_hook = nullptr;
+        SDL_Window* _handle = nullptr;
+        NativeEventCallback _native_event_hook = nullptr;
     };
 } // namespace Cobalt

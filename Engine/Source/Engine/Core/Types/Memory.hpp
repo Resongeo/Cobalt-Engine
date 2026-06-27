@@ -16,12 +16,12 @@ namespace Cobalt
     namespace Memory
     {
         template <typename T, typename... Args>
-        constexpr auto make_box(Args&&... args) -> Box<T> {
+        constexpr auto MakeBox(Args&&... args) -> Box<T> {
             return std::make_unique<T>(std::forward<Args>(args)...);
         }
 
         template <typename T, typename... Args>
-        constexpr auto make_rc(Args&&... args) -> Rc<T> {
+        constexpr auto MakeRc(Args&&... args) -> Rc<T> {
             return std::make_shared<T>(std::forward<Args>(args)...);
         }
     } // namespace Memory

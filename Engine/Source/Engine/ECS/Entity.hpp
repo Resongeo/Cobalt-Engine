@@ -10,39 +10,39 @@ namespace Cobalt
     class Entity final
     {
     public:
-        Entity(const entt::entity id, entt::registry* registry) : m_id(id), m_registry(registry) {}
+        Entity(const entt::entity id, entt::registry* registry) : _id(id), _registry(registry) {}
         Entity() = default;
 
-        auto is_valid() const -> bool {
-            return m_registry || m_id != entt::null;
+        auto IsValid() const -> bool {
+            return _registry || _id != entt::null;
         }
 
         template <typename T, typename... Args>
-        auto add_component(Args&&... args) -> T& {
-            return m_registry->emplace<T>(m_id, std::forward<Args>(args)...);
+        auto AddComponent(Args&&... args) -> T& {
+            return _registry->emplace<T>(_id, std::forward<Args>(args)...);
         }
 
         template <typename T>
-        auto has_component() const -> bool {
-            return m_registry->any_of<T>(m_id);
+        auto HasComponent() const -> bool {
+            return _registry->any_of<T>(_id);
         }
 
         template <typename T>
-        auto get_component() -> T& {
-            return m_registry->get<T>(m_id);
+        auto GetComponent() -> T& {
+            return _registry->get<T>(_id);
         }
 
         template <typename T>
-        auto remove_component() const -> void {
-            m_registry->remove<T>(m_id);
+        auto RemoveComponent() const -> void {
+            _registry->remove<T>(_id);
         }
 
-        auto get_id() const -> entt::entity {
-            return m_id;
+        auto ID() const -> entt::entity {
+            return _id;
         }
 
     private:
-        entt::entity m_id = entt::null;
-        entt::registry* m_registry = nullptr;
+        entt::entity _id = entt::null;
+        entt::registry* _registry = nullptr;
     };
 } // namespace Cobalt

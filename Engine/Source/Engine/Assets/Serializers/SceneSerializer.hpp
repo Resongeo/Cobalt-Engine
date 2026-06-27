@@ -10,7 +10,7 @@ namespace Cobalt
     class SceneSerializer final : public IAssetSerializer
     {
     public:
-        auto deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> override;
-        auto serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool override;
+        auto Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> override;
+        auto Serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool override;
     };
 }

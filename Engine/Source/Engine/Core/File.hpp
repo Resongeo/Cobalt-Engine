@@ -10,7 +10,7 @@ namespace Cobalt
     class File final
     {
     public:
-        static auto read(const Filepath& path) -> String;
-        static auto exists(const Filepath& path) -> bool;
+        static auto Read(const Filepath& path) -> String;
+        static auto Exists(const Filepath& path) -> bool;
     };
 } // namespace Cobalt

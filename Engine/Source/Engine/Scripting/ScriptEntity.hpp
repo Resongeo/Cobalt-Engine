@@ -13,21 +13,21 @@ namespace Cobalt
     {
         Entity entity;
 
-        auto set_position(const Vec2& pos) -> void;
-        auto set_position_x(f32 x) -> void;
-        auto set_position_y(f32 y) -> void;
-        auto get_position() -> Vec2;
-        auto get_position_x() -> f32;
-        auto get_position_y() -> f32;
+        auto SetPosition(const Vec2& pos) -> void;
+        auto SetPositionX(f32 x) -> void;
+        auto SetPositionY(f32 y) -> void;
+        auto GetPosition() -> Vec2;
+        auto GetPositionX() -> f32;
+        auto GetPositionY() -> f32;
 
-        auto set_rotation(f32 degree) -> void;
-        auto get_rotation() -> f32;
+        auto SetRotation(f32 degree) -> void;
+        auto GetRotation() -> f32;
 
-        auto set_scale(const Vec2& scale) -> void;
-        auto set_scale_x(f32 x) -> void;
-        auto set_scale_y(f32 y) -> void;
-        auto get_scale() -> Vec2;
-        auto get_scale_x() -> f32;
-        auto get_scale_y() -> f32;
+        auto SetScale(const Vec2& scale) -> void;
+        auto SetScaleX(f32 x) -> void;
+        auto SetScaleY(f32 y) -> void;
+        auto GetScale() -> Vec2;
+        auto GetScaleX() -> f32;
+        auto GetScaleY() -> f32;
     };
 }

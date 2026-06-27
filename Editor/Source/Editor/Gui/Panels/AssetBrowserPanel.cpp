@@ -16,47 +16,47 @@ namespace Cobalt
     constexpr float THUMBNAIL_MIN_SIZE = 70.0f;
     constexpr float THUMBNAIL_MAX_SIZE = 150.0f;
 
-    void AssetBrowserPanel::begin(EngineContext& ctx, EditorState& state) {
-        m_assets_base_dir = ctx.project.get_project_assets_path();
-        m_current_dir = m_assets_base_dir;
+    void AssetBrowserPanel::Begin(EngineContext& ctx, EditorState& state) {
+        _assets_base_dir = ctx.project.ProjectAssetsPath();
+        _current_dir = _assets_base_dir;
 
-        const auto editor_asset_path = ctx.project.get_editor_assets_path();
+        const auto editor_asset_path = ctx.project.EditorAssetsPath();
 
-        m_directory_texture = Memory::make_rc<Texture2D>();
-        m_directory_texture->load_from_file(editor_asset_path / "Textures" / "Directory.png");
+        _directory_texture = Memory::MakeRc<Texture2D>();
+        _directory_texture->LoadFromFile(editor_asset_path / "Textures" / "Directory.png");
 
-        m_default_texture = Memory::make_rc<Texture2D>();
-        m_default_texture->load_from_file(editor_asset_path / "Textures" / "Default.png");
+        _default_texture = Memory::MakeRc<Texture2D>();
+        _default_texture->LoadFromFile(editor_asset_path / "Textures" / "Default.png");
 
-        m_script_texture = Memory::make_rc<Texture2D>();
-        m_script_texture->load_from_file(editor_asset_path / "Textures" / "Script.png");
+        _script_texture = Memory::MakeRc<Texture2D>();
+        _script_texture->LoadFromFile(editor_asset_path / "Textures" / "Script.png");
 
-        m_texture_texture = Memory::make_rc<Texture2D>();
-        m_texture_texture->load_from_file(editor_asset_path / "Textures" / "Texture.png");
+        _texture_texture = Memory::MakeRc<Texture2D>();
+        _texture_texture->LoadFromFile(editor_asset_path / "Textures" / "Texture.png");
     }
 
-    auto AssetBrowserPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        Widgets::begin("Asset Browser", {8, 8});
+    auto AssetBrowserPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+        Widgets::Begin("Asset Browser", {8, 8});
         {
             ImGui::PushFont(Fonts::icon);
 
-            if (Widgets::button(ICON_ARROW_LEFT, Variant::Default, {0, 0}, true)) {
-                if (m_current_dir != std::filesystem::path(m_assets_base_dir)) {
-                    m_current_dir = m_current_dir.parent_path();
-                    m_directory_changed = true;
+            if (Widgets::Button(ICON_ARROW_LEFT, Variant::Default, {0, 0}, true)) {
+                if (_current_dir != std::filesystem::path(_assets_base_dir)) {
+                    _current_dir = _current_dir.parent_path();
+                    _directory_changed = true;
                 }
             }
 
             ImGui::SameLine();
 
-            if (Widgets::button(ICON_REFRESH, Variant::Default, {0, 0}, true) || m_directory_changed) {
-                for (auto& entry : std::filesystem::directory_iterator(m_current_dir)) {
+            if (Widgets::Button(ICON_REFRESH, Variant::Default, {0, 0}, true) || _directory_changed) {
+                for (auto& entry : std::filesystem::directory_iterator(_current_dir)) {
                     if (!entry.is_directory()) {
-                        ctx.asset_manager.register_asset(entry.path());
+                        ctx.asset_manager.RegisterAsset(entry.path());
                     }
                 }
 
-                m_directory_changed = false;
+                _directory_changed = false;
             }
 
             ImGui::PopFont();
@@ -73,16 +73,16 @@ namespace Cobalt
 
             ImGui::Columns(columnCount, nullptr, false);
 
-            for (auto& directory_entry : std::filesystem::directory_iterator(m_current_dir)) {
+            for (auto& directory_entry : std::filesystem::directory_iterator(_current_dir)) {
                 const auto& path = directory_entry.path();
                 auto filename_string = path.filename().string();
 
-                const auto texture = get_texture_from_dir_entry(directory_entry);
+                const auto texture = GetTextureFromDirEntry(directory_entry);
                 auto tint_col = ImVec4{1, 1, 1, 1};
 
                 if (directory_entry.is_directory()) {
-                    if (m_directory_colors.contains(path)) {
-                        tint_col = IMVEC4(m_directory_colors[path]);
+                    if (_directory_colors.contains(path)) {
+                        tint_col = IMVEC4(_directory_colors[path]);
                     } else {
                         tint_col = IMVEC4(Colors::directory);
                     }
@@ -92,7 +92,7 @@ namespace Cobalt
                 ImGui::InvisibleButton(filename_string.c_str(), {thumbnail_size, thumbnail_size});
 
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                    auto uuid = ctx.asset_manager.get_uuid(path);
+                    auto uuid = ctx.asset_manager.GetUUID(path);
                     ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &uuid.value, sizeof(u64));
                     ImGui::EndDragDropSource();
                 }
@@ -102,8 +102,8 @@ namespace Cobalt
 
                     if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
                         if (directory_entry.is_directory()) {
-                            m_current_dir /= path.filename();
-                            m_directory_changed = true;
+                            _current_dir /= path.filename();
+                            _directory_changed = true;
                         }
                     }
 
@@ -114,7 +114,7 @@ namespace Cobalt
 
                 ImGui::SetCursorScreenPos(cursor_pos);
                 ImGui::ImageWithBg(
-                    texture->get_renderer_id(),
+                    texture->GetRendererID(),
                     {thumbnail_size, thumbnail_size},
                     {0, 1}, {1, 0},
                     {0, 0, 0, 0}, tint_col
@@ -138,7 +138,7 @@ namespace Cobalt
 
             ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {8, 8});
             if (ImGui::BeginPopupContextItem("Asset Context Menu")) {
-                if (Widgets::button("Change Color")) {
+                if (Widgets::Button("Change Color")) {
                     CORE_INFO("Editor::AssetBrowser: Pressed Change Color");
                 }
 
@@ -146,20 +146,20 @@ namespace Cobalt
             }
             ImGui::PopStyleVar(1);
         }
-        Widgets::end();
+        Widgets::End();
     }
 
-    auto AssetBrowserPanel::get_texture_from_dir_entry(const std::filesystem::directory_entry& entry) const
+    auto AssetBrowserPanel::GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const
             -> Texture2D* {
         if (entry.is_directory()) {
-            return m_directory_texture.get();
+            return _directory_texture.get();
         }
 
-        switch (AssetManager::get_asset_type_from_extension(entry.path())) {
-            case AssetType::Texture: return m_texture_texture.get();
-            case AssetType::Script: return m_script_texture.get();
+        switch (AssetManager::GetAssetTypeFromExtension(entry.path())) {
+            case AssetType::Texture: return _texture_texture.get();
+            case AssetType::Script: return _script_texture.get();
             case AssetType::Scene:
-            default: return m_default_texture.get();
+            default: return _default_texture.get();
         }
     }
 } // namespace Cobalt

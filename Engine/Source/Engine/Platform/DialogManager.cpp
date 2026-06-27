@@ -7,11 +7,11 @@
 
 namespace Cobalt
 {
-    auto DialogManager::init(const Window& window) -> void {
-        m_window_handle = window.get_handle();
+    auto DialogManager::Init(const Window& window) -> void {
+        _window_handle = window.GetHandle();
     }
 
-    auto DialogManager::show_save_dialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const
+    auto DialogManager::ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const
             -> void {
         static auto sdl_filters = Vector<SDL_DialogFileFilter>{};
 
@@ -34,6 +34,6 @@ namespace Cobalt
 
                     delete cpp_callback;
                 },
-                callback_ptr, m_window_handle, sdl_filters.data(), sdl_filters.size(), default_path.c_str());
+                callback_ptr, _window_handle, sdl_filters.data(), sdl_filters.size(), default_path.c_str());
     }
 } // namespace Cobalt

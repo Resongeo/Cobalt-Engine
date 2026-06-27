@@ -31,7 +31,7 @@ namespace Cobalt
 
         Attribute(const AttributeDataType data_type);
 
-        auto element_count() const -> u32;
+        auto GetElementCount() const -> u32;
     };
 
     class AttributeLayout final
@@ -39,9 +39,9 @@ namespace Cobalt
     public:
         AttributeLayout() = default;
 
-        auto create(const InitializerList<Attribute>& attributes) -> void;
-        auto attributes() -> Vector<Attribute>&;
-        auto stride() -> u32;
+        auto Create(const InitializerList<Attribute>& attributes) -> void;
+        auto GetAttributes() -> Vector<Attribute>&;
+        auto GetStride() -> u32;
 
         auto begin() -> Vector<Attribute>::iterator;
         auto end() -> Vector<Attribute>::iterator;
@@ -49,7 +49,7 @@ namespace Cobalt
         auto end() const -> Vector<Attribute>::const_iterator;
 
     private:
-        Vector<Attribute> m_attributes = {};
-        u32 m_stride = 0;
+        Vector<Attribute> _attributes = {};
+        u32 _stride = 0;
     };
 } // namespace Cobalt

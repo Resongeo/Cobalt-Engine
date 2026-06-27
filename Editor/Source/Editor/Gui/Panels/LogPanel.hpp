@@ -11,14 +11,14 @@ namespace Cobalt
     class LogPanel final : public IPanel
     {
     public:
-        auto begin(EngineContext& ctx, EditorState& state) -> void override;
-        auto draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Begin(EngineContext& ctx, EditorState& state) -> void override;
+        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
 
     private:
-        auto log_event(const LogEvent& event) -> void;
+        auto AddLogEvent(const LogEvent& event) -> void;
 
     private:
-        Vector<LogEvent> m_log_entries = {};
-        bool m_scroll_to_bottom = true;
+        Vector<LogEvent> _log_entries = {};
+        bool _scroll_to_bottom = true;
     };
 } // namespace Cobalt

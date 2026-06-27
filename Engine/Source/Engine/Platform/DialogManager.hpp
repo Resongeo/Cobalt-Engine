@@ -19,10 +19,10 @@ namespace Cobalt
     class DialogManager final
     {
     public:
-        auto init(const Window& window) -> void;
-        auto show_save_dialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const -> void;
+        auto Init(const Window& window) -> void;
+        auto ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const -> void;
 
     private:
-        SDL_Window* m_window_handle = nullptr;
+        SDL_Window* _window_handle = nullptr;
     };
 } // namespace Cobalt

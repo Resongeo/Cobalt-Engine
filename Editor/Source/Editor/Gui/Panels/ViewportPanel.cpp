@@ -26,8 +26,8 @@ namespace Cobalt
         return ImGuizmo::UNIVERSAL;
     }
 
-    auto ViewportPanel::draw(EngineContext& ctx, EditorState& state) -> void {
-        Widgets::begin("Viewport");
+    auto ViewportPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+        Widgets::Begin("Viewport");
         {
             static auto mode = ImGuizmo::LOCAL;
             static auto should_snap = false;
@@ -54,9 +54,9 @@ namespace Cobalt
             static auto toolbar_pos = ImVec2();
             toolbar_pos = ImGui::GetCursorScreenPos();
 
-            if (const auto color_id = state.framebuffer.get_color_attachment_id(0); color_id >= 0) {
+            if (const auto color_id = state.framebuffer.GetColorAttachmentID(0); color_id >= 0) {
                 const auto viewport_size = ImGui::GetContentRegionAvail();
-                state.framebuffer.resize(viewport_size.x, viewport_size.y);
+                state.framebuffer.Resize(viewport_size.x, viewport_size.y);
                 ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
             }
 
@@ -91,15 +91,15 @@ namespace Cobalt
 
             ImGui::PopStyleVar();
 
-            if (state.selected_entity != entt::null && ctx.scene_manager.get_state() == SceneState::None) {
+            if (state.selected_entity != entt::null && ctx.scene_manager.GetState() == SceneState::None) {
                 ImGuizmo::SetOrthographic(true);
                 ImGuizmo::SetDrawlist();
                 ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, ImGui::GetWindowWidth(),
                                   ImGui::GetWindowHeight());
 
-                auto entity = Entity(state.selected_entity, &state.active_scene->get_registry());
-                auto& transform_component = entity.get_component<TransformComponent>();
-                auto transform_matrix = transform_component.get_transform_matrix();
+                auto entity = Entity(state.selected_entity, &state.active_scene->GetRegistry());
+                auto& transform_component = entity.GetComponent<TransformComponent>();
+                auto transform_matrix = transform_component.TransformMatrix();
 
                 if (should_snap) {
                     // TODO: Implement snapping
@@ -107,8 +107,8 @@ namespace Cobalt
                     snap_amount = 0.0f;
                 }
 
-                ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.view()),
-                                     glm::value_ptr(state.editor_camera.projection(state.framebuffer.get_size())),
+                ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.GetView()),
+                                     glm::value_ptr(state.editor_camera.GetProjection(state.framebuffer.GetSize())),
                                      gizmo_operation_to_imguizmo(state.gizmo_operation), mode,
                                      glm::value_ptr(transform_matrix), nullptr, should_snap ? &snap_amount : nullptr);
 
@@ -138,6 +138,6 @@ namespace Cobalt
                 }
             }
         }
-        Widgets::end();
+        Widgets::End();
     }
 } // namespace Cobalt

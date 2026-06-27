@@ -19,7 +19,7 @@ namespace Cobalt
 {
     SDL_GLContext gl_context = nullptr;
 
-    auto Window::init(EngineContext& ctx) -> bool {
+    auto Window::Init(EngineContext& ctx) -> bool {
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
             CORE_CRITICAL("Platform: Failed to initialize SDL3: {}", SDL_GetError());
             return false;
@@ -32,27 +32,27 @@ namespace Cobalt
 
         const auto primary_display = SDL_GetPrimaryDisplay();
         constexpr auto window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
-        const auto title = ctx.project.get_name();
+        const auto title = ctx.project.Name();
 
         auto* display_mode = SDL_GetCurrentDisplayMode(primary_display);
 
-        m_handle = SDL_CreateWindow(title.c_str(), static_cast<int>(display_mode->w * 0.8),
+        _handle = SDL_CreateWindow(title.c_str(), static_cast<int>(display_mode->w * 0.8),
                                     static_cast<int>(display_mode->h * 0.8), window_flags);
-        if (m_handle == nullptr) {
+        if (_handle == nullptr) {
             CORE_CRITICAL("Platform: Failed to create window: {}", SDL_GetError());
             return false;
         }
 
-        gl_context = SDL_GL_CreateContext(m_handle);
+        gl_context = SDL_GL_CreateContext(_handle);
         if (gl_context == nullptr) {
             CORE_CRITICAL("Platform: Failed to create OpenGL context: {}", SDL_GetError());
             return false;
         }
 
-        SDL_GL_MakeCurrent(m_handle, gl_context);
+        SDL_GL_MakeCurrent(_handle, gl_context);
         SDL_GL_SetSwapInterval(1);
-        SDL_SetWindowPosition(m_handle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-        SDL_ShowWindow(m_handle);
+        SDL_SetWindowPosition(_handle, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+        SDL_ShowWindow(_handle);
 
         const auto version = gladLoadGL(SDL_GL_GetProcAddress);
 
@@ -100,12 +100,12 @@ namespace Cobalt
         return true;
     }
 
-    auto Window::poll_events(EngineContext& ctx) const -> void {
+    auto Window::PollEvents(EngineContext& ctx) const -> void {
         static SDL_Event sdl_event;
 
         while (SDL_PollEvent(&sdl_event)) {
-            if (m_native_event_hook) {
-                m_native_event_hook(&sdl_event);
+            if (_native_event_hook) {
+                _native_event_hook(&sdl_event);
             }
 
             switch (sdl_event.type) {
@@ -211,30 +211,30 @@ namespace Cobalt
         }
     }
 
-    auto Window::swap_buffers() const -> void {
-        SDL_GL_SwapWindow(m_handle);
+    auto Window::SwapBuffers() const -> void {
+        SDL_GL_SwapWindow(_handle);
     }
 
-    auto Window::get_handle() const -> SDL_Window* {
-        return m_handle;
+    auto Window::GetHandle() const -> SDL_Window* {
+        return _handle;
     }
 
-    auto Window::get_gl_context() const -> SDL_GLContextState* {
+    auto Window::GetGLContext() const -> SDL_GLContextState* {
         return gl_context;
     }
 
-    auto Window::get_size() const -> Vec<2, i32> {
+    auto Window::GetSize() const -> Vec<2, i32> {
         i32 width, height = 0;
-        SDL_GetWindowSize(m_handle, &width, &height);
+        SDL_GetWindowSize(_handle, &width, &height);
         return {width, height};
     }
 
-    auto Window::destroy() const -> void {
+    auto Window::ShutDown() const -> void {
         SDL_GL_DestroyContext(gl_context);
-        SDL_DestroyWindow(m_handle);
+        SDL_DestroyWindow(_handle);
     }
 
-    auto Window::set_native_event_callback(NativeEventCallback callback) -> void {
-        m_native_event_hook = std::move(callback);
+    auto Window::SetNativeEventCallback(NativeEventCallback callback) -> void {
+        _native_event_hook = std::move(callback);
     }
 } // namespace Cobalt

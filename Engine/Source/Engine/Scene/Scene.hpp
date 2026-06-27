@@ -18,16 +18,16 @@ namespace Cobalt
         explicit Scene() = default;
         explicit Scene(const String& name);
 
-        auto get_name() -> String&;
-        auto set_name(const String& name) -> void;
-        auto get_registry() -> entt::registry&;
-        auto create_entity(const String& name) -> Entity;
-        auto create_entity(const String& name, UUID uuid) -> Entity;
-        auto create_empty_entity() -> Entity;
-        auto clone() -> Rc<Scene>;
+        auto GetName() -> String&;
+        auto SetName(const String& name) -> void;
+        auto GetRegistry() -> entt::registry&;
+        auto CreateEntity(const String& name) -> Entity;
+        auto CreateEntity(const String& name, UUID uuid) -> Entity;
+        auto CreateEmptyEntity() -> Entity;
+        auto Clone() -> Rc<Scene>;
 
     private:
-        String m_name = {};
-        entt::registry m_registry = {};
+        String _name = {};
+        entt::registry _registry = {};
     };
 } // namespace Cobalt

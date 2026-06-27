@@ -16,37 +16,37 @@
 
 namespace Cobalt
 {
-    auto AssetManager::init(const Project& project) -> void {
-        m_assets_dir = project.get_project_assets_path();
+    auto AssetManager::Init(const Project& project) -> void {
+        _assets_dir = project.ProjectAssetsPath();
 
-        if (!std::filesystem::exists(m_assets_dir)) {
-            std::filesystem::create_directories(m_assets_dir);
+        if (!std::filesystem::exists(_assets_dir)) {
+            std::filesystem::create_directories(_assets_dir);
         }
 
-        m_registry_path = m_assets_dir / "AssetRegistry.json";
-        load_registry();
+        _registry_path = _assets_dir / "AssetRegistry.json";
+        LoadRegistry();
 
-        for (auto& entry : std::filesystem::recursive_directory_iterator(m_assets_dir)) {
+        for (auto& entry : std::filesystem::recursive_directory_iterator(_assets_dir)) {
             if (entry.is_directory()) {
                 continue;
             }
 
-            if (is_file_asset(entry.path())) {
-                register_asset(entry.path());
+            if (IsFileAsset(entry.path())) {
+                RegisterAsset(entry.path());
             }
         }
 
-        m_serializers[static_cast<usize>(AssetType::Texture)] = Memory::make_rc<Texture2DSerializer>();
-        m_serializers[static_cast<usize>(AssetType::Script)] = Memory::make_rc<ScriptSerializer>();
-        m_serializers[static_cast<usize>(AssetType::Scene)] = Memory::make_rc<SceneSerializer>();
+        _serializers[static_cast<usize>(AssetType::Texture)] = Memory::MakeRc<Texture2DSerializer>();
+        _serializers[static_cast<usize>(AssetType::Script)] = Memory::MakeRc<ScriptSerializer>();
+        _serializers[static_cast<usize>(AssetType::Scene)] = Memory::MakeRc<SceneSerializer>();
     }
 
-    auto AssetManager::register_asset(const Filepath& path) const -> void {
-        if (is_asset_registered(path)) {
+    auto AssetManager::RegisterAsset(const Filepath& path) const -> void {
+        if (IsAssetRegistered(path)) {
             return;
         }
 
-        if (!is_file_asset(path)) {
+        if (!IsFileAsset(path)) {
             return;
         }
 
@@ -54,29 +54,29 @@ namespace Cobalt
             return;
         }
 
-        const auto meta = AssetMetadata{.path = path, .type = get_asset_type_from_extension(path)};
+        const auto meta = AssetMetadata{.path = path, .type = GetAssetTypeFromExtension(path)};
 
-        m_registry[UUID::generate()] = meta;
+        _registry[UUID::Generate()] = meta;
     }
 
-    auto AssetManager::register_asset(const UUID id, const AssetMetadata& metadata) const -> void {
+    auto AssetManager::RegisterAsset(const UUID id, const AssetMetadata& metadata) const -> void {
         if (!std::filesystem::exists(metadata.path)) {
             return;
         }
 
-        m_registry[id] = metadata;
+        _registry[id] = metadata;
     }
 
-    auto AssetManager::get_metadata(const UUID id) const -> AssetMetadata {
-        if (const auto it = m_registry.find(id); it != m_registry.end()) {
+    auto AssetManager::GetMetadata(const UUID id) const -> AssetMetadata {
+        if (const auto it = _registry.find(id); it != _registry.end()) {
             return it->second;
         }
 
         return {};
     }
 
-    auto AssetManager::get_uuid(const Filepath& path) const -> UUID {
-        for (auto& [id, meta] : m_registry) {
+    auto AssetManager::GetUUID(const Filepath& path) const -> UUID {
+        for (auto& [id, meta] : _registry) {
             if (meta.path == path) {
                 return id;
             }
@@ -85,13 +85,13 @@ namespace Cobalt
         return UUID{};
     }
 
-    auto AssetManager::is_asset_registered(const UUID id) const -> bool {
-        const auto it = m_registry.find(id);
-        return it != m_registry.end();
+    auto AssetManager::IsAssetRegistered(const UUID id) const -> bool {
+        const auto it = _registry.find(id);
+        return it != _registry.end();
     }
 
-    auto AssetManager::is_asset_registered(const Filepath& path) const -> bool {
-        for (const auto& asset : m_registry | std::views::values) {
+    auto AssetManager::IsAssetRegistered(const Filepath& path) const -> bool {
+        for (const auto& asset : _registry | std::views::values) {
             if (asset.path == path) {
                 return true;
             }
@@ -100,13 +100,13 @@ namespace Cobalt
         return false;
     }
 
-    auto AssetManager::load_registry() const -> void {
-        if (!std::filesystem::exists(m_registry_path)) {
+    auto AssetManager::LoadRegistry() const -> void {
+        if (!std::filesystem::exists(_registry_path)) {
             return;
         }
 
         simdjson::ondemand::parser parser;
-        const auto json = simdjson::padded_string::load(m_registry_path.string());
+        const auto json = simdjson::padded_string::load(_registry_path.string());
         auto doc = simdjson::ondemand::document{};
 
         if (const auto error = parser.iterate(json).get(doc)) {
@@ -136,7 +136,7 @@ namespace Cobalt
 
                 continue;
             }
-            meta.path = m_assets_dir / relative_path_string;
+            meta.path = _assets_dir / relative_path_string;
 
             auto type_string = String{};
             if (const auto error = asset["type"].get_string().get(type_string)) {
@@ -144,13 +144,13 @@ namespace Cobalt
 
                 continue;
             }
-            meta.type = string_to_asset_type(type_string);
+            meta.type = StringToAssetType(type_string);
 
-            register_asset(id, meta);
+            RegisterAsset(id, meta);
         }
     }
 
-    auto AssetManager::save_registry() const -> void {
+    auto AssetManager::SaveRegistry() const -> void {
         auto sb = simdjson::builder::string_builder{};
 
         sb.start_object();
@@ -161,7 +161,7 @@ namespace Cobalt
             sb.start_array();
             {
                 auto asset_index = 0;
-                for (const auto& [id, meta] : m_registry) {
+                for (const auto& [id, meta] : _registry) {
                     if (meta.is_memory) {
                         asset_index++;
                         continue;
@@ -173,15 +173,15 @@ namespace Cobalt
                         sb.append_key_value("uuid", id.value);
                         sb.append_comma();
 
-                        const auto relative_path = std::filesystem::relative(meta.path, m_assets_dir).string();
+                        const auto relative_path = std::filesystem::relative(meta.path, _assets_dir).string();
                         sb.append_key_value("path", relative_path);
                         sb.append_comma();
 
-                        sb.append_key_value("type", asset_type_to_string(meta.type));
+                        sb.append_key_value("type", AssetTypeToString(meta.type));
                     }
                     sb.end_object();
 
-                    if (asset_index < m_registry.size()) {
+                    if (asset_index < _registry.size()) {
                         sb.append_comma();
                     }
                 }
@@ -192,16 +192,16 @@ namespace Cobalt
 
         const auto result = sb.view();
 
-        std::ofstream out(m_registry_path);
+        std::ofstream out(_registry_path);
         out << result.value_unsafe();
         out.close();
     }
 
-    auto AssetManager::get_registry() const -> HashMap<UUID, AssetMetadata>& {
-        return m_registry;
+    auto AssetManager::GetRegistry() const -> HashMap<UUID, AssetMetadata>& {
+        return _registry;
     }
 
-    auto AssetManager::get_asset_type_from_extension(const Filepath& path) -> AssetType {
+    auto AssetManager::GetAssetTypeFromExtension(const Filepath& path) -> AssetType {
         const auto extension = path.extension().string();
 
         if (extension == ".as") {
@@ -217,9 +217,9 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::save_asset(EngineContext& ctx, const UUID id) const -> bool {
-        auto meta = get_metadata(id);
-        const auto serializer = m_serializers[static_cast<usize>(meta.type)];
+    auto AssetManager::SaveAsset(EngineContext& ctx, const UUID id) const -> bool {
+        auto meta = GetMetadata(id);
+        const auto serializer = _serializers[static_cast<usize>(meta.type)];
 
         if (!serializer) {
             return false;
@@ -230,12 +230,12 @@ namespace Cobalt
                 Filepath path = {};
                 bool completed = false;
             };
-            auto sync_data = Memory::make_rc<DialogSync>();
+            auto sync_data = Memory::MakeRc<DialogSync>();
 
-            static auto filter = asset_type_to_filters(meta.type);
-            const auto default_path = ctx.project.get_project_assets_path().string();
+            static auto filter = AssetTypeToFilters(meta.type);
+            const auto default_path = ctx.project.ProjectAssetsPath().string();
 
-            ctx.dialog_manager.show_save_dialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
+            ctx.dialog_manager.ShowSaveDialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
                 sync_data->path = chosen_path;
                 sync_data->completed = true;
             });
@@ -254,10 +254,10 @@ namespace Cobalt
             return false;
         }
 
-        return serializer->serialize(m_loaded[id], meta);
+        return serializer->Serialize(_loaded[id], meta);
     }
 
-    auto AssetManager::asset_type_to_string(const AssetType type) const -> String {
+    auto AssetManager::AssetTypeToString(const AssetType type) const -> String {
         switch (type) {
             case AssetType::Texture: return "Texture";
             case AssetType::Scene: return "Scene";
@@ -267,7 +267,7 @@ namespace Cobalt
         }
     }
 
-    auto AssetManager::asset_type_to_filters(const AssetType type) const -> Vector<DialogFileFilter> {
+    auto AssetManager::AssetTypeToFilters(const AssetType type) const -> Vector<DialogFileFilter> {
         switch (type) {
             case AssetType::Texture: return {{.name = "Texture", .pattern = "png;jpg"}};
             case AssetType::Scene: return {{.name = "Cobalt Scene", .pattern = "cbscene"}};
@@ -277,7 +277,7 @@ namespace Cobalt
         }
     }
 
-    auto AssetManager::string_to_asset_type(const String& str) const -> AssetType {
+    auto AssetManager::StringToAssetType(const String& str) const -> AssetType {
         if (str == "Texture") {
             return AssetType::Texture;
         }
@@ -291,7 +291,7 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::is_file_asset(const Filepath& path) const -> bool {
-        return get_asset_type_from_extension(path) != AssetType::None;
+    auto AssetManager::IsFileAsset(const Filepath& path) const -> bool {
+        return GetAssetTypeFromExtension(path) != AssetType::None;
     }
 } // namespace Cobalt

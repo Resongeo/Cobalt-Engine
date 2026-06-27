@@ -24,48 +24,48 @@
 
 namespace Cobalt
 {
-    auto EditorApplication::begin(EngineContext& ctx) -> void {
-        Gui::init(ctx.window);
-        Gui::setup_style();
+    auto EditorApplication::OnBegin(EngineContext& ctx) -> void {
+        Gui::Init(ctx.window);
+        Gui::SetupStyle();
 
-        m_renderer.init(10000, ctx.project.get_editor_assets_path());
+        _renderer.Init(10000, ctx.project.EditorAssetsPath());
 
-        m_state.framebuffer.create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
-        m_state.framebuffer.unbind();
+        _state.framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
+        _state.framebuffer.Unbind();
 
-        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::EditorUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
-        ctx.scene_manager.add_system<EditorRenderSystem>(Schedule::RuntimeUpdate, &m_renderer, &m_state.editor_camera, &m_state.framebuffer);
+        ctx.scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
+        ctx.scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
 
-        ctx.scene_manager.add_system<ScriptStartSystem>(Schedule::RuntimeStart);
-        ctx.scene_manager.add_system<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
+        ctx.scene_manager.AddSystem<ScriptStartSystem>(Schedule::RuntimeStart);
+        ctx.scene_manager.AddSystem<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
 
-        m_panels.emplace_back(Memory::make_box<AssetBrowserPanel>());
-        m_panels.emplace_back(Memory::make_box<EntityComponentsPanel>());
-        m_panels.emplace_back(Memory::make_box<SceneHierarchyPanel>());
-        m_panels.emplace_back(Memory::make_box<ViewportPanel>());
-        m_panels.emplace_back(Memory::make_box<LogPanel>());
+        _panels.emplace_back(Memory::MakeBox<AssetBrowserPanel>());
+        _panels.emplace_back(Memory::MakeBox<EntityComponentsPanel>());
+        _panels.emplace_back(Memory::MakeBox<SceneHierarchyPanel>());
+        _panels.emplace_back(Memory::MakeBox<ViewportPanel>());
+        _panels.emplace_back(Memory::MakeBox<LogPanel>());
 
-        ctx.window.set_native_event_callback([](void* event) {
+        ctx.window.SetNativeEventCallback([](void* event) {
             const auto* sdl_event = static_cast<SDL_Event*>(event);
-            Gui::process_event(sdl_event);
+            Gui::ProcessEvent(sdl_event);
         });
 
-        for (const auto& panel : m_panels) {
-            panel->begin(ctx, m_state);
+        for (const auto& panel : _panels) {
+            panel->Begin(ctx, _state);
         }
     }
 
-    auto EditorApplication::update(EngineContext& ctx) -> void {
+    auto EditorApplication::OnUpdate(EngineContext& ctx) -> void {
         auto& scene_manager = ctx.scene_manager;
-        scene_manager.update(ctx);
+        scene_manager.Update(ctx);
 
-        Gui::begin_frame(ctx);
+        Gui::BeginFrame(ctx);
         {
             ImGui::BeginMainMenuBar();
             {
                 if (ImGui::BeginMenu("File")) {
                     if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
-                        ctx.asset_manager.save_asset(ctx, ctx.scene_manager.get_active_scene_uuid());
+                        ctx.asset_manager.SaveAsset(ctx, ctx.scene_manager.GetActiveSceneUUID());
                     }
 
                     ImGui::EndMenu();
@@ -73,7 +73,7 @@ namespace Cobalt
             }
             ImGui::EndMainMenuBar();
 
-            if (const auto active_scene = scene_manager.get_active_scene(); active_scene != nullptr) {
+            if (const auto active_scene = scene_manager.GetActiveScene(); active_scene != nullptr) {
                 const auto viewport = ImGui::GetMainViewport();
                 ImGui::SetNextWindowPos(viewport->Pos);
                 ImGui::SetNextWindowSize(viewport->Size);
@@ -90,36 +90,36 @@ namespace Cobalt
                 }
                 ImGui::End();
 
-                m_state.active_scene = active_scene;
-                for (const auto& panel : m_panels) {
-                    panel->draw(ctx, m_state);
+                _state.active_scene = active_scene;
+                for (const auto& panel : _panels) {
+                    panel->Draw(ctx, _state);
                 }
             }
         }
 
         ImGui::Begin("Debug");
         {
-            switch (ctx.scene_manager.get_state()) {
+            switch (ctx.scene_manager.GetState()) {
                 case SceneState::None: {
                     if (ImGui::Button("Play")) {
-                        m_state.active_scene = m_state.active_scene->clone();
-                        ctx.scene_manager.set_active_scene(m_state.active_scene);
-                        ctx.scene_manager.set_state(SceneState::Start);
+                        _state.active_scene = _state.active_scene->Clone();
+                        ctx.scene_manager.SetActiveScene(_state.active_scene);
+                        ctx.scene_manager.SetState(SceneState::Start);
                     }
                     break;
                 }
                 case SceneState::Update: {
                     if (ImGui::Button("Stop")) {
-                        ctx.scene_manager.set_active_scene(ctx, ctx.scene_manager.get_active_scene_uuid());
-                        ctx.scene_manager.set_state(SceneState::None);
-                        m_state.active_scene = ctx.scene_manager.get_active_scene();
+                        ctx.scene_manager.SetActiveScene(ctx, ctx.scene_manager.GetActiveSceneUUID());
+                        ctx.scene_manager.SetState(SceneState::None);
+                        _state.active_scene = ctx.scene_manager.GetActiveScene();
                     }
                     break;
                 }
                 case SceneState::Start: break;
             }
 
-            if (Widgets::button("Log")) {
+            if (Widgets::Button("Log")) {
                 CORE_INFO("ASD");
                 CORE_WARN("ASD");
                 CORE_ERROR("ASD");
@@ -130,7 +130,7 @@ namespace Cobalt
 
         ImGui::Begin("Assets");
         {
-            for (auto [id, meta] : ctx.asset_manager.get_registry()) {
+            for (auto [id, meta] : ctx.asset_manager.GetRegistry()) {
                 auto name_string = meta.path.string();
                 ImGui::Text("Name %s", name_string.c_str());
                 ImGui::PushID(id.value);
@@ -140,6 +140,6 @@ namespace Cobalt
         }
         ImGui::End();
 
-        Gui::end_frame(ctx);
+        Gui::EndFrame(ctx);
     }
 } // namespace Cobalt

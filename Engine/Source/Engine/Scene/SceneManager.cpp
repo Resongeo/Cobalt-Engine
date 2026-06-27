@@ -8,71 +8,71 @@
 
 namespace Cobalt
 {
-    auto SceneManager::init(EngineContext& ctx) -> void {
-        const auto startup_scene_uuid = ctx.project.get_startup_scene_uuid();
-        if (ctx.asset_manager.is_asset_registered(startup_scene_uuid)) {
-            m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, startup_scene_uuid);
-            m_active_scene_uuid = startup_scene_uuid;
+    auto SceneManager::Init(EngineContext& ctx) -> void {
+        const auto startup_scene_uuid = ctx.project.StartupSceneUUID();
+        if (ctx.asset_manager.IsAssetRegistered(startup_scene_uuid)) {
+            _active_scene = ctx.asset_manager.GetAsset<Scene>(ctx, startup_scene_uuid);
+            _active_scene_uuid = startup_scene_uuid;
         } else {
-            m_active_scene_uuid = ctx.asset_manager.create_memory_asset<Scene>(AssetType::Scene);
-            set_active_scene(ctx, m_active_scene_uuid);
+            _active_scene_uuid = ctx.asset_manager.CreateInMemoryAsset<Scene>(AssetType::Scene);
+            SetActiveScene(ctx, _active_scene_uuid);
 
-            if (m_active_scene) {
-                m_active_scene->set_name("Empty");
+            if (_active_scene) {
+                _active_scene->SetName("Empty");
             }
         }
     }
 
-    auto SceneManager::get_active_scene() const -> Rc<Scene> {
-        return m_active_scene;
+    auto SceneManager::GetActiveScene() const -> Rc<Scene> {
+        return _active_scene;
     }
 
-    auto SceneManager::get_active_scene_uuid() const -> UUID {
-        return m_active_scene_uuid;
+    auto SceneManager::GetActiveSceneUUID() const -> UUID {
+        return _active_scene_uuid;
     }
 
-    auto SceneManager::set_active_scene(EngineContext& ctx, const UUID uuid) -> void {
-        m_active_scene = ctx.asset_manager.get_asset<Scene>(ctx, uuid);
+    auto SceneManager::SetActiveScene(EngineContext& ctx, const UUID uuid) -> void {
+        _active_scene = ctx.asset_manager.GetAsset<Scene>(ctx, uuid);
     }
 
-    auto SceneManager::set_active_scene(const Rc<Scene>& scene) -> void {
-        m_active_scene = scene;
+    auto SceneManager::SetActiveScene(const Rc<Scene>& scene) -> void {
+        _active_scene = scene;
     }
 
-    auto SceneManager::set_state(const SceneState state) -> void {
-        m_state = state;
+    auto SceneManager::SetState(const SceneState state) -> void {
+        _state = state;
     }
 
-    auto SceneManager::get_state() const -> SceneState {
-        return m_state;
+    auto SceneManager::GetState() const -> SceneState {
+        return _state;
     }
 
-    auto SceneManager::update(EngineContext& ctx) -> void {
-        const auto active_scene = get_active_scene();
+    auto SceneManager::Update(EngineContext& ctx) -> void {
+        const auto active_scene = GetActiveScene();
 
         if (active_scene == nullptr) {
             return;
         }
 
-        auto& registry = active_scene->get_registry();
+        auto& registry = active_scene->GetRegistry();
 
-        switch (m_state) {
+        switch (_state) {
             case SceneState::None: {
-                for (const auto& system : m_editor_update_systems) {
-                    system->update(ctx, registry);
+                for (const auto& system : _editor_update_systems) {
+                    system->Update(ctx, registry);
                 }
                 break;
             }
             case SceneState::Start: {
-                for (const auto& system : m_runtime_start_systems) {
-                    system->update(ctx, registry);
+                for (const auto& system : _runtime_start_systems) {
+                    system->Update(ctx, registry);
                 }
-                m_state = SceneState::Update;
+                _state = SceneState::Update;
                 break;
             }
             case SceneState::Update: {
-                for (const auto& system : m_runtime_update_systems) {
-                    system->update(ctx, registry);
+                for (const auto& system : _runtime_update_systems) {
+                    system->Update(ctx, registry);
                 }
                 break;
             }

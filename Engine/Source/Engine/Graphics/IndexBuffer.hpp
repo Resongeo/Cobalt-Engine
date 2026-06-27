@@ -13,14 +13,14 @@ namespace Cobalt
         IndexBuffer() = default;
         ~IndexBuffer();
 
-        auto bind() const -> void;
-        auto unbind() const -> void;
+        auto Bind() const -> void;
+        auto Unbind() const -> void;
 
-        auto create(u32 count, const u32* indices) -> void;
-        auto count() const -> u32;
+        auto Create(u32 count, const u32* indices) -> void;
+        auto GetCount() const -> u32;
 
     private:
-        u32 m_renderer_id = 0;
-        u32 m_count = 0;
+        u32 _renderer_id = 0;
+        u32 _count = 0;
     };
 } // namespace Cobalt

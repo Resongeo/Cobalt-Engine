@@ -17,41 +17,41 @@ namespace Cobalt
     public:
         ~SceneManager() = default;
 
-        auto init(EngineContext& ctx) -> void;
+        auto Init(EngineContext& ctx) -> void;
 
-        auto get_active_scene() const -> Rc<Scene>;
-        auto get_active_scene_uuid() const -> UUID;
-        auto set_active_scene(EngineContext& ctx, UUID uuid) -> void;
-        auto set_active_scene(const Rc<Scene>& scene) -> void;
-        auto get_state() const -> SceneState;
-        auto set_state(SceneState state) -> void;
-        auto update(EngineContext& ctx) -> void;
+        auto GetActiveScene() const -> Rc<Scene>;
+        auto GetActiveSceneUUID() const -> UUID;
+        auto SetActiveScene(EngineContext& ctx, UUID uuid) -> void;
+        auto SetActiveScene(const Rc<Scene>& scene) -> void;
+        auto GetState() const -> SceneState;
+        auto SetState(SceneState state) -> void;
+        auto Update(EngineContext& ctx) -> void;
 
         template <typename T, typename... Args>
-        auto add_system(const Schedule schedule, Args&&... args) -> void {
+        auto AddSystem(const Schedule schedule, Args&&... args) -> void {
             switch (schedule) {
                 case Schedule::RuntimeStart: {
-                    m_runtime_start_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
+                    _runtime_start_systems.emplace_back(Memory::MakeBox<T>(std::forward<Args>(args)...));
                     break;
                 }
                 case Schedule::EditorUpdate: {
-                    m_editor_update_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
+                    _editor_update_systems.emplace_back(Memory::MakeBox<T>(std::forward<Args>(args)...));
                     break;
                 }
                 case Schedule::RuntimeUpdate: {
-                    m_runtime_update_systems.emplace_back(Memory::make_box<T>(std::forward<Args>(args)...));
+                    _runtime_update_systems.emplace_back(Memory::MakeBox<T>(std::forward<Args>(args)...));
                     break;
                 }
             }
         }
 
     private:
-        Rc<Scene> m_active_scene = nullptr;
-        UUID m_active_scene_uuid;
-        SceneState m_state = SceneState::None;
+        Rc<Scene> _active_scene = nullptr;
+        UUID _active_scene_uuid;
+        SceneState _state = SceneState::None;
 
-        Vector<Box<ISystem>> m_runtime_start_systems = {};
-        Vector<Box<ISystem>> m_editor_update_systems = {};
-        Vector<Box<ISystem>> m_runtime_update_systems = {};
+        Vector<Box<ISystem>> _runtime_start_systems = {};
+        Vector<Box<ISystem>> _editor_update_systems = {};
+        Vector<Box<ISystem>> _runtime_update_systems = {};
     };
 } // namespace Cobalt

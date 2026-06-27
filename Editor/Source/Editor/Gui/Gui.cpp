@@ -25,7 +25,7 @@
 
 namespace Cobalt
 {
-    auto Gui::init(const Window& window) -> void {
+    auto Gui::Init(const Window& window) -> void {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -59,11 +59,11 @@ namespace Cobalt
             &icon_font_config
         );
 
-        ImGui_ImplSDL3_InitForOpenGL(window.get_handle(), window.get_gl_context());
+        ImGui_ImplSDL3_InitForOpenGL(window.GetHandle(), window.GetGLContext());
         ImGui_ImplOpenGL3_Init("#version 450 core");
     }
 
-    auto Gui::setup_style() -> void {
+    auto Gui::SetupStyle() -> void {
         auto& style = ImGui::GetStyle();
 
         // Default ImGui style values
@@ -86,34 +86,34 @@ namespace Cobalt
 
         // Default ImGui colors
         // -- Background colors --
-        style.Colors[ImGuiCol_WindowBg]            = IMVEC4(Color::from_oklch(0.2f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_TitleBg]             = IMVEC4(Color::from_oklch(0.2f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_TitleBgActive]       = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_Button]              = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_ButtonHovered]       = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_ButtonActive]        = IMVEC4(Color::from_oklch(0.32f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_FrameBg]             = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_FrameBgActive]       = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_FrameBgHovered]      = IMVEC4(Color::from_oklch(0.28f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_Tab]                 = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
-        style.Colors[ImGuiCol_TabDimmedSelected]   = IMVEC4(Color::from_oklch(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_WindowBg]            = IMVEC4(Color::FromOKLCH(0.2f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TitleBg]             = IMVEC4(Color::FromOKLCH(0.2f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TitleBgActive]       = IMVEC4(Color::FromOKLCH(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_Button]              = IMVEC4(Color::FromOKLCH(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_ButtonHovered]       = IMVEC4(Color::FromOKLCH(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_ButtonActive]        = IMVEC4(Color::FromOKLCH(0.32f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBg]             = IMVEC4(Color::FromOKLCH(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBgActive]       = IMVEC4(Color::FromOKLCH(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_FrameBgHovered]      = IMVEC4(Color::FromOKLCH(0.28f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_Tab]                 = IMVEC4(Color::FromOKLCH(0.25f, 0.0f, 0.0f));
+        style.Colors[ImGuiCol_TabDimmedSelected]   = IMVEC4(Color::FromOKLCH(0.25f, 0.0f, 0.0f));
 
         // -- Foreground colors --
-        style.Colors[ImGuiCol_Text]                = IMVEC4(Color::from_scalar(1.0f, 0.88f));
+        style.Colors[ImGuiCol_Text]                = IMVEC4(Color::FromScalar(1.0f, 0.88f));
 
         // -- Primary colors --
-        style.Colors[ImGuiCol_TabSelected]         = IMVEC4(Color::from_oklch(0.52f, 0.17f, 260.0f));
-        style.Colors[ImGuiCol_TabSelectedOverline] = IMVEC4(Color::from_oklch(0.52f, 0.17f, 260.0f));
-        style.Colors[ImGuiCol_TabHovered]          = IMVEC4(Color::from_oklch(0.61f, 0.17f, 260.0f));
+        style.Colors[ImGuiCol_TabSelected]         = IMVEC4(Color::FromOKLCH(0.52f, 0.17f, 260.0f));
+        style.Colors[ImGuiCol_TabSelectedOverline] = IMVEC4(Color::FromOKLCH(0.52f, 0.17f, 260.0f));
+        style.Colors[ImGuiCol_TabHovered]          = IMVEC4(Color::FromOKLCH(0.61f, 0.17f, 260.0f));
     }
 
-    auto Gui::begin_frame(const EngineContext& ctx) -> void {
+    auto Gui::BeginFrame(const EngineContext& ctx) -> void {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini = ctx.project.get_project_assets_path().parent_path() / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini = ctx.project.ProjectAssetsPath().parent_path() / "Settings" / "DefaultLayout.ini";
 
         if (!std::filesystem::exists(layout_ini.parent_path())) {
             std::filesystem::create_directories(layout_ini.parent_path());
@@ -126,11 +126,11 @@ namespace Cobalt
         ImGuizmo::BeginFrame();
     }
 
-    auto Gui::process_event(const SDL_Event* event) -> void {
+    auto Gui::ProcessEvent(const SDL_Event* event) -> void {
         ImGui_ImplSDL3_ProcessEvent(event);
     }
 
-    auto Gui::end_frame(const EngineContext& ctx) -> void {
+    auto Gui::EndFrame(const EngineContext& ctx) -> void {
         const auto& io = ImGui::GetIO();
 
         ImGui::Render();
@@ -140,8 +140,8 @@ namespace Cobalt
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            auto* backup_current_window = ctx.window.get_handle();
-            const auto backup_current_context = ctx.window.get_gl_context();
+            auto* backup_current_window = ctx.window.GetHandle();
+            const auto backup_current_context = ctx.window.GetGLContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);

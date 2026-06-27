@@ -9,33 +9,33 @@
 namespace Cobalt
 {
     VertexArray::~VertexArray() {
-        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", m_renderer_id);
+        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", _renderer_id);
 
-        glDeleteVertexArrays(1, &m_renderer_id);
-        m_renderer_id = 0;
+        glDeleteVertexArrays(1, &_renderer_id);
+        _renderer_id = 0;
     }
 
-    auto VertexArray::create() -> void {
-        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", m_renderer_id);
+    auto VertexArray::Create() -> void {
+        CORE_INFO("Graphics::VertexArray: Deleting. ID: {}", _renderer_id);
 
-        glGenVertexArrays(1, &m_renderer_id);
-        bind();
+        glGenVertexArrays(1, &_renderer_id);
+        Bind();
     }
 
-    auto VertexArray::bind() const -> void {
-        glBindVertexArray(m_renderer_id);
+    auto VertexArray::Bind() const -> void {
+        glBindVertexArray(_renderer_id);
     }
 
-    auto VertexArray::unbind() const -> void {
+    auto VertexArray::Unbind() const -> void {
         glBindVertexArray(0);
     }
 
-    auto VertexArray::add_vertex_buffer(const Rc<VertexBuffer>& vertex_buffer) -> void {
-        bind();
-        vertex_buffer->bind();
+    auto VertexArray::AddVertexBuffer(const Rc<VertexBuffer>& vertex_buffer) -> void {
+        Bind();
+        vertex_buffer->Bind();
 
         auto index = 0;
-        for (auto& layout = vertex_buffer->attribute_layout(); auto& attribute : layout) {
+        for (auto& layout = vertex_buffer->GetAttributeLayout(); auto& attribute : layout) {
             switch (attribute.type) {
                 case AttributeDataType::Bool:
                 case AttributeDataType::Int:
@@ -43,13 +43,13 @@ namespace Cobalt
                 case AttributeDataType::Int3:
                 case AttributeDataType::Int4: {
                     glEnableVertexAttribArray(index);
-                    glVertexAttribIPointer(index, attribute.element_count(), GL_INT, layout.stride(),
+                    glVertexAttribIPointer(index, attribute.GetElementCount(), GL_INT, layout.GetStride(),
                                            (const void*)attribute.offset);
                     break;
                 }
                 default: {
                     glEnableVertexAttribArray(index);
-                    glVertexAttribPointer(index, attribute.element_count(), GL_FLOAT, GL_FALSE, layout.stride(),
+                    glVertexAttribPointer(index, attribute.GetElementCount(), GL_FLOAT, GL_FALSE, layout.GetStride(),
                                           (const void*)attribute.offset);
                     break;
                 }
@@ -58,21 +58,21 @@ namespace Cobalt
             index++;
         }
 
-        m_vertex_buffers.push_back(vertex_buffer);
+        _vertex_buffers.push_back(vertex_buffer);
     }
 
-    auto VertexArray::set_index_buffer(const Rc<IndexBuffer>& index_buffer) -> void {
-        bind();
-        index_buffer->bind();
+    auto VertexArray::SetIndexBuffer(const Rc<IndexBuffer>& buffer) -> void {
+        Bind();
+        buffer->Bind();
 
-        m_index_buffer = index_buffer;
+        _index_buffer = buffer;
     }
 
-    auto VertexArray::vertex_buffers() const -> const Vector<Rc<VertexBuffer>>& {
-        return m_vertex_buffers;
+    auto VertexArray::GetVertexBuffers() const -> const Vector<Rc<VertexBuffer>>& {
+        return _vertex_buffers;
     }
 
-    auto VertexArray::index_buffer() const -> const Rc<IndexBuffer>& {
-        return m_index_buffer;
+    auto VertexArray::GetIndexBuffer() const -> const Rc<IndexBuffer>& {
+        return _index_buffer;
     }
 } // namespace Cobalt

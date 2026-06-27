@@ -10,22 +10,22 @@
 
 namespace Cobalt
 {
-    extern auto create_application() -> Box<Application>;
+    extern auto CreateApplication() -> Box<Application>;
 } // namespace Cobalt
 
 #if defined(PLATFORM_WINDOWS) && defined(CONFIGURATION_RELEASE)
 
 #include <Windows.h>
 auto WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) -> int {
-    const auto app = Cobalt::create_application();
-    app->run({__argc, __argv});
+    const auto app = Cobalt::CreateApplication();
+    app->Run({__argc, __argv});
 }
 
 #else
 
 auto main(const int argc, char* argv[]) -> int {
-    const auto app = Cobalt::create_application();
-    app->run({argc, argv});
+    const auto app = Cobalt::CreateApplication();
+    app->Run({argc, argv});
 }
 
 #endif

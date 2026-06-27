@@ -14,17 +14,17 @@ namespace Cobalt
     public:
         ~Texture2D() override;
 
-        auto load_from_file(const Filepath& path) -> bool;
-        auto create_with_size(const u32 width, const u32 height) -> bool;
-        auto bind_slot(u32 slot) const -> void;
+        auto LoadFromFile(const Filepath& path) -> bool;
+        auto CreateWithSize(u32 width, u32 height) -> bool;
+        auto BindSlot(u32 slot) const -> void;
 
-        auto get_width() const -> u32;
-        auto get_height() const -> u32;
-        auto get_renderer_id() const -> u32;
+        auto GetWidth() const -> u32;
+        auto GetHeight() const -> u32;
+        auto GetRendererID() const -> u32;
 
     private:
-        u32 m_renderer_id = 0;
-        u32 m_width = 0;
-        u32 m_height = 0;
+        u32 _renderer_id = 0;
+        u32 _width = 0;
+        u32 _height = 0;
     };
 }

@@ -8,18 +8,18 @@
 
 namespace Cobalt
 {
-    void ScriptStartSystem::update(EngineContext& ctx, entt::registry& registry) {
+    void ScriptStartSystem::Update(EngineContext& ctx, entt::registry& registry) {
         for (const auto entity : registry.view<ScriptComponent>()) {
             auto& [script_id, instance] = registry.get<ScriptComponent>(entity);
 
-            if (!script_id.is_valid()) {
+            if (!script_id.IsValid()) {
                 continue;
             }
 
-            if (auto script = ctx.asset_manager.get_asset<Script>(ctx, script_id); script) {
-                ctx.script_manager.compile_script(script);
-                instance = ctx.script_manager.instantiate_script(ctx, entity, script);
-                ctx.script_manager.execute_start(script, instance);
+            if (auto script = ctx.asset_manager.GetAsset<Script>(ctx, script_id); script) {
+                ctx.script_manager.CompileScript(script);
+                instance = ctx.script_manager.InstantiateScript(ctx, entity, script);
+                ctx.script_manager.ExecuteStart(script, instance);
             }
         }
     }

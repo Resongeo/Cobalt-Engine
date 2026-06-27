@@ -17,37 +17,37 @@ namespace Cobalt
         f32 b = 1.0f;
         f32 a = 1.0f;
 
-        static auto from_scalar(const f32 value, const f32 alpha = 1.0f) -> Color {
+        static auto FromScalar(const f32 value, const f32 alpha = 1.0f) -> Color {
             return {value, value, value, alpha};
         }
 
-        static auto from_rgb_f32(const f32 r, const f32 g, const f32 b) -> Color {
+        static auto FromScalar(const u8 value, const u8 alpha = 255) -> Color {
+            return {
+                static_cast<f32>(value) / 255.0f,
+                static_cast<f32>(value) / 255.0f,
+                static_cast<f32>(value) / 255.0f,
+                static_cast<f32>(alpha) / 255.0f,
+        };
+        }
+
+        static auto FromRGBF32(const f32 r, const f32 g, const f32 b) -> Color {
             return {r, g, b, 1.0};
         }
 
-        static auto from_rgba(const f32 r, const f32 g, const f32 b, const f32 a) -> Color {
+        static auto FromRGBU8(const u8 r, const u8 g, const u8 b) -> Color {
+            return {
+                static_cast<f32>(r) / 255.0f,
+                static_cast<f32>(g) / 255.0f,
+                static_cast<f32>(b) / 255.0f,
+                1.0f,
+        };
+        }
+
+        static auto FromRGBA(const f32 r, const f32 g, const f32 b, const f32 a) -> Color {
             return {r, g, b, a};
         }
 
-        static auto from_scalar(const u8 value, const u8 alpha = 255) -> Color {
-            return {
-                    static_cast<f32>(value) / 255.0f,
-                    static_cast<f32>(value) / 255.0f,
-                    static_cast<f32>(value) / 255.0f,
-                    static_cast<f32>(alpha) / 255.0f,
-            };
-        }
-
-        static auto from_rgb_u8(const u8 r, const u8 g, const u8 b) -> Color {
-            return {
-                    static_cast<f32>(r) / 255.0f,
-                    static_cast<f32>(g) / 255.0f,
-                    static_cast<f32>(b) / 255.0f,
-                    1.0f,
-            };
-        }
-
-        static auto from_rgba(const u8 r, const u8 g, const u8 b, const u8 a) -> Color {
+        static auto FromRGBA(const u8 r, const u8 g, const u8 b, const u8 a) -> Color {
             return {
                     static_cast<f32>(r) / 255.0f,
                     static_cast<f32>(g) / 255.0f,
@@ -56,12 +56,12 @@ namespace Cobalt
             };
         }
 
-        static auto from_hex(const u32 hex) -> Color {
+        static auto FromHex(const u32 hex) -> Color {
             // TODO: Handle alpha values in hex
             return {(hex >> 16 & 0xFF) / 255.0f, (hex >> 8 & 0xFF) / 255.0f, (hex & 0xFF) / 255.0f, 1.0f};
         }
 
-        static auto from_oklch(f32 l, f32 c, f32 deg, f32 alpha = 1.0f) -> Color {
+        static auto FromOKLCH(const f32 l, const f32 c, const f32 deg, const f32 alpha = 1.0f) -> Color {
             constexpr auto PI = 3.14159265358979323846;
 
             // OKLCH -> OKLab

@@ -8,16 +8,15 @@
 
 namespace Cobalt
 {
-    auto Platform::sdl3_init() -> bool {
+    auto Platform::InitSDL3() -> bool {
         return true;
     }
 
-    auto Platform::opengl_init() -> bool {
-
+    auto Platform::InitOpenGL() -> bool {
         return true;
     }
 
-    auto Platform::destroy() -> void {
+    auto Platform::ShutDown() -> void {
         SDL_Quit();
     }
 } // namespace Cobalt

@@ -13,20 +13,20 @@ namespace Cobalt
     class AssetBrowserPanel final : public IPanel
     {
     public:
-        auto begin(EngineContext& ctx, EditorState& state) -> void override;
-        auto draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Begin(EngineContext& ctx, EditorState& state) -> void override;
+        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
 
     private:
-        auto get_texture_from_dir_entry(const std::filesystem::directory_entry& entry) const -> Texture2D*;
+        auto GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const -> Texture2D*;
 
     private:
-        Filepath m_assets_base_dir = {};
-        Filepath m_current_dir = {};
-        bool m_directory_changed = false;
-        HashMap<Filepath, Color> m_directory_colors = {};
-        Rc<Texture2D> m_directory_texture = {};
-        Rc<Texture2D> m_texture_texture = {};
-        Rc<Texture2D> m_script_texture = {};
-        Rc<Texture2D> m_default_texture = {};
+        Filepath _assets_base_dir = {};
+        Filepath _current_dir = {};
+        bool _directory_changed = false;
+        HashMap<Filepath, Color> _directory_colors = {};
+        Rc<Texture2D> _directory_texture = {};
+        Rc<Texture2D> _texture_texture = {};
+        Rc<Texture2D> _script_texture = {};
+        Rc<Texture2D> _default_texture = {};
     };
 } // namespace Cobalt

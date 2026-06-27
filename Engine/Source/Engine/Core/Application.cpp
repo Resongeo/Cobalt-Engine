@@ -9,51 +9,51 @@
 
 namespace Cobalt
 {
-    auto Application::run(const CommandLineArgs& args) -> void {
-        if (!initialize(args)) {
+    auto Application::Run(const CommandLineArgs& args) -> void {
+        if (!Init(args)) {
             CORE_CRITICAL("Application: Initialization failed! Exiting program...");
             return;
         }
 
-        begin(m_ctx);
-        main_loop();
-        end(m_ctx);
+        OnBegin(_ctx);
+        MainLoop();
+        OnShutdown(_ctx);
     }
 
-    auto Application::initialize(const CommandLineArgs& args) -> bool {
-        Log::init(m_ctx);
+    auto Application::Init(const CommandLineArgs& args) -> bool {
+        Log::Init(_ctx);
 
-        m_ctx.project.init(args);
-        m_ctx.asset_manager.init(m_ctx.project);
-        m_ctx.scene_manager.init(m_ctx);
+        _ctx.project.Init(args);
+        _ctx.asset_manager.Init(_ctx.project);
+        _ctx.scene_manager.Init(_ctx);
 
-        if (!m_ctx.window.init(m_ctx)) return false;
-        if (!m_ctx.script_manager.init(m_ctx)) return false;
+        if (!_ctx.window.Init(_ctx)) return false;
+        if (!_ctx.script_manager.Init(_ctx)) return false;
 
-        m_ctx.dialog_manager.init(m_ctx.window);
+        _ctx.dialog_manager.Init(_ctx.window);
 
         return true;
     }
 
-    auto Application::main_loop() -> void {
+    auto Application::MainLoop() -> void {
         u64 current_time = SDL_GetTicks();
         u64 last_time = current_time;
-        while (!m_ctx.close_requested) {
+        while (!_ctx.close_requested) {
             current_time = SDL_GetTicks();
-            m_ctx.delta_time = static_cast<f32>(current_time - last_time) / 1000.0f;
+            _ctx.delta_time = static_cast<f32>(current_time - last_time) / 1000.0f;
             last_time = current_time;
 
-            Log::flush_events(m_ctx);
+            Log::FlushEvents(_ctx);
 
-            m_ctx.window.poll_events(m_ctx);
-            update(m_ctx);
-            m_ctx.window.swap_buffers();
+            _ctx.window.PollEvents(_ctx);
+            OnUpdate(_ctx);
+            _ctx.window.SwapBuffers();
         }
     }
 
     Application::~Application() {
-        m_ctx.asset_manager.save_registry();
-        m_ctx.script_manager.destroy();
-        m_ctx.window.destroy();
+        _ctx.asset_manager.SaveRegistry();
+        _ctx.script_manager.ShutDown();
+        _ctx.window.ShutDown();
     }
 } // namespace Cobalt

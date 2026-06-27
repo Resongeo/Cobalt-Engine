@@ -9,7 +9,7 @@
 
 namespace Cobalt::Widgets
 {
-    auto begin(const StringView title, const ImVec2 padding) -> bool {
+    auto Begin(const StringView title, const ImVec2 padding) -> bool {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
         const auto result = ImGui::Begin(title.data());
         ImGui::PopStyleVar();
@@ -17,15 +17,15 @@ namespace Cobalt::Widgets
         return result;
     }
 
-    auto end() -> void {
+    auto End() -> void {
         ImGui::End();
     }
 
-    auto separator() -> void {
+    auto Separator() -> void {
         ImGui::Separator();
     }
 
-    auto button(const StringView label, const Variant variant, const ImVec2 size, bool icon) -> bool {
+    auto Button(const StringView label, const Variant variant, const ImVec2 size, bool icon) -> bool {
         const auto window = ImGui::GetCurrentWindow();
         if (window->SkipItems) {
             return false;
@@ -87,7 +87,7 @@ namespace Cobalt::Widgets
         return pressed;
     }
 
-    auto collapsing_header(const StringView label, const Color& text_color, const bool default_opened) -> bool {
+    auto CollapsingHeader(const StringView label, const Color& text_color, const bool default_opened) -> bool {
         auto* window = ImGui::GetCurrentWindow();
         if (window->SkipItems) {
             return false;

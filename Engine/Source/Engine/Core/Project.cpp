@@ -9,27 +9,27 @@
 
 namespace Cobalt
 {
-    auto Project::init(const CommandLineArgs& cli_args) -> void {
-        m_args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
+    auto Project::Init(const CommandLineArgs& cli_args) -> void {
+        _args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
 
-        m_name = "No Project";
-        m_version = "0.0.0";
+        _name = "No Project";
+        _version = "0.0.0";
 
-        m_editor_path = Filepath(m_args[0]).parent_path();
+        _editor_path = Filepath(_args[0]).parent_path();
 
-        if (m_args.size() < 2) {
+        if (_args.size() < 2) {
             CORE_WARN("Project: No file is provided. Please provide a valid path to a .cbproj file");
             return;
         }
 
-        if (!std::filesystem::exists(m_args[1])) {
-            CORE_ERROR("Project: File path does not exists: {}", m_args[1]);
+        if (!std::filesystem::exists(_args[1])) {
+            CORE_ERROR("Project: File path does not exists: {}", _args[1]);
             return;
         }
 
         auto valid_file = true;
-        const auto project_file_path = Filepath(m_args[1]);
-        m_project_path = project_file_path.parent_path();
+        const auto project_file_path = Filepath(_args[1]);
+        _project_path = project_file_path.parent_path();
 
         if (project_file_path.extension() != ".cbproj") {
             valid_file = false;
@@ -51,30 +51,30 @@ namespace Cobalt
         }
 
         auto table = result.table();
-        m_name = table["project"]["name"].value_or<String>("Default");
-        m_version = table["project"]["version"].value_or<String>("0.0.0");
-        m_startup_scene = UUID(table["project"]["startup_scene"].value_or<u64>(0));
+        _name = table["project"]["name"].value_or<String>("Default");
+        _version = table["project"]["version"].value_or<String>("0.0.0");
+        _startup_scene = UUID(table["project"]["startup_scene"].value_or<u64>(0));
 
-        CORE_INFO("Project: Loading. Name: {}. Version: {}", m_name, m_version);
+        CORE_INFO("Project: Loading. Name: {}. Version: {}", _name, _version);
     }
 
-    auto Project::get_name() -> String& {
-        return m_name;
+    auto Project::Name() -> String& {
+        return _name;
     }
 
-    auto Project::get_version() -> String& {
-        return m_version;
+    auto Project::Version() -> String& {
+        return _version;
     }
 
-    auto Project::get_editor_assets_path() const -> Filepath {
-        return m_editor_path / "Assets";
+    auto Project::EditorAssetsPath() const -> Filepath {
+        return _editor_path / "Assets";
     }
 
-    auto Project::get_project_assets_path() const -> Filepath {
-        return m_project_path / "Assets";
+    auto Project::ProjectAssetsPath() const -> Filepath {
+        return _project_path / "Assets";
     }
 
-    auto Project::get_startup_scene_uuid() const -> UUID {
-        return m_startup_scene;
+    auto Project::StartupSceneUUID() const -> UUID {
+        return _startup_scene;
     }
 } // namespace Cobalt

@@ -16,23 +16,23 @@ namespace Cobalt
     class ScriptManager final
     {
     public:
-        auto init(EngineContext& ctx) -> bool;
-        auto destroy() const -> void;
+        auto Init(EngineContext& ctx) -> bool;
+        auto ShutDown() const -> void;
 
-        auto load_script(const String& script_path) const -> Rc<Script>;
-        auto compile_script(Rc<Script>& script) const -> bool;
-        auto instantiate_script(EngineContext& ctx, entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
-        auto execute_start(const Rc<Script>& script, asIScriptObject* instance) const -> void;
-        auto execute_update(const Rc<Script>& script, asIScriptObject* instance, f32 delta_time) const -> void;
+        auto LoadScript(const String& script_path) const -> Rc<Script>;
+        auto CompileScript(Rc<Script>& script) const -> bool;
+        auto InstantiateScript(EngineContext& ctx, entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
+        auto ExecuteStart(const Rc<Script>& script, asIScriptObject* instance) const -> void;
+        auto ExecuteUpdate(const Rc<Script>& script, asIScriptObject* instance, f32 delta_time) const -> void;
 
-        auto get_engine() const -> asIScriptEngine*;
-        auto get_context() const -> asIScriptContext*;
-
-    private:
-        auto message_callback(const asSMessageInfo& msg) const -> void;
+        auto GetEngine() const -> asIScriptEngine*;
+        auto GetContext() const -> asIScriptContext*;
 
     private:
-        asIScriptEngine* m_engine = nullptr;
-        asIScriptContext* m_context = nullptr;
+        auto MessageCallback(const asSMessageInfo& msg) const -> void;
+
+    private:
+        asIScriptEngine* _engine = nullptr;
+        asIScriptContext* _context = nullptr;
     };
 }

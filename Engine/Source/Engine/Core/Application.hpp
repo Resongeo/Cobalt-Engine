@@ -15,17 +15,17 @@ namespace Cobalt
     public:
         virtual ~Application();
 
-        auto run(const CommandLineArgs& args) -> void;
+        auto Run(const CommandLineArgs& args) -> void;
 
-        virtual auto begin(EngineContext& ctx) -> void {}
-        virtual auto update(EngineContext& ctx) -> void {}
-        virtual auto end(EngineContext& ctx) -> void {}
-
-    private:
-        auto initialize(const CommandLineArgs& args) -> bool;
-        auto main_loop() -> void;
+        virtual auto OnBegin(EngineContext& ctx) -> void {}
+        virtual auto OnUpdate(EngineContext& ctx) -> void {}
+        virtual auto OnShutdown(EngineContext& ctx) -> void {}
 
     private:
-        EngineContext m_ctx = {};
+        auto Init(const CommandLineArgs& args) -> bool;
+        auto MainLoop() -> void;
+
+    private:
+        EngineContext _ctx = {};
     };
 } // namespace Cobalt
