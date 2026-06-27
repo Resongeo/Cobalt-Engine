@@ -9,6 +9,8 @@
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Scripting/ScriptEntity.hpp"
 
+#include <autowrapper/aswrappedcall.h>
+
 namespace Cobalt
 {
     namespace Utils
@@ -82,7 +84,7 @@ namespace Cobalt
         engine->RegisterGlobalFunction("void Print(string& in)", asFUNCTION(TestPrint), asCALL_CDECL);
 
         engine->SetDefaultNamespace("Scene");
-        engine->RegisterGlobalFunction("Entity find_by_name(string& in)", asFUNCTION(EntityFindByName), asCALL_CDECL);
+        engine->RegisterGlobalFunction("Entity find_by_name(string& in)", WRAP_FN(EntityFindByName), asCALL_GENERIC);
         engine->SetDefaultNamespace("");
     }
 
