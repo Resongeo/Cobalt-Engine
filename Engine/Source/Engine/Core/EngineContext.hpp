@@ -16,7 +16,6 @@ namespace Cobalt
 {
     struct EngineContext
     {
-        ScriptManager script_manager = {};
         DialogManager dialog_manager = {};
 
         entt::dispatcher dispatcher = {};

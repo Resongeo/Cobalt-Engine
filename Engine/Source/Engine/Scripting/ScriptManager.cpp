@@ -212,6 +212,11 @@ namespace Cobalt
         return _context;
     }
 
+    auto ScriptManager::Get() -> ScriptManager& {
+        static ScriptManager instance;
+        return instance;
+    }
+
     auto ScriptManager::MessageCallback(const asSMessageInfo& msg) const -> void {
         if (msg.type == asMSGTYPE_INFORMATION) {
             CORE_INFO("ScriptManager: {} ({}:{}) {}", msg.section, msg.row, msg.col, msg.message);

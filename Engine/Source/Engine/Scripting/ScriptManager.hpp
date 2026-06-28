@@ -28,6 +28,8 @@ namespace Cobalt
         auto GetEngine() const -> asIScriptEngine*;
         auto GetContext() const -> asIScriptContext*;
 
+        static auto Get() -> ScriptManager&;
+
     private:
         auto MessageCallback(const asSMessageInfo& msg) const -> void;
 

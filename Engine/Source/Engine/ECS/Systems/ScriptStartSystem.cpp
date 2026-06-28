@@ -17,9 +17,10 @@ namespace Cobalt
             }
 
             if (auto script = AssetManager::Get().GetAsset<Script>(ctx, script_id); script) {
-                ctx.script_manager.CompileScript(script);
-                instance = ctx.script_manager.InstantiateScript(ctx, entity, script);
-                ctx.script_manager.ExecuteStart(script, instance);
+                auto& script_manager = ScriptManager::Get();
+                script_manager.CompileScript(script);
+                instance = script_manager.InstantiateScript(ctx, entity, script);
+                script_manager.ExecuteStart(script, instance);
             }
         }
     }

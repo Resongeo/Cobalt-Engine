@@ -23,12 +23,13 @@ namespace Cobalt
     auto Application::Init(const CommandLineArgs& args) -> bool {
         Log::Init(_ctx);
 
+        // TODO: Have proper error types and TRY macro
         Project::Get().Init(args);
         AssetManager::Get().Init();
         SceneManager::Get().Init(_ctx);
 
         if (!Window::Get().Init()) return false;
-        if (!_ctx.script_manager.Init(_ctx)) return false;
+        if (!ScriptManager::Get().Init(_ctx)) return false;
 
         _ctx.dialog_manager.Init();
 
@@ -53,7 +54,7 @@ namespace Cobalt
 
     Application::~Application() {
         AssetManager::Get().SaveRegistry();
-        _ctx.script_manager.ShutDown();
+        ScriptManager::Get().ShutDown();
         Window::Get().ShutDown();
     }
 } // namespace Cobalt
