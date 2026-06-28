@@ -31,7 +31,7 @@ namespace Cobalt
         if (!Window::Get().Init()) return false;
         if (!ScriptManager::Get().Init(_ctx)) return false;
 
-        _ctx.dialog_manager.Init();
+        DialogManager::Get().Init();
 
         return true;
     }

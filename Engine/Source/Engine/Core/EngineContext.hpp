@@ -16,8 +16,6 @@ namespace Cobalt
 {
     struct EngineContext
     {
-        DialogManager dialog_manager = {};
-
         entt::dispatcher dispatcher = {};
 
         f32 delta_time = 0.0f;

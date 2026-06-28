@@ -22,6 +22,8 @@ namespace Cobalt
         auto Init() -> void;
         auto ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const -> void;
 
+        static auto Get() -> DialogManager&;
+
     private:
         SDL_Window* _window_handle = nullptr;
     };

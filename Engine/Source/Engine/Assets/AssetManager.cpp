@@ -236,7 +236,7 @@ namespace Cobalt
             static auto filter = AssetTypeToFilters(meta.type);
             const auto default_path = Project::Get().GetProjectAssetsPath().string();
 
-            ctx.dialog_manager.ShowSaveDialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
+            DialogManager::Get().ShowSaveDialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
                 sync_data->path = chosen_path;
                 sync_data->completed = true;
             });

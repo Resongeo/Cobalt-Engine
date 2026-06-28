@@ -36,4 +36,9 @@ namespace Cobalt
                 },
                 callback_ptr, _window_handle, sdl_filters.data(), sdl_filters.size(), default_path.c_str());
     }
+
+    auto DialogManager::Get() -> DialogManager& {
+        static DialogManager instance;
+        return instance;
+    }
 } // namespace Cobalt
