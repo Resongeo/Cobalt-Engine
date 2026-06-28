@@ -17,10 +17,10 @@ namespace Cobalt
     constexpr float THUMBNAIL_MAX_SIZE = 150.0f;
 
     void AssetBrowserPanel::Begin(EngineContext& ctx, EditorState& state) {
-        _assets_base_dir = ctx.project.ProjectAssetsPath();
+        _assets_base_dir = Project::Get().GetProjectAssetsPath();
         _current_dir = _assets_base_dir;
 
-        const auto editor_asset_path = ctx.project.EditorAssetsPath();
+        const auto editor_asset_path = Project::Get().GetEditorAssetsPath();
 
         _directory_texture = Memory::MakeRc<Texture2D>();
         _directory_texture->LoadFromFile(editor_asset_path / "Textures" / "Directory.png");

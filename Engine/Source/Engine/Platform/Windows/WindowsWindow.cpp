@@ -32,7 +32,7 @@ namespace Cobalt
 
         const auto primary_display = SDL_GetPrimaryDisplay();
         constexpr auto window_flags = SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_HIDDEN | SDL_WINDOW_HIGH_PIXEL_DENSITY;
-        const auto title = ctx.project.Name();
+        const auto title = Project::Get().GetName();
 
         auto* display_mode = SDL_GetCurrentDisplayMode(primary_display);
 

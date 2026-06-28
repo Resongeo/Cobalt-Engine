@@ -7,6 +7,7 @@
 #include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
 #include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Log.hpp"
+#include "Engine/Core/Project.hpp"
 
 #include <fstream>
 #include <ranges>
@@ -16,8 +17,8 @@
 
 namespace Cobalt
 {
-    auto AssetManager::Init(const Project& project) -> void {
-        _assets_dir = project.ProjectAssetsPath();
+    auto AssetManager::Init() -> void {
+        _assets_dir = Project::Get().GetProjectAssetsPath();
 
         if (!std::filesystem::exists(_assets_dir)) {
             std::filesystem::create_directories(_assets_dir);
@@ -233,7 +234,7 @@ namespace Cobalt
             auto sync_data = Memory::MakeRc<DialogSync>();
 
             static auto filter = AssetTypeToFilters(meta.type);
-            const auto default_path = ctx.project.ProjectAssetsPath().string();
+            const auto default_path = Project::Get().GetProjectAssetsPath().string();
 
             ctx.dialog_manager.ShowSaveDialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
                 sync_data->path = chosen_path;

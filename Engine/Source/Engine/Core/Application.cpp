@@ -23,8 +23,15 @@ namespace Cobalt
     auto Application::Init(const CommandLineArgs& args) -> bool {
         Log::Init(_ctx);
 
-        _ctx.project.Init(args);
-        _ctx.asset_manager.Init(_ctx.project);
+        Project::Get().Init(args);
+        /*
+        AssetManager::Get().Init();
+        SceneManager::Get().Init();
+        Window::Get().Init();
+        ScriptManager::GetInstance().Init();
+        */
+
+        _ctx.asset_manager.Init();
         _ctx.scene_manager.Init(_ctx);
 
         if (!_ctx.window.Init(_ctx)) return false;

@@ -113,7 +113,7 @@ namespace Cobalt
 
         // TODO: Temporary fix. IO.Filename gets overwritten somewhere
         auto& io = ImGui::GetIO();
-        const auto layout_ini = ctx.project.ProjectAssetsPath().parent_path() / "Settings" / "DefaultLayout.ini";
+        const auto layout_ini = Project::Get().GetProjectAssetsPath().parent_path() / "Settings" / "DefaultLayout.ini";
 
         if (!std::filesystem::exists(layout_ini.parent_path())) {
             std::filesystem::create_directories(layout_ini.parent_path());

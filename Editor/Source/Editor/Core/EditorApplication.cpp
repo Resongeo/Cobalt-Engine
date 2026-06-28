@@ -28,7 +28,7 @@ namespace Cobalt
         Gui::Init(ctx.window);
         Gui::SetupStyle();
 
-        _renderer.Init(10000, ctx.project.EditorAssetsPath());
+        _renderer.Init(10000, Project::Get().GetEditorAssetsPath());
 
         _state.framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         _state.framebuffer.Unbind();

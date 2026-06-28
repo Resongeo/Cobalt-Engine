@@ -15,7 +15,7 @@ namespace Cobalt
     class AssetManager final
     {
     public:
-        auto Init(const Project& project) -> void;
+        auto Init() -> void;
 
         auto RegisterAsset(const Filepath& path) const -> void;
         auto RegisterAsset(UUID id, const AssetMetadata& metadata) const -> void;

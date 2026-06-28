@@ -13,11 +13,13 @@ namespace Cobalt
     {
     public:
         auto Init(const CommandLineArgs& cli_args) -> void;
-        auto Name() -> String&;
-        auto Version() -> String&;
-        auto EditorAssetsPath() const -> Filepath;
-        auto ProjectAssetsPath() const -> Filepath;
-        auto StartupSceneUUID() const -> UUID;
+        auto GetName() -> String&;
+        auto GetVersion() -> String&;
+        auto GetEditorAssetsPath() const -> Filepath;
+        auto GetProjectAssetsPath() const -> Filepath;
+        auto GetStartupSceneUUID() const -> UUID;
+
+        static auto Get() -> Project&;
 
     private:
         Vector<String> _args = {};

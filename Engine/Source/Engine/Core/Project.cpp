@@ -58,23 +58,28 @@ namespace Cobalt
         CORE_INFO("Project: Loading. Name: {}. Version: {}", _name, _version);
     }
 
-    auto Project::Name() -> String& {
+    auto Project::GetName() -> String& {
         return _name;
     }
 
-    auto Project::Version() -> String& {
+    auto Project::GetVersion() -> String& {
         return _version;
     }
 
-    auto Project::EditorAssetsPath() const -> Filepath {
+    auto Project::GetEditorAssetsPath() const -> Filepath {
         return _editor_path / "Assets";
     }
 
-    auto Project::ProjectAssetsPath() const -> Filepath {
+    auto Project::GetProjectAssetsPath() const -> Filepath {
         return _project_path / "Assets";
     }
 
-    auto Project::StartupSceneUUID() const -> UUID {
+    auto Project::GetStartupSceneUUID() const -> UUID {
         return _startup_scene;
+    }
+
+    auto Project::Get() -> Project& {
+        static Project instance;
+        return instance;
     }
 } // namespace Cobalt

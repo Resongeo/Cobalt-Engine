@@ -16,7 +16,6 @@ namespace Cobalt
 {
     struct EngineContext
     {
-        Project project = {};
         Window window = {};
 
         AssetManager asset_manager = {};
