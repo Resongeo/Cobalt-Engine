@@ -90,6 +90,8 @@ set(ENGINE_SOURCES
 	Source/Engine/Scripting/ScriptGlue.hpp
 	Source/Engine/Events/LogEvents.hpp
 	Source/Engine/Events/EventBus.hpp
+	Source/Engine/Core/Time.cpp
+	Source/Engine/Core/Time.hpp
 )
 
 # -- Platform specific source files --

@@ -4,6 +4,7 @@
 #include "Engine/ECS/Systems/ScriptUpdateSystem.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Core/EngineContext.hpp"
+#include "Engine/Core/Time.hpp"
 #include "Engine/Scripting/Script.hpp"
 
 namespace Cobalt
@@ -17,7 +18,7 @@ namespace Cobalt
             }
 
             if (auto script = AssetManager::Get().GetAsset<Script>(ctx, script_id); script) {
-                ScriptManager::Get().ExecuteUpdate(script, instance, ctx.delta_time);
+                ScriptManager::Get().ExecuteUpdate(script, instance, Time::GetDeltaTime());
             }
         }
     }

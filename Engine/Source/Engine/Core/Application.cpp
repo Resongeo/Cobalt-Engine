@@ -3,6 +3,7 @@
 
 #include "Engine/Core/Application.hpp"
 #include "Engine/Core/Log.hpp"
+#include "Engine/Core/Time.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
@@ -32,21 +33,16 @@ namespace Cobalt
         if (!ScriptManager::Get().Init(_ctx)) return false;
 
         DialogManager::Get().Init();
+        Time::Init();
 
         return true;
     }
 
     auto Application::MainLoop() -> void {
-        u64 current_time = SDL_GetTicks();
-        u64 last_time = current_time;
         while (!_ctx.close_requested) {
-            current_time = SDL_GetTicks();
-            _ctx.delta_time = static_cast<f32>(current_time - last_time) / 1000.0f;
-            last_time = current_time;
-
-            Log::FlushEvents(_ctx);
-
             Window::Get().PollEvents(_ctx);
+            Time::Update();
+            Log::FlushEvents(_ctx);
             OnUpdate(_ctx);
             Window::Get().SwapBuffers();
         }
