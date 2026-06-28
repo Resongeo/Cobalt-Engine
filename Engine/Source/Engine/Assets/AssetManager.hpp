@@ -71,6 +71,8 @@ namespace Cobalt
             return uuid;
         }
 
+        static auto Get() -> AssetManager&;
+
     private:
         auto AssetTypeToString(AssetType type) const -> String;
         auto AssetTypeToFilters(AssetType type) const -> Vector<DialogFileFilter>;

@@ -52,7 +52,7 @@ namespace Cobalt
             if (Widgets::Button(ICON_REFRESH, Variant::Default, {0, 0}, true) || _directory_changed) {
                 for (auto& entry : std::filesystem::directory_iterator(_current_dir)) {
                     if (!entry.is_directory()) {
-                        ctx.asset_manager.RegisterAsset(entry.path());
+                        AssetManager::Get().RegisterAsset(entry.path());
                     }
                 }
 
@@ -92,7 +92,7 @@ namespace Cobalt
                 ImGui::InvisibleButton(filename_string.c_str(), {thumbnail_size, thumbnail_size});
 
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                    auto uuid = ctx.asset_manager.GetUUID(path);
+                    auto uuid = AssetManager::Get().GetUUID(path);
                     ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &uuid.value, sizeof(u64));
                     ImGui::EndDragDropSource();
                 }

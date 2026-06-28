@@ -24,14 +24,7 @@ namespace Cobalt
         Log::Init(_ctx);
 
         Project::Get().Init(args);
-        /*
         AssetManager::Get().Init();
-        SceneManager::Get().Init();
-        Window::Get().Init();
-        ScriptManager::GetInstance().Init();
-        */
-
-        _ctx.asset_manager.Init();
         _ctx.scene_manager.Init(_ctx);
 
         if (!Window::Get().Init()) return false;
@@ -59,7 +52,7 @@ namespace Cobalt
     }
 
     Application::~Application() {
-        _ctx.asset_manager.SaveRegistry();
+        AssetManager::Get().SaveRegistry();
         _ctx.script_manager.ShutDown();
         Window::Get().ShutDown();
     }

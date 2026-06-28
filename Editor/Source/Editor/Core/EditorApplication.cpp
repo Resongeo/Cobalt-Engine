@@ -65,7 +65,7 @@ namespace Cobalt
             {
                 if (ImGui::BeginMenu("File")) {
                     if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
-                        ctx.asset_manager.SaveAsset(ctx, ctx.scene_manager.GetActiveSceneUUID());
+                        AssetManager::Get().SaveAsset(ctx, ctx.scene_manager.GetActiveSceneUUID());
                     }
 
                     ImGui::EndMenu();
@@ -130,7 +130,7 @@ namespace Cobalt
 
         ImGui::Begin("Assets");
         {
-            for (auto [id, meta] : ctx.asset_manager.GetRegistry()) {
+            for (auto [id, meta] : AssetManager::Get().GetRegistry()) {
                 auto name_string = meta.path.string();
                 ImGui::Text("Name %s", name_string.c_str());
                 ImGui::PushID(id.value);

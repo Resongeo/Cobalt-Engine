@@ -16,7 +16,7 @@ namespace Cobalt
                 continue;
             }
 
-            if (auto script = ctx.asset_manager.GetAsset<Script>(ctx, script_id); script) {
+            if (auto script = AssetManager::Get().GetAsset<Script>(ctx, script_id); script) {
                 ctx.script_manager.ExecuteUpdate(script, instance, ctx.delta_time);
             }
         }

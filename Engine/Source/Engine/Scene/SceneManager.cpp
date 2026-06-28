@@ -10,11 +10,11 @@ namespace Cobalt
 {
     auto SceneManager::Init(EngineContext& ctx) -> void {
         const auto startup_scene_uuid = Project::Get().GetStartupSceneUUID();
-        if (ctx.asset_manager.IsAssetRegistered(startup_scene_uuid)) {
-            _active_scene = ctx.asset_manager.GetAsset<Scene>(ctx, startup_scene_uuid);
+        if (AssetManager::Get().IsAssetRegistered(startup_scene_uuid)) {
+            _active_scene = AssetManager::Get().GetAsset<Scene>(ctx, startup_scene_uuid);
             _active_scene_uuid = startup_scene_uuid;
         } else {
-            _active_scene_uuid = ctx.asset_manager.CreateInMemoryAsset<Scene>(AssetType::Scene);
+            _active_scene_uuid = AssetManager::Get().CreateInMemoryAsset<Scene>(AssetType::Scene);
             SetActiveScene(ctx, _active_scene_uuid);
 
             if (_active_scene) {
@@ -32,7 +32,7 @@ namespace Cobalt
     }
 
     auto SceneManager::SetActiveScene(EngineContext& ctx, const UUID uuid) -> void {
-        _active_scene = ctx.asset_manager.GetAsset<Scene>(ctx, uuid);
+        _active_scene = AssetManager::Get().GetAsset<Scene>(ctx, uuid);
     }
 
     auto SceneManager::SetActiveScene(const Rc<Scene>& scene) -> void {

@@ -258,6 +258,11 @@ namespace Cobalt
         return serializer->Serialize(_loaded[id], meta);
     }
 
+    auto AssetManager::Get() -> AssetManager& {
+        static AssetManager instance;
+        return instance;
+    }
+
     auto AssetManager::AssetTypeToString(const AssetType type) const -> String {
         switch (type) {
             case AssetType::Texture: return "Texture";
