@@ -12,7 +12,7 @@
 
 namespace Cobalt
 {
-    auto SceneHierarchyPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+    auto SceneHierarchyPanel::Draw(EditorState& state) -> void {
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0, 0});
 
         Widgets::Begin("Scene Hierarchy");

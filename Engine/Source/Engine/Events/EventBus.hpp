@@ -22,12 +22,12 @@ namespace Cobalt
 
         template<typename Event, auto Member, typename Instance>
         static void Subscribe(Instance* instance) {
-            _dispatcher.sink<Event>().connect<Member>(instance);
+            _dispatcher.sink<Event>().template connect<Member>(instance);
         }
 
         template<typename Event, auto Member, typename Instance>
         static void Unsubscribe(Instance* instance) {
-            _dispatcher.sink<Event>().disconnect<Member>(instance);
+            _dispatcher.sink<Event>().template disconnect<Member>(instance);
         }
 
     private:

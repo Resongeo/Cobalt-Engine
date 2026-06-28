@@ -10,6 +10,7 @@
 #include "Editor/Gui/Panels/ViewportPanel.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Log.hpp"
+#include "Engine/Assets/AssetManager.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
@@ -24,7 +25,7 @@
 
 namespace Cobalt
 {
-    auto EditorApplication::OnBegin(EngineContext& ctx) -> void {
+    auto EditorApplication::OnBegin() -> void {
         Gui::Init();
         Gui::SetupStyle();
 
@@ -51,21 +52,21 @@ namespace Cobalt
         });
 
         for (const auto& panel : _panels) {
-            panel->Begin(ctx, _state);
+            panel->Begin(_state);
         }
     }
 
-    auto EditorApplication::OnUpdate(EngineContext& ctx) -> void {
+    auto EditorApplication::OnUpdate() -> void {
         auto& scene_manager = SceneManager::Get();
-        scene_manager.Update(ctx);
+        scene_manager.Update();
 
-        Gui::BeginFrame(ctx);
+        Gui::BeginFrame();
         {
             ImGui::BeginMainMenuBar();
             {
                 if (ImGui::BeginMenu("File")) {
                     if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
-                        AssetManager::Get().SaveAsset(ctx, scene_manager.GetActiveSceneUUID());
+                        AssetManager::Get().SaveAsset(scene_manager.GetActiveSceneUUID());
                     }
 
                     ImGui::EndMenu();
@@ -92,7 +93,7 @@ namespace Cobalt
 
                 _state.active_scene = active_scene;
                 for (const auto& panel : _panels) {
-                    panel->Draw(ctx, _state);
+                    panel->Draw(_state);
                 }
             }
         }
@@ -110,7 +111,7 @@ namespace Cobalt
                 }
                 case SceneState::Update: {
                     if (ImGui::Button("Stop")) {
-                        scene_manager.SetActiveScene(ctx, scene_manager.GetActiveSceneUUID());
+                        scene_manager.SetActiveScene(scene_manager.GetActiveSceneUUID());
                         scene_manager.SetState(SceneState::None);
                         _state.active_scene = scene_manager.GetActiveScene();
                     }
@@ -140,6 +141,6 @@ namespace Cobalt
         }
         ImGui::End();
 
-        Gui::EndFrame(ctx);
+        Gui::EndFrame();
     }
 } // namespace Cobalt

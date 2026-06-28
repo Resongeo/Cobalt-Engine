@@ -13,6 +13,6 @@ namespace Cobalt
     {
     public:
         virtual ~ISystem() = default;
-        virtual auto Update(EngineContext& ctx, entt::registry& registry) -> void {}
+        virtual auto Update(entt::registry& registry) -> void {}
     };
 } // namespace Cobalt

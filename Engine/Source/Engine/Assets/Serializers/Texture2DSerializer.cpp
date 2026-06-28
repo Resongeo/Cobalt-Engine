@@ -6,7 +6,7 @@
 
 namespace Cobalt
 {
-    auto Texture2DSerializer::Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
+    auto Texture2DSerializer::Deserialize(const AssetMetadata& metadata) -> Rc<IAsset> {
         auto texture_2d = Memory::MakeRc<Texture2D>();
 
         if (texture_2d->LoadFromFile(metadata.path)) {

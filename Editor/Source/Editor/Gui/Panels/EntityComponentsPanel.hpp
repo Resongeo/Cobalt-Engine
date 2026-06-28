@@ -10,6 +10,6 @@ namespace Cobalt
     class EntityComponentsPanel final : public IPanel
     {
     public:
-        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Draw(EditorState& state) -> void override;
     };
 } // namespace Cobalt

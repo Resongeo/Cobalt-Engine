@@ -14,8 +14,8 @@ namespace Cobalt
     class EditorApplication final : public Application
     {
     public:
-        auto OnBegin(EngineContext& ctx) -> void override;
-        auto OnUpdate(EngineContext& ctx) -> void override;
+        auto OnBegin() -> void override;
+        auto OnUpdate() -> void override;
 
     private:
         Renderer _renderer = {};

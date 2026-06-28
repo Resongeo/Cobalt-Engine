@@ -3,12 +3,13 @@
 
 #include "Engine/ECS/Systems/ScriptStartSystem.hpp"
 #include "Engine/ECS/Components/ScriptComponent.hpp"
-#include "Engine/Core/EngineContext.hpp"
+#include "Engine/Assets/AssetManager.hpp"
 #include "Engine/Scripting/Script.hpp"
+#include "Engine/Scripting/ScriptManager.hpp"
 
 namespace Cobalt
 {
-    void ScriptStartSystem::Update(EngineContext& ctx, entt::registry& registry) {
+    void ScriptStartSystem::Update(entt::registry& registry) {
         for (const auto entity : registry.view<ScriptComponent>()) {
             auto& [script_id, instance] = registry.get<ScriptComponent>(entity);
 
@@ -16,10 +17,10 @@ namespace Cobalt
                 continue;
             }
 
-            if (auto script = AssetManager::Get().GetAsset<Script>(ctx, script_id); script) {
+            if (auto script = AssetManager::Get().GetAsset<Script>(script_id); script) {
                 auto& script_manager = ScriptManager::Get();
                 script_manager.CompileScript(script);
-                instance = script_manager.InstantiateScript(ctx, entity, script);
+                instance = script_manager.InstantiateScript(entity, script);
                 script_manager.ExecuteStart(script, instance);
             }
         }

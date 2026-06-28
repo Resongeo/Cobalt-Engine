@@ -68,7 +68,7 @@ namespace Cobalt
         }
     } // namespace Helpers
 
-    auto SceneSerializer::Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
+    auto SceneSerializer::Deserialize(const AssetMetadata& metadata) -> Rc<IAsset> {
         auto scene = Memory::MakeRc<Scene>();
         auto& registry = scene->GetRegistry();
 

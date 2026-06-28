@@ -13,8 +13,8 @@ namespace Cobalt
     class AssetBrowserPanel final : public IPanel
     {
     public:
-        auto Begin(EngineContext& ctx, EditorState& state) -> void override;
-        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Begin(EditorState& state) -> void override;
+        auto Draw(EditorState& state) -> void override;
 
     private:
         auto GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const -> Texture2D*;

@@ -15,7 +15,7 @@ namespace Cobalt
     public:
         virtual ~IAssetSerializer() = default;
 
-        virtual auto Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> = 0;
+        virtual auto Deserialize(const AssetMetadata& metadata) -> Rc<IAsset> = 0;
         virtual auto Serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool = 0;
     };
 }

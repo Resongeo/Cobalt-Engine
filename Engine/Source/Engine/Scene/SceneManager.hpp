@@ -17,15 +17,15 @@ namespace Cobalt
     public:
         ~SceneManager() = default;
 
-        auto Init(EngineContext& ctx) -> void;
+        auto Init() -> void;
 
         auto GetActiveScene() const -> Rc<Scene>;
         auto GetActiveSceneUUID() const -> UUID;
-        auto SetActiveScene(EngineContext& ctx, UUID uuid) -> void;
+        auto SetActiveScene(UUID uuid) -> void;
         auto SetActiveScene(const Rc<Scene>& scene) -> void;
         auto GetState() const -> SceneState;
         auto SetState(SceneState state) -> void;
-        auto Update(EngineContext& ctx) -> void;
+        auto Update() -> void;
 
         template <typename T, typename... Args>
         auto AddSystem(const Schedule schedule, Args&&... args) -> void {

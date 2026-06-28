@@ -4,7 +4,7 @@
 #include "Engine/ECS/Systems/EditorRenderSystem.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
-#include "Engine/Core/EngineContext.hpp"
+#include "Engine/Assets/AssetManager.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
@@ -13,7 +13,7 @@ namespace Cobalt
     EditorRenderSystem::EditorRenderSystem(Renderer* renderer, Camera* camera, Framebuffer* framebuffer) :
         _renderer(renderer), _camera(camera), _framebuffer(framebuffer) {}
 
-    auto EditorRenderSystem::Update(EngineContext& ctx, entt::registry& registry) -> void {
+    auto EditorRenderSystem::Update(entt::registry& registry) -> void {
         _framebuffer->Bind();
 
         const auto viewport_size = _framebuffer->GetSize();
@@ -24,7 +24,7 @@ namespace Cobalt
             auto [tint, texture_id] = registry.get<SpriteComponent>(entity);
             auto [pos, scale, rotation] = registry.get<TransformComponent>(entity);
 
-            if (auto texture = AssetManager::Get().GetAsset<Texture2D>(ctx, texture_id); texture) {
+            if (auto texture = AssetManager::Get().GetAsset<Texture2D>(texture_id); texture) {
                 _renderer->SubmitQuad({pos.x, pos.y, 0}, scale, rotation, tint, texture);
             } else {
                 _renderer->SubmitQuad({pos.x, pos.y, 0}, scale, rotation, tint);

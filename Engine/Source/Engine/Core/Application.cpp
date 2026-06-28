@@ -4,6 +4,11 @@
 #include "Engine/Core/Application.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Time.hpp"
+#include "Engine/Core/Project.hpp"
+#include "Engine/Events/EventBus.hpp"
+#include "Engine/Assets/AssetManager.hpp"
+#include "Engine/Scene/SceneManager.hpp"
+#include "Engine/Scripting/ScriptManager.hpp"
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
@@ -16,36 +21,42 @@ namespace Cobalt
             return;
         }
 
-        OnBegin(_ctx);
+        OnBegin();
         MainLoop();
-        OnShutdown(_ctx);
+        OnShutdown();
     }
 
     auto Application::Init(const CommandLineArgs& args) -> bool {
-        Log::Init(_ctx);
+        Log::Init();
 
         // TODO: Have proper error types and TRY macro
         Project::Get().Init(args);
         AssetManager::Get().Init();
-        SceneManager::Get().Init(_ctx);
+        SceneManager::Get().Init();
 
         if (!Window::Get().Init()) return false;
-        if (!ScriptManager::Get().Init(_ctx)) return false;
+        if (!ScriptManager::Get().Init()) return false;
 
         DialogManager::Get().Init();
         Time::Init();
+
+        EventBus::Subscribe<ApplicationQuitEvent, &Application::OnApplicationQuit>(this);
 
         return true;
     }
 
     auto Application::MainLoop() -> void {
-        while (!_ctx.close_requested) {
-            Window::Get().PollEvents(_ctx);
+        while (!_close_requested) {
+            Window::Get().PollEvents();
             Time::Update();
-            Log::FlushEvents(_ctx);
-            OnUpdate(_ctx);
+            Log::FlushEvents();
+            OnUpdate();
             Window::Get().SwapBuffers();
         }
+    }
+
+    auto Application::OnApplicationQuit(const Cobalt::ApplicationQuitEvent& event) -> void {
+        _close_requested = true;
     }
 
     Application::~Application() {

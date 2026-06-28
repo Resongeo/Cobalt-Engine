@@ -13,8 +13,8 @@ namespace Cobalt
     class Log final
     {
     public:
-        static auto Init(EngineContext& ctx) -> void;
-        static auto FlushEvents(EngineContext& ctx) -> void;
+        static auto Init() -> void;
+        static auto FlushEvents() -> void;
         static auto CoreLogger() -> Rc<spdlog::logger>&;
 
     private:

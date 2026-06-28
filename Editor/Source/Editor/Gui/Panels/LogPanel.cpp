@@ -12,11 +12,11 @@
 
 namespace Cobalt
 {
-    void LogPanel::Begin(EngineContext& ctx, EditorState& state) {
+    void LogPanel::Begin(EditorState& state) {
         EventBus::Subscribe<LogEvent, &LogPanel::AddLogEvent>(this);
     }
 
-    auto LogPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+    auto LogPanel::Draw(EditorState& state) -> void {
         Widgets::Begin("Logs", {8, 8});
         {
             if (Widgets::Button(ICON_TRASH, Variant::Default, {0, 0}, true)) {

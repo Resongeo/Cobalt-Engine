@@ -11,8 +11,8 @@ namespace Cobalt
     class LogPanel final : public IPanel
     {
     public:
-        auto Begin(EngineContext& ctx, EditorState& state) -> void override;
-        auto Draw(EngineContext& ctx, EditorState& state) -> void override;
+        auto Begin(EditorState& state) -> void override;
+        auto Draw(EditorState& state) -> void override;
 
     private:
         auto AddLogEvent(const LogEvent& event) -> void;

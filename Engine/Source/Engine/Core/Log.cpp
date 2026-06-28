@@ -2,7 +2,6 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Core/Log.hpp"
-#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Events/LogEvents.hpp"
 #include "Engine/Events/EventBus.hpp"
 
@@ -22,7 +21,7 @@ namespace Cobalt
     static std::mutex log_queue_mutex;
     static Vector<PendingLogEntry> pending_logs;
 
-    auto Log::Init(EngineContext& ctx) -> void {
+    auto Log::Init() -> void {
         auto callback_sink = Memory::MakeRc<spdlog::sinks::callback_sink_mt>([&](const spdlog::details::log_msg& msg) {
             std::lock_guard lock(log_queue_mutex);
             pending_logs.push_back({msg.level, String(msg.payload.data(), msg.payload.size())});
@@ -31,7 +30,7 @@ namespace Cobalt
         _core_logger = Memory::MakeRc<spdlog::logger>("Engine", spdlog::sinks_init_list{console_sink, callback_sink});
     }
 
-    auto Log::FlushEvents(EngineContext& ctx) -> void {
+    auto Log::FlushEvents() -> void {
         static Vector<PendingLogEntry> logs_to_process = {};
 
         {

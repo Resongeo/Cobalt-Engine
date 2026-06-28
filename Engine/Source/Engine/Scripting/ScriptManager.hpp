@@ -16,12 +16,12 @@ namespace Cobalt
     class ScriptManager final
     {
     public:
-        auto Init(EngineContext& ctx) -> bool;
+        auto Init() -> bool;
         auto ShutDown() const -> void;
 
         auto LoadScript(const String& script_path) const -> Rc<Script>;
         auto CompileScript(Rc<Script>& script) const -> bool;
-        auto InstantiateScript(EngineContext& ctx, entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
+        auto InstantiateScript(entt::entity entity, const Rc<Script>& script) const -> asIScriptObject*;
         auto ExecuteStart(const Rc<Script>& script, asIScriptObject* instance) const -> void;
         auto ExecuteUpdate(const Rc<Script>& script, asIScriptObject* instance, f32 delta_time) const -> void;
 

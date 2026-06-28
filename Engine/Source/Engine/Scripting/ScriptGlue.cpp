@@ -2,10 +2,10 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Scripting/ScriptGlue.hpp"
-#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Math.hpp"
+#include "Engine/Scene/SceneManager.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Scripting/ScriptEntity.hpp"
 
@@ -13,27 +13,6 @@
 
 namespace Cobalt
 {
-    namespace Utils
-    {
-        inline auto GetEngineCtx() -> EngineContext* {
-            const auto* as_ctx = asGetActiveContext();
-            if (!as_ctx) {
-                return nullptr;
-            }
-
-            const auto* engine = as_ctx->GetEngine();
-            return static_cast<EngineContext*>(engine->GetUserData());
-        }
-
-        static auto GetActiveRegistry() -> entt::registry* {
-            if (const auto* ctx = GetEngineCtx(); ctx) {
-                return &SceneManager::Get().GetActiveScene()->GetRegistry();
-            }
-
-            return nullptr;
-        }
-    }
-
     auto TestPrint(String& msg) -> void {
         CORE_INFO("Script: {}", msg);
     }
@@ -51,16 +30,18 @@ namespace Cobalt
     }
 
     auto EntityFindByName(const String& name) -> ScriptEntity {
-        auto* registry = Utils::GetActiveRegistry();
-        if (!registry) {
+        const auto scene = SceneManager::Get().GetActiveScene();
+        if (!scene) {
             return ScriptEntity{};
         }
 
-        const auto view = registry->view<TagComponent>();
+        auto& registry = scene->GetRegistry();
+
+        const auto view = registry.view<TagComponent>();
         for (auto entity : view) {
             if (view.get<TagComponent>(entity).name == name) {
                 auto script_entity = ScriptEntity{};
-                script_entity.entity = {entity, registry};
+                script_entity.entity = {entity, &registry};
 
                 return script_entity;
             }

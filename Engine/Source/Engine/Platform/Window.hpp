@@ -16,7 +16,7 @@ namespace Cobalt
     public:
         auto Init() -> bool;
 
-        auto PollEvents(EngineContext& ctx) const -> void;
+        auto PollEvents() const -> void;
         auto SwapBuffers() const -> void;
         auto ShutDown() const -> void;
 

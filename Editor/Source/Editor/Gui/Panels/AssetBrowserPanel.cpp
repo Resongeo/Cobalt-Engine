@@ -8,6 +8,7 @@
 #include "Editor/Gui/Widgets.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
+#include "Engine/Assets/AssetManager.hpp"
 
 #include <imgui.h>
 
@@ -16,7 +17,7 @@ namespace Cobalt
     constexpr float THUMBNAIL_MIN_SIZE = 70.0f;
     constexpr float THUMBNAIL_MAX_SIZE = 150.0f;
 
-    void AssetBrowserPanel::Begin(EngineContext& ctx, EditorState& state) {
+    void AssetBrowserPanel::Begin(EditorState& state) {
         _assets_base_dir = Project::Get().GetProjectAssetsPath();
         _current_dir = _assets_base_dir;
 
@@ -35,7 +36,7 @@ namespace Cobalt
         _texture_texture->LoadFromFile(editor_asset_path / "Textures" / "Texture.png");
     }
 
-    auto AssetBrowserPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+    auto AssetBrowserPanel::Draw(EditorState& state) -> void {
         Widgets::Begin("Asset Browser", {8, 8});
         {
             ImGui::PushFont(Fonts::icon);

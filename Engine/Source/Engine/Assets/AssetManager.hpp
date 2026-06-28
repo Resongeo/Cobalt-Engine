@@ -29,10 +29,10 @@ namespace Cobalt
 
         static auto GetAssetTypeFromExtension(const Filepath& path) -> AssetType;
 
-        auto SaveAsset(EngineContext& ctx, UUID id) const -> bool;
+        auto SaveAsset(UUID id) const -> bool;
 
         template <typename T>
-        auto GetAsset(EngineContext& ctx, const UUID id) const -> Rc<T> {
+        auto GetAsset(const UUID id) const -> Rc<T> {
             if (!id.IsValid()) {
                 return nullptr;
             }
@@ -48,7 +48,7 @@ namespace Cobalt
                 return nullptr;
             }
 
-            if (const auto asset = serializer->Deserialize(ctx, metadata)) {
+            if (const auto asset = serializer->Deserialize(metadata)) {
                 _loaded[id] = asset;
                 return std::static_pointer_cast<T>(asset);
             }

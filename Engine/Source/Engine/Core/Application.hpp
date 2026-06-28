@@ -4,9 +4,7 @@
 #pragma once
 
 #include "Engine/Core/CommandLineArgs.hpp"
-#include "EngineContext.hpp"
-
-union SDL_Event;
+#include "Engine/Events/ApplicationEvents.hpp"
 
 namespace Cobalt
 {
@@ -17,15 +15,16 @@ namespace Cobalt
 
         auto Run(const CommandLineArgs& args) -> void;
 
-        virtual auto OnBegin(EngineContext& ctx) -> void {}
-        virtual auto OnUpdate(EngineContext& ctx) -> void {}
-        virtual auto OnShutdown(EngineContext& ctx) -> void {}
+        virtual auto OnBegin() -> void {}
+        virtual auto OnUpdate() -> void {}
+        virtual auto OnShutdown() -> void {}
 
     private:
         auto Init(const CommandLineArgs& args) -> bool;
         auto MainLoop() -> void;
+        auto OnApplicationQuit(const ApplicationQuitEvent& event) -> void;
 
     private:
-        EngineContext _ctx = {};
+        bool _close_requested = false;
     };
 } // namespace Cobalt

@@ -2,8 +2,8 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Scripting/ScriptManager.hpp"
-#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Log.hpp"
+#include "Engine/Scene/SceneManager.hpp"
 #include "Engine/Scripting/ScriptEntity.hpp"
 #include "Engine/Scripting/ScriptGlue.hpp"
 
@@ -17,7 +17,7 @@
 
 namespace Cobalt
 {
-    auto ScriptManager::Init(EngineContext& ctx) -> bool {
+    auto ScriptManager::Init() -> bool {
         _engine = asCreateScriptEngine();
         if (_engine == nullptr) {
             return false;
@@ -33,8 +33,6 @@ namespace Cobalt
         if (result < 0) {
             return false;
         }
-
-        _engine->SetUserData(&ctx);
 
         RegisterStdString(_engine);
         RegisterScriptMath(_engine);
@@ -126,7 +124,7 @@ namespace Cobalt
         return script;
     }
 
-    auto ScriptManager::InstantiateScript(EngineContext& ctx, const entt::entity entity, const Rc<Script>& script) const
+    auto ScriptManager::InstantiateScript(const entt::entity entity, const Rc<Script>& script) const
             -> asIScriptObject* {
         if (!script || !script->factory_func) {
             return nullptr;

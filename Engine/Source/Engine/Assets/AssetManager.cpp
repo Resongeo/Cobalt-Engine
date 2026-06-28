@@ -5,7 +5,6 @@
 #include "Engine/Assets/Serializers/SceneSerializer.hpp"
 #include "Engine/Assets/Serializers/ScriptSerializer.hpp"
 #include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
-#include "Engine/Core/EngineContext.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
 
@@ -218,7 +217,7 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::SaveAsset(EngineContext& ctx, const UUID id) const -> bool {
+    auto AssetManager::SaveAsset(const UUID id) const -> bool {
         auto meta = GetMetadata(id);
         const auto serializer = _serializers[static_cast<usize>(meta.type)];
 

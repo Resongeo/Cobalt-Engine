@@ -5,6 +5,7 @@
 #include "Editor/Gui/Widgets.hpp"
 #include "Engine/ECS/Components/TransformComponent.hpp"
 #include "Engine/ECS/Entity.hpp"
+#include "Engine/Scene/SceneManager.hpp"
 
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
@@ -26,7 +27,7 @@ namespace Cobalt
         return ImGuizmo::UNIVERSAL;
     }
 
-    auto ViewportPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
+    auto ViewportPanel::Draw(EditorState& state) -> void {
         Widgets::Begin("Viewport");
         {
             static auto mode = ImGuizmo::LOCAL;

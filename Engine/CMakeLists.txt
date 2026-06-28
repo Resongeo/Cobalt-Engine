@@ -62,7 +62,6 @@ set(ENGINE_SOURCES
 	Source/Engine/Assets/AssetManager.hpp
 	Source/Engine/Assets/AssetType.hpp
 	Source/Engine/Assets/AssetMetadata.hpp
-	Source/Engine/Core/EngineContext.hpp
 	Source/Engine/Assets/IAsset.hpp
 	Source/Engine/Assets/IAssetSerializer.hpp
 	Source/Engine/Graphics/Texture2D.cpp

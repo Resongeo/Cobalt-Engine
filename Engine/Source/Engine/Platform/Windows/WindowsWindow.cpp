@@ -2,7 +2,7 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Platform/Window.hpp"
-#include "Engine/Core/EngineContext.hpp"
+#include "Engine/Core/Project.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Events/ApplicationEvents.hpp"
 #include "Engine/Events/DropEvents.hpp"
@@ -101,7 +101,7 @@ namespace Cobalt
         return true;
     }
 
-    auto Window::PollEvents(EngineContext& ctx) const -> void {
+    auto Window::PollEvents() const -> void {
         static SDL_Event sdl_event;
 
         while (SDL_PollEvent(&sdl_event)) {
@@ -113,7 +113,6 @@ namespace Cobalt
                 // Application events
                 case SDL_EVENT_QUIT: {
                     EventBus::Trigger<ApplicationQuitEvent>();
-                    ctx.close_requested = true;
                     break;
                 }
 

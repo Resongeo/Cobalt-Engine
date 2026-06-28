@@ -2,11 +2,11 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Assets/Serializers/ScriptSerializer.hpp"
-#include "Engine/Core/EngineContext.hpp"
+#include "Engine/Scripting/ScriptManager.hpp"
 
 namespace Cobalt
 {
-    auto ScriptSerializer::Deserialize(EngineContext& ctx, const AssetMetadata& metadata) -> Rc<IAsset> {
+    auto ScriptSerializer::Deserialize(const AssetMetadata& metadata) -> Rc<IAsset> {
         // TODO: Load bytecode when implemented
         return ScriptManager::Get().LoadScript(metadata.path.string());
     }

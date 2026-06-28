@@ -107,7 +107,7 @@ namespace Cobalt
         style.Colors[ImGuiCol_TabHovered]          = IMVEC4(Color::FromOKLCH(0.61f, 0.17f, 260.0f));
     }
 
-    auto Gui::BeginFrame(const EngineContext& ctx) -> void {
+    auto Gui::BeginFrame() -> void {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL3_NewFrame();
 
@@ -130,7 +130,7 @@ namespace Cobalt
         ImGui_ImplSDL3_ProcessEvent(event);
     }
 
-    auto Gui::EndFrame(const EngineContext& ctx) -> void {
+    auto Gui::EndFrame() -> void {
         const auto& io = ImGui::GetIO();
 
         ImGui::Render();
