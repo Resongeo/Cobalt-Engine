@@ -25,7 +25,7 @@
 
 namespace Cobalt
 {
-    auto Gui::Init(const Window& window) -> void {
+    auto Gui::Init() -> void {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -59,7 +59,7 @@ namespace Cobalt
             &icon_font_config
         );
 
-        ImGui_ImplSDL3_InitForOpenGL(window.GetHandle(), window.GetGLContext());
+        ImGui_ImplSDL3_InitForOpenGL(Window::Get().GetHandle(), Window::Get().GetGLContext());
         ImGui_ImplOpenGL3_Init("#version 450 core");
     }
 
@@ -140,8 +140,8 @@ namespace Cobalt
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            auto* backup_current_window = ctx.window.GetHandle();
-            const auto backup_current_context = ctx.window.GetGLContext();
+            auto* backup_current_window = Window::Get().GetHandle();
+            const auto backup_current_context = Window::Get().GetGLContext();
             ImGui::UpdatePlatformWindows();
             ImGui::RenderPlatformWindowsDefault();
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);

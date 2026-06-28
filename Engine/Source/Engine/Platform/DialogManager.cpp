@@ -7,8 +7,8 @@
 
 namespace Cobalt
 {
-    auto DialogManager::Init(const Window& window) -> void {
-        _window_handle = window.GetHandle();
+    auto DialogManager::Init() -> void {
+        _window_handle = Window::Get().GetHandle();
     }
 
     auto DialogManager::ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const

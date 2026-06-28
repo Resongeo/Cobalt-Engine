@@ -25,7 +25,7 @@
 namespace Cobalt
 {
     auto EditorApplication::OnBegin(EngineContext& ctx) -> void {
-        Gui::Init(ctx.window);
+        Gui::Init();
         Gui::SetupStyle();
 
         _renderer.Init(10000, Project::Get().GetEditorAssetsPath());
@@ -45,7 +45,7 @@ namespace Cobalt
         _panels.emplace_back(Memory::MakeBox<ViewportPanel>());
         _panels.emplace_back(Memory::MakeBox<LogPanel>());
 
-        ctx.window.SetNativeEventCallback([](void* event) {
+        Window::Get().SetNativeEventCallback([](void* event) {
             const auto* sdl_event = static_cast<SDL_Event*>(event);
             Gui::ProcessEvent(sdl_event);
         });

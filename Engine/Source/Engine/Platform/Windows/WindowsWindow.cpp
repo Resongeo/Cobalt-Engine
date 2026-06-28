@@ -19,7 +19,7 @@ namespace Cobalt
 {
     SDL_GLContext gl_context = nullptr;
 
-    auto Window::Init(EngineContext& ctx) -> bool {
+    auto Window::Init() -> bool {
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
             CORE_CRITICAL("Platform: Failed to initialize SDL3: {}", SDL_GetError());
             return false;
@@ -227,6 +227,11 @@ namespace Cobalt
         i32 width, height = 0;
         SDL_GetWindowSize(_handle, &width, &height);
         return {width, height};
+    }
+
+    auto Window::Get() -> Window& {
+        static Window instance;
+        return instance;
     }
 
     auto Window::ShutDown() const -> void {

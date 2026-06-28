@@ -14,7 +14,8 @@ namespace Cobalt
     class Window final
     {
     public:
-        auto Init(EngineContext& ctx) -> bool;
+        auto Init() -> bool;
+
         auto PollEvents(EngineContext& ctx) const -> void;
         auto SwapBuffers() const -> void;
         auto ShutDown() const -> void;
@@ -23,6 +24,8 @@ namespace Cobalt
         auto GetHandle() const -> SDL_Window*;
         auto GetGLContext() const -> SDL_GLContextState*;
         auto GetSize() const -> Vec<2, i32>;
+
+        static auto Get() -> Window&;
 
     private:
         SDL_Window* _handle = nullptr;

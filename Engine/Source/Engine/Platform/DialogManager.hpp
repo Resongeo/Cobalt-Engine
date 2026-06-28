@@ -19,7 +19,7 @@ namespace Cobalt
     class DialogManager final
     {
     public:
-        auto Init(const Window& window) -> void;
+        auto Init() -> void;
         auto ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const -> void;
 
     private:

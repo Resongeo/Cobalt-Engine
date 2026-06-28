@@ -13,7 +13,7 @@ namespace Cobalt
     class Gui final
     {
     public:
-        static auto Init(const Window& window) -> void;
+        static auto Init() -> void;
         static auto SetupStyle() -> void;
         static auto BeginFrame(const EngineContext& ctx) -> void;
         static auto EndFrame(const EngineContext& ctx) -> void;

@@ -34,10 +34,10 @@ namespace Cobalt
         _ctx.asset_manager.Init();
         _ctx.scene_manager.Init(_ctx);
 
-        if (!_ctx.window.Init(_ctx)) return false;
+        if (!Window::Get().Init()) return false;
         if (!_ctx.script_manager.Init(_ctx)) return false;
 
-        _ctx.dialog_manager.Init(_ctx.window);
+        _ctx.dialog_manager.Init();
 
         return true;
     }
@@ -52,15 +52,15 @@ namespace Cobalt
 
             Log::FlushEvents(_ctx);
 
-            _ctx.window.PollEvents(_ctx);
+            Window::Get().PollEvents(_ctx);
             OnUpdate(_ctx);
-            _ctx.window.SwapBuffers();
+            Window::Get().SwapBuffers();
         }
     }
 
     Application::~Application() {
         _ctx.asset_manager.SaveRegistry();
         _ctx.script_manager.ShutDown();
-        _ctx.window.ShutDown();
+        Window::Get().ShutDown();
     }
 } // namespace Cobalt
