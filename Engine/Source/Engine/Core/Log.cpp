@@ -4,6 +4,7 @@
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/EngineContext.hpp"
 #include "Engine/Events/LogEvents.hpp"
+#include "Engine/Events/EventBus.hpp"
 
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
@@ -51,7 +52,7 @@ namespace Cobalt
                 default: cobalt_level = LogLevel::Info; break;
             }
 
-            ctx.dispatcher.trigger<LogEvent>({.level = cobalt_level, .message = entry.message});
+            EventBus::Trigger<LogEvent>({.level = cobalt_level, .message = entry.message});
         }
 
         pending_logs.clear();

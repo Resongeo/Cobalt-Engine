@@ -9,6 +9,7 @@
 #include "Engine/Events/GamepadEvents.hpp"
 #include "Engine/Events/KeyboardEvents.hpp"
 #include "Engine/Events/WindowEvents.hpp"
+#include "Engine/Events/EventBus.hpp"
 
 #include <SDL3/SDL.h>
 
@@ -111,98 +112,98 @@ namespace Cobalt
             switch (sdl_event.type) {
                 // Application events
                 case SDL_EVENT_QUIT: {
-                    ctx.dispatcher.trigger<ApplicationQuitEvent>();
+                    EventBus::Trigger<ApplicationQuitEvent>();
                     ctx.close_requested = true;
                     break;
                 }
 
                 // Window events
                 case SDL_EVENT_WINDOW_MOVED: {
-                    ctx.dispatcher.trigger<WindowMovedEvent>(
+                    EventBus::Trigger<WindowMovedEvent>(
                             {static_cast<u32>(sdl_event.window.data1), static_cast<u32>(sdl_event.window.data2)});
                     break;
                 }
                 case SDL_EVENT_WINDOW_RESIZED: {
-                    ctx.dispatcher.trigger<WindowResizedEvent>(
+                    EventBus::Trigger<WindowResizedEvent>(
                             {static_cast<u32>(sdl_event.window.data1), static_cast<u32>(sdl_event.window.data2)});
                     break;
                 }
                 case SDL_EVENT_WINDOW_MINIMIZED: {
-                    ctx.dispatcher.trigger<WindowMinimizedEvent>();
+                    EventBus::Trigger<WindowMinimizedEvent>();
                     break;
                 }
                 case SDL_EVENT_WINDOW_MAXIMIZED: {
-                    ctx.dispatcher.trigger<WindowMaximizedEvent>();
+                    EventBus::Trigger<WindowMaximizedEvent>();
                     break;
                 }
                 case SDL_EVENT_WINDOW_RESTORED: {
-                    ctx.dispatcher.trigger<WindowRestoredEvent>();
+                    EventBus::Trigger<WindowRestoredEvent>();
                     break;
                 }
                 case SDL_EVENT_WINDOW_ENTER_FULLSCREEN: {
-                    ctx.dispatcher.trigger<WindowEnterFullscreenEvent>();
+                    EventBus::Trigger<WindowEnterFullscreenEvent>();
                     break;
                 }
                 case SDL_EVENT_WINDOW_LEAVE_FULLSCREEN: {
-                    ctx.dispatcher.trigger<WindowLeaveFullscreenEvent>();
+                    EventBus::Trigger<WindowLeaveFullscreenEvent>();
                     break;
                 }
 
                 // Keyboard events
                 case SDL_EVENT_KEY_DOWN: {
-                    ctx.dispatcher.trigger<KeyboardKeyDownEvent>();
+                    EventBus::Trigger<KeyboardKeyDownEvent>();
                     break;
                 }
                 case SDL_EVENT_KEY_UP: {
-                    ctx.dispatcher.trigger<KeyboardKeyUpEvent>();
+                    EventBus::Trigger<KeyboardKeyUpEvent>();
                     break;
                 }
                 case SDL_EVENT_TEXT_INPUT: {
-                    ctx.dispatcher.trigger<KeyboardTextInputEvent>();
+                    EventBus::Trigger<KeyboardTextInputEvent>();
                     break;
                 }
 
                 // Gamepad events
                 case SDL_EVENT_GAMEPAD_AXIS_MOTION: {
-                    ctx.dispatcher.trigger<GamepadAxisMotionEvent>();
+                    EventBus::Trigger<GamepadAxisMotionEvent>();
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_BUTTON_DOWN: {
-                    ctx.dispatcher.trigger<GamepadButtonDownEvent>();
+                    EventBus::Trigger<GamepadButtonDownEvent>();
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_BUTTON_UP: {
-                    ctx.dispatcher.trigger<GamepadButtonUpEvent>();
+                    EventBus::Trigger<GamepadButtonUpEvent>();
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_ADDED: {
-                    ctx.dispatcher.trigger<GamepadAddedEvent>();
+                    EventBus::Trigger<GamepadAddedEvent>();
                     break;
                 }
                 case SDL_EVENT_GAMEPAD_REMOVED: {
-                    ctx.dispatcher.trigger<GamepadRemovedEvent>();
+                    EventBus::Trigger<GamepadRemovedEvent>();
                     break;
                 }
 
                 // Drop events
                 case SDL_EVENT_DROP_FILE: {
-                    ctx.dispatcher.trigger<DropFileEvent>({sdl_event.drop.data});
+                    EventBus::Trigger<DropFileEvent>({sdl_event.drop.data});
                     break;
                 }
                 case SDL_EVENT_DROP_TEXT: {
-                    ctx.dispatcher.trigger<DropTextEvent>({sdl_event.drop.data});
+                    EventBus::Trigger<DropTextEvent>({sdl_event.drop.data});
                     break;
                 }
                 case SDL_EVENT_DROP_BEGIN: {
-                    ctx.dispatcher.trigger<DropBeginEvent>();
+                    EventBus::Trigger<DropBeginEvent>();
                     break;
                 }
                 case SDL_EVENT_DROP_COMPLETE: {
-                    ctx.dispatcher.trigger<DropCompleteEvent>();
+                    EventBus::Trigger<DropCompleteEvent>();
                     break;
                 }
                 case SDL_EVENT_DROP_POSITION: {
-                    ctx.dispatcher.trigger<DropPositionEvent>({static_cast<u32>(sdl_event.drop.x), static_cast<u32>(sdl_event.drop.y)});
+                    EventBus::Trigger<DropPositionEvent>({static_cast<u32>(sdl_event.drop.x), static_cast<u32>(sdl_event.drop.y)});
                     break;
                 }
 

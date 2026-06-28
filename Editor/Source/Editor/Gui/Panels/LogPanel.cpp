@@ -6,13 +6,14 @@
 #include "Editor/Gui/FontIcons.hpp"
 #include "Editor/Gui/Colors.hpp"
 #include "Editor/Gui/Fonts.hpp"
+#include "Engine/Events/EventBus.hpp"
 
 #include <imgui_internal.h>
 
 namespace Cobalt
 {
     void LogPanel::Begin(EngineContext& ctx, EditorState& state) {
-        ctx.dispatcher.sink<LogEvent>().connect<&LogPanel::AddLogEvent>(this);
+        EventBus::Subscribe<LogEvent, &LogPanel::AddLogEvent>(this);
     }
 
     auto LogPanel::Draw(EngineContext& ctx, EditorState& state) -> void {
