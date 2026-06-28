@@ -16,7 +16,6 @@ namespace Cobalt
 {
     struct EngineContext
     {
-        SceneManager scene_manager = {};
         ScriptManager script_manager = {};
         DialogManager dialog_manager = {};
 

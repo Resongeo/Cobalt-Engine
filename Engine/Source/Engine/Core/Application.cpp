@@ -25,7 +25,7 @@ namespace Cobalt
 
         Project::Get().Init(args);
         AssetManager::Get().Init();
-        _ctx.scene_manager.Init(_ctx);
+        SceneManager::Get().Init(_ctx);
 
         if (!Window::Get().Init()) return false;
         if (!_ctx.script_manager.Init(_ctx)) return false;

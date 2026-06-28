@@ -45,6 +45,8 @@ namespace Cobalt
             }
         }
 
+        static auto Get() -> SceneManager&;
+
     private:
         Rc<Scene> _active_scene = nullptr;
         UUID _active_scene_uuid;

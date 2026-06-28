@@ -33,11 +33,11 @@ namespace Cobalt
         _state.framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
         _state.framebuffer.Unbind();
 
-        ctx.scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
-        ctx.scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
-
-        ctx.scene_manager.AddSystem<ScriptStartSystem>(Schedule::RuntimeStart);
-        ctx.scene_manager.AddSystem<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
+        auto& scene_manager = SceneManager::Get();
+        scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
+        scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
+        scene_manager.AddSystem<ScriptStartSystem>(Schedule::RuntimeStart);
+        scene_manager.AddSystem<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
 
         _panels.emplace_back(Memory::MakeBox<AssetBrowserPanel>());
         _panels.emplace_back(Memory::MakeBox<EntityComponentsPanel>());
@@ -56,7 +56,7 @@ namespace Cobalt
     }
 
     auto EditorApplication::OnUpdate(EngineContext& ctx) -> void {
-        auto& scene_manager = ctx.scene_manager;
+        auto& scene_manager = SceneManager::Get();
         scene_manager.Update(ctx);
 
         Gui::BeginFrame(ctx);
@@ -65,7 +65,7 @@ namespace Cobalt
             {
                 if (ImGui::BeginMenu("File")) {
                     if (ImGui::MenuItem("Save Scene", "Ctrl+S")) {
-                        AssetManager::Get().SaveAsset(ctx, ctx.scene_manager.GetActiveSceneUUID());
+                        AssetManager::Get().SaveAsset(ctx, scene_manager.GetActiveSceneUUID());
                     }
 
                     ImGui::EndMenu();
@@ -99,20 +99,20 @@ namespace Cobalt
 
         ImGui::Begin("Debug");
         {
-            switch (ctx.scene_manager.GetState()) {
+            switch (scene_manager.GetState()) {
                 case SceneState::None: {
                     if (ImGui::Button("Play")) {
                         _state.active_scene = _state.active_scene->Clone();
-                        ctx.scene_manager.SetActiveScene(_state.active_scene);
-                        ctx.scene_manager.SetState(SceneState::Start);
+                        scene_manager.SetActiveScene(_state.active_scene);
+                        scene_manager.SetState(SceneState::Start);
                     }
                     break;
                 }
                 case SceneState::Update: {
                     if (ImGui::Button("Stop")) {
-                        ctx.scene_manager.SetActiveScene(ctx, ctx.scene_manager.GetActiveSceneUUID());
-                        ctx.scene_manager.SetState(SceneState::None);
-                        _state.active_scene = ctx.scene_manager.GetActiveScene();
+                        scene_manager.SetActiveScene(ctx, scene_manager.GetActiveSceneUUID());
+                        scene_manager.SetState(SceneState::None);
+                        _state.active_scene = scene_manager.GetActiveScene();
                     }
                     break;
                 }

@@ -27,7 +27,7 @@ namespace Cobalt
 
         static auto GetActiveRegistry() -> entt::registry* {
             if (const auto* ctx = GetEngineCtx(); ctx) {
-                return &ctx->scene_manager.GetActiveScene()->GetRegistry();
+                return &SceneManager::Get().GetActiveScene()->GetRegistry();
             }
 
             return nullptr;
