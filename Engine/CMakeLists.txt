@@ -91,6 +91,8 @@ set(ENGINE_SOURCES
 	Source/Engine/Events/EventBus.hpp
 	Source/Engine/Core/Time.cpp
 	Source/Engine/Core/Time.hpp
+	Source/Engine/Assets/AssetRegistry.cpp
+	Source/Engine/Assets/AssetRegistry.hpp
 )
 
 # -- Platform specific source files --

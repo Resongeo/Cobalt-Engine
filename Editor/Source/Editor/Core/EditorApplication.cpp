@@ -129,18 +129,6 @@ namespace Cobalt
         }
         ImGui::End();
 
-        ImGui::Begin("Assets");
-        {
-            for (auto [id, meta] : AssetManager::Get().GetRegistry()) {
-                auto name_string = meta.path.string();
-                ImGui::Text("Name %s", name_string.c_str());
-                ImGui::PushID(id.value);
-                ImGui::InputScalar("UUID", ImGuiDataType_U64, (void*)&id.value);
-                ImGui::PopID();
-            }
-        }
-        ImGui::End();
-
         Gui::EndFrame();
     }
 } // namespace Cobalt

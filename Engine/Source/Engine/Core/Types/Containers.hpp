@@ -10,6 +10,7 @@
 #include <string>
 #include <string_view>
 #include <span>
+#include <optional>
 
 namespace Cobalt
 {
@@ -31,4 +32,8 @@ namespace Cobalt
 
     template <typename T>
     using Span = std::span<T>;
+
+    template <typename T>
+    using Optional = std::optional<T>;
+    inline constexpr auto None = std::nullopt;
 } // namespace Cobalt

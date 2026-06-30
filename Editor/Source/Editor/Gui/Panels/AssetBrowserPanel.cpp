@@ -93,8 +93,13 @@ namespace Cobalt
                 ImGui::InvisibleButton(filename_string.c_str(), {thumbnail_size, thumbnail_size});
 
                 if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
-                    auto uuid = AssetManager::Get().GetUUID(path);
-                    ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &uuid.value, sizeof(u64));
+                    if (auto metadata_opt = AssetManager::Get().GetRegistry().GetMetadata(path)) {
+                        auto metadata = metadata_opt.value();
+                        ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &metadata.uuid.value, sizeof(u64));
+
+                        auto asset_name = metadata.path.filename().string();
+                        ImGui::Text("%s", asset_name.c_str());
+                    }
                     ImGui::EndDragDropSource();
                 }
 

@@ -13,7 +13,7 @@ namespace Cobalt
     {
         u64 value;
 
-        explicit UUID() : value(0) {}
+        UUID() : value(0) {}
         explicit UUID(const u64 val) : value(val) {}
         explicit UUID(const String& val) : value(std::stoll(val)) {}
 

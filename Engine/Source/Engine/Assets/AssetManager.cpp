@@ -41,7 +41,7 @@ namespace Cobalt
         _serializers[static_cast<usize>(AssetType::Scene)] = Memory::MakeRc<SceneSerializer>();
     }
 
-    auto AssetManager::RegisterAsset(const Filepath& path) const -> void {
+    auto AssetManager::RegisterAsset(const Filepath& path) -> void {
         if (IsAssetRegistered(path)) {
             return;
         }
@@ -54,53 +54,24 @@ namespace Cobalt
             return;
         }
 
-        const auto meta = AssetMetadata{.path = path, .type = GetAssetTypeFromExtension(path)};
+        const auto meta = AssetMetadata{
+            .uuid = UUID::Generate(),
+            .path = path,
+            .type = GetAssetTypeFromExtension(path)
+        };
 
-        _registry[UUID::Generate()] = meta;
-    }
-
-    auto AssetManager::RegisterAsset(const UUID id, const AssetMetadata& metadata) const -> void {
-        if (!std::filesystem::exists(metadata.path)) {
-            return;
-        }
-
-        _registry[id] = metadata;
-    }
-
-    auto AssetManager::GetMetadata(const UUID id) const -> AssetMetadata {
-        if (const auto it = _registry.find(id); it != _registry.end()) {
-            return it->second;
-        }
-
-        return {};
-    }
-
-    auto AssetManager::GetUUID(const Filepath& path) const -> UUID {
-        for (auto& [id, meta] : _registry) {
-            if (meta.path == path) {
-                return id;
-            }
-        }
-
-        return UUID{};
+        _registry.RegisterAsset(meta);
     }
 
     auto AssetManager::IsAssetRegistered(const UUID id) const -> bool {
-        const auto it = _registry.find(id);
-        return it != _registry.end();
+        return _registry.GetMetadata(id).has_value();
     }
 
     auto AssetManager::IsAssetRegistered(const Filepath& path) const -> bool {
-        for (const auto& asset : _registry | std::views::values) {
-            if (asset.path == path) {
-                return true;
-            }
-        }
-
-        return false;
+        return _registry.GetUUID(path).has_value();
     }
 
-    auto AssetManager::LoadRegistry() const -> void {
+    auto AssetManager::LoadRegistry() -> void {
         if (!std::filesystem::exists(_registry_path)) {
             return;
         }
@@ -121,14 +92,15 @@ namespace Cobalt
         }
 
         for (auto asset : assets) {
-            auto id = UUID{};
+            auto uuid = UUID{};
             auto meta = AssetMetadata{};
 
-            if (const auto error = asset["uuid"].get_uint64().get(id.value)) {
+            if (const auto error = asset["uuid"].get_uint64().get(uuid.value)) {
                 CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "uuid");
 
                 continue;
             }
+            meta.uuid = uuid;
 
             auto relative_path_string = String{};
             if (const auto error = asset["path"].get_string().get(relative_path_string)) {
@@ -146,11 +118,12 @@ namespace Cobalt
             }
             meta.type = StringToAssetType(type_string);
 
-            RegisterAsset(id, meta);
+            _registry.RegisterAsset(meta);
         }
     }
 
     auto AssetManager::SaveRegistry() const -> void {
+        /*
         auto sb = simdjson::builder::string_builder{};
 
         sb.start_object();
@@ -195,9 +168,10 @@ namespace Cobalt
         std::ofstream out(_registry_path);
         out << result.value_unsafe();
         out.close();
+        */
     }
 
-    auto AssetManager::GetRegistry() const -> HashMap<UUID, AssetMetadata>& {
+    auto AssetManager::GetRegistry() const -> const AssetRegistry& {
         return _registry;
     }
 
@@ -217,8 +191,13 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::SaveAsset(const UUID id) const -> bool {
-        auto meta = GetMetadata(id);
+    auto AssetManager::SaveAsset(const UUID id) -> bool {
+        auto metadata_opt = _registry.GetMetadata(id);
+        if (!metadata_opt.has_value()) {
+            return false;
+        }
+
+        auto& meta = metadata_opt.value();
         const auto serializer = _serializers[static_cast<usize>(meta.type)];
 
         if (!serializer) {

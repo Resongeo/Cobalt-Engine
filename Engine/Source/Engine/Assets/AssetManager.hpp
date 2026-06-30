@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Assets/IAssetSerializer.hpp"
+#include "Engine/Assets/AssetRegistry.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Memory.hpp"
@@ -17,31 +18,34 @@ namespace Cobalt
     public:
         auto Init() -> void;
 
-        auto RegisterAsset(const Filepath& path) const -> void;
-        auto RegisterAsset(UUID id, const AssetMetadata& metadata) const -> void;
-        auto GetMetadata(UUID id) const -> AssetMetadata;
-        auto GetUUID(const Filepath& path) const -> UUID;
-        auto IsAssetRegistered(UUID id) const -> bool;
+        auto RegisterAsset(const Filepath& path) -> void;
+        auto IsAssetRegistered(UUID uuid) const -> bool;
         auto IsAssetRegistered(const Filepath& path) const -> bool;
-        auto LoadRegistry() const -> void;
+        auto GetRegistry() const -> const AssetRegistry&;
+
+        auto LoadRegistry() -> void;
         auto SaveRegistry() const -> void;
-        auto GetRegistry() const -> HashMap<UUID, AssetMetadata>&;
 
         static auto GetAssetTypeFromExtension(const Filepath& path) -> AssetType;
 
-        auto SaveAsset(UUID id) const -> bool;
+        auto SaveAsset(UUID uuid) -> bool;
 
         template <typename T>
-        auto GetAsset(const UUID id) const -> Rc<T> {
-            if (!id.IsValid()) {
+        auto GetAsset(const UUID uuid) const -> Rc<T> {
+            if (!uuid.IsValid()) {
                 return nullptr;
             }
 
-            if (const auto it = _loaded.find(id); it != _loaded.end()) {
+            if (const auto it = _loaded.find(uuid); it != _loaded.end()) {
                 return std::static_pointer_cast<T>(it->second);
             }
 
-            const auto& metadata = GetMetadata(id);
+            const auto metadata_opt = _registry.GetMetadata(uuid);
+            if (!metadata_opt.has_value()) {
+                return nullptr;
+            }
+
+            const auto& metadata = metadata_opt.value();
             const auto& serializer = _serializers[static_cast<usize>(metadata.type)];
 
             if (!serializer) {
@@ -49,7 +53,7 @@ namespace Cobalt
             }
 
             if (const auto asset = serializer->Deserialize(metadata)) {
-                _loaded[id] = asset;
+                _loaded[uuid] = asset;
                 return std::static_pointer_cast<T>(asset);
             }
 
@@ -57,15 +61,16 @@ namespace Cobalt
         }
 
         template <typename T>
-        auto CreateInMemoryAsset(const AssetType type) const -> UUID {
+        auto CreateInMemoryAsset(const AssetType type) -> UUID {
             auto asset = Memory::MakeRc<T>();
             const auto uuid = UUID::Generate();
             const auto meta = AssetMetadata{
+                .uuid = uuid,
                 .type = type,
                 .is_memory = true
             };
 
-            _registry[uuid] = meta;
+            _registry.RegisterAsset(meta);
             _loaded[uuid] = asset;
 
             return uuid;
@@ -81,7 +86,7 @@ namespace Cobalt
 
     private:
         mutable HashMap<UUID, Rc<IAsset>> _loaded = {};
-        mutable HashMap<UUID, AssetMetadata> _registry = {};
+        AssetRegistry _registry = {};
         Array<Rc<IAssetSerializer>, static_cast<usize>(AssetType::SIZE)> _serializers = {};
         Filepath _registry_path = {};
         Filepath _assets_dir = {};

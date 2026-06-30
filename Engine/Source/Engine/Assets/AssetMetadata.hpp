@@ -5,11 +5,13 @@
 
 #include "Engine/Assets/AssetType.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Types/UUID.hpp"
 
 namespace Cobalt
 {
     struct AssetMetadata
     {
+        UUID uuid = {};
         Filepath path = {};
         AssetType type = AssetType::None;
         std::filesystem::file_time_type last_modified = {};
