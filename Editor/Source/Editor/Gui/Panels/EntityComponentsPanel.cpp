@@ -107,7 +107,7 @@ namespace Cobalt
                         const auto text_y_offset = rect_height * 0.5f - text_line_height * 0.5f;
                         if (texture) {
                             ImGui::SetCursorScreenPos(cursor_pos + ImVec2{thumbnail_padding, thumbnail_padding});
-                            ImGui::Image(texture->GetRendererID(), thumbnail_size);
+                            ImGui::Image(texture->GetRendererID(), thumbnail_size, {0, 1}, {1, 0});
 
                             ImGui::SetCursorScreenPos(cursor_pos + ImVec2{thumbnail_size.x + thumbnail_padding * 2, text_y_offset});
                             const auto meta = AssetManager::Get().GetRegistry().GetMetadata(uuid).value();
