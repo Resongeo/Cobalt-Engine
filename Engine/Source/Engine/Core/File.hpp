@@ -11,6 +11,7 @@ namespace Cobalt
     {
     public:
         static auto Read(const Filepath& path) -> String;
+        static auto Save(const Filepath& path, const String& content) -> bool;
         static auto Exists(const Filepath& path) -> bool;
     };
 } // namespace Cobalt

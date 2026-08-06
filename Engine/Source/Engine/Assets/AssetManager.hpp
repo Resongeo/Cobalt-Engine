@@ -22,13 +22,11 @@ namespace Cobalt
         auto IsAssetRegistered(UUID uuid) const -> bool;
         auto IsAssetRegistered(const Filepath& path) const -> bool;
         auto GetRegistry() const -> const AssetRegistry&;
-
         auto LoadRegistry() -> void;
-        auto SaveRegistry() const -> void;
 
         static auto GetAssetTypeFromExtension(const Filepath& path) -> AssetType;
 
-        auto SaveAsset(UUID uuid) -> bool;
+        auto SaveAsset(UUID uuid) const -> bool;
 
         template <typename T>
         auto GetAsset(const UUID uuid) const -> Rc<T> {
@@ -83,6 +81,9 @@ namespace Cobalt
         auto AssetTypeToFilters(AssetType type) const -> Vector<DialogFileFilter>;
         auto StringToAssetType(const String& str) const -> AssetType;
         auto IsFileAsset(const Filepath& path) const -> bool;
+        auto IsFileHasMetadata(const Filepath& path) const -> bool;
+        auto LoadMetadata(const Filepath& path) const -> AssetMetadata;
+        auto SaveMetadata(const AssetMetadata& meta) const -> void;
 
     private:
         mutable HashMap<UUID, Rc<IAsset>> _loaded = {};

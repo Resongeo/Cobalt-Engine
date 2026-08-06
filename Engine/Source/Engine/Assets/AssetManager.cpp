@@ -7,11 +7,14 @@
 #include "Engine/Assets/Serializers/Texture2DSerializer.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
+#include "Engine/Core/File.hpp"
 
 #include <fstream>
 #include <ranges>
 #include <simdjson.h>
 
+#define TOML_EXCEPTIONS 0
+#include <toml++/toml.hpp>
 #include <SDL3/SDL.h>
 
 namespace Cobalt
@@ -19,22 +22,13 @@ namespace Cobalt
     auto AssetManager::Init() -> void {
         _assets_dir = Project::Get().GetProjectAssetsPath();
 
-        if (!std::filesystem::exists(_assets_dir)) {
+        if (!File::Exists(_assets_dir)) {
             std::filesystem::create_directories(_assets_dir);
         }
 
         _registry_path = _assets_dir / "AssetRegistry.json";
+
         LoadRegistry();
-
-        for (auto& entry : std::filesystem::recursive_directory_iterator(_assets_dir)) {
-            if (entry.is_directory()) {
-                continue;
-            }
-
-            if (IsFileAsset(entry.path())) {
-                RegisterAsset(entry.path());
-            }
-        }
 
         _serializers[static_cast<usize>(AssetType::Texture)] = Memory::MakeRc<Texture2DSerializer>();
         _serializers[static_cast<usize>(AssetType::Script)] = Memory::MakeRc<ScriptSerializer>();
@@ -42,23 +36,18 @@ namespace Cobalt
     }
 
     auto AssetManager::RegisterAsset(const Filepath& path) -> void {
-        if (IsAssetRegistered(path)) {
-            return;
-        }
+        auto meta = AssetMetadata{};
 
-        if (!IsFileAsset(path)) {
-            return;
+        if (IsFileHasMetadata(path)) {
+            meta = LoadMetadata(path);
+        } else {
+            meta = AssetMetadata{
+                .uuid = UUID::Generate(),
+                .path = path,
+                .type = GetAssetTypeFromExtension(path)
+            };
+            SaveMetadata(meta);
         }
-
-        if (!std::filesystem::exists(path)) {
-            return;
-        }
-
-        const auto meta = AssetMetadata{
-            .uuid = UUID::Generate(),
-            .path = path,
-            .type = GetAssetTypeFromExtension(path)
-        };
 
         _registry.RegisterAsset(meta);
     }
@@ -72,103 +61,15 @@ namespace Cobalt
     }
 
     auto AssetManager::LoadRegistry() -> void {
-        if (!std::filesystem::exists(_registry_path)) {
-            return;
-        }
-
-        simdjson::ondemand::parser parser;
-        const auto json = simdjson::padded_string::load(_registry_path.string());
-        auto doc = simdjson::ondemand::document{};
-
-        if (const auto error = parser.iterate(json).get(doc)) {
-            CORE_ERROR("AssetManager: {}", simdjson::error_message(error));
-            return;
-        }
-
-        auto assets = simdjson::ondemand::array{};
-        if (const auto error = doc["assets"].get_array().get(assets)) {
-            CORE_ERROR("AssetManager: {} Expected: \"assets\"", simdjson::error_message(error));
-            return;
-        }
-
-        for (auto asset : assets) {
-            auto uuid = UUID{};
-            auto meta = AssetMetadata{};
-
-            if (const auto error = asset["uuid"].get_uint64().get(uuid.value)) {
-                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "uuid");
-
+        for (auto& entry : std::filesystem::recursive_directory_iterator(_assets_dir)) {
+            if (entry.is_directory()) {
                 continue;
             }
-            meta.uuid = uuid;
 
-            auto relative_path_string = String{};
-            if (const auto error = asset["path"].get_string().get(relative_path_string)) {
-                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "path");
-
-                continue;
+            if (IsFileAsset(entry.path())) {
+                RegisterAsset(entry.path());
             }
-            meta.path = _assets_dir / relative_path_string;
-
-            auto type_string = String{};
-            if (const auto error = asset["type"].get_string().get(type_string)) {
-                CORE_ERROR("AssetManager: {} Expected: \"{}\"", simdjson::error_message(error), "type");
-
-                continue;
-            }
-            meta.type = StringToAssetType(type_string);
-
-            _registry.RegisterAsset(meta);
         }
-    }
-
-    auto AssetManager::SaveRegistry() const -> void {
-        /*
-        auto sb = simdjson::builder::string_builder{};
-
-        sb.start_object();
-        {
-            sb.escape_and_append_with_quotes("assets");
-            sb.append_colon();
-
-            sb.start_array();
-            {
-                auto asset_index = 0;
-                for (const auto& [id, meta] : _registry) {
-                    if (meta.is_memory) {
-                        asset_index++;
-                        continue;
-                    }
-
-                    asset_index++;
-                    sb.start_object();
-                    {
-                        sb.append_key_value("uuid", id.value);
-                        sb.append_comma();
-
-                        const auto relative_path = std::filesystem::relative(meta.path, _assets_dir).string();
-                        sb.append_key_value("path", relative_path);
-                        sb.append_comma();
-
-                        sb.append_key_value("type", AssetTypeToString(meta.type));
-                    }
-                    sb.end_object();
-
-                    if (asset_index < _registry.size()) {
-                        sb.append_comma();
-                    }
-                }
-            }
-            sb.end_array();
-        }
-        sb.end_object();
-
-        const auto result = sb.view();
-
-        std::ofstream out(_registry_path);
-        out << result.value_unsafe();
-        out.close();
-        */
     }
 
     auto AssetManager::GetRegistry() const -> const AssetRegistry& {
@@ -191,8 +92,8 @@ namespace Cobalt
         return AssetType::None;
     }
 
-    auto AssetManager::SaveAsset(const UUID id) -> bool {
-        auto metadata_opt = _registry.GetMetadata(id);
+    auto AssetManager::SaveAsset(const UUID uuid) const -> bool {
+        auto metadata_opt = _registry.GetMetadata(uuid);
         if (!metadata_opt.has_value()) {
             return false;
         }
@@ -233,7 +134,7 @@ namespace Cobalt
             return false;
         }
 
-        return serializer->Serialize(_loaded[id], meta);
+        return serializer->Serialize(_loaded[uuid], meta);
     }
 
     auto AssetManager::Get() -> AssetManager& {
@@ -277,5 +178,59 @@ namespace Cobalt
 
     auto AssetManager::IsFileAsset(const Filepath& path) const -> bool {
         return GetAssetTypeFromExtension(path) != AssetType::None;
+    }
+
+    auto AssetManager::IsFileHasMetadata(const Filepath& path) const -> bool {
+        if (GetAssetTypeFromExtension(path) == AssetType::None) {
+            return false;
+        }
+
+        auto meta_path = path;
+        meta_path += ".meta";
+
+        return File::Exists(meta_path);
+    }
+
+    auto AssetManager::LoadMetadata(const Filepath& path) const -> AssetMetadata {
+        auto meta_path = path;
+        meta_path += ".meta";
+        auto meta_path_str = meta_path.string();
+
+        auto result = toml::parse_file(meta_path_str);
+
+        if (!result) {
+            auto error_msg = std::ostringstream();
+            error_msg << result.error();
+            CORE_ERROR("AssetManager: Could not parse {}: {}", meta_path_str, error_msg.str());
+        }
+
+        auto meta = AssetMetadata{};
+        auto table = result.table();
+        auto meta_table = table["asset metadata"];
+
+        meta.uuid = UUID(std::stoull(meta_table["uuid"].value_or<String>("0")));
+        meta.type = StringToAssetType(meta_table["type"].value_or<String>("None"));
+        meta.path = path;
+
+        return meta;
+    }
+
+    auto AssetManager::SaveMetadata(const AssetMetadata& meta) const -> void {
+        auto meta_path = meta.path;
+        meta_path += ".meta";
+
+        const auto table = toml::table{
+            {"asset metadata", toml::table{
+                {"uuid", std::to_string(meta.uuid.value)},
+                {"type", AssetTypeToString(meta.type)},
+                /* TODO: Save last_modified when implementing asset reloading */
+            }}
+        };
+
+        auto serialized_meta_table = std::ostringstream();
+        serialized_meta_table << table;
+        const auto result = serialized_meta_table.str();
+
+        File::Save(meta_path, result);
     }
 } // namespace Cobalt

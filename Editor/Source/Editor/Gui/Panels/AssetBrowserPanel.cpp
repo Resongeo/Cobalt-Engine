@@ -52,7 +52,7 @@ namespace Cobalt
 
             if (Widgets::Button(ICON_REFRESH, Variant::Default, {0, 0}, true) || _directory_changed) {
                 for (auto& entry : std::filesystem::directory_iterator(_current_dir)) {
-                    if (!entry.is_directory()) {
+                    if (!entry.is_directory() && entry.path().extension() != ".meta") {
                         AssetManager::Get().RegisterAsset(entry.path());
                     }
                 }
@@ -76,6 +76,10 @@ namespace Cobalt
 
             for (auto& directory_entry : std::filesystem::directory_iterator(_current_dir)) {
                 const auto& path = directory_entry.path();
+                if (path.extension() == ".meta") {
+                    continue;
+                }
+
                 auto filename_string = path.filename().string();
 
                 const auto texture = GetTextureFromDirEntry(directory_entry);

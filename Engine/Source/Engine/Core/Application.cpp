@@ -55,12 +55,11 @@ namespace Cobalt
         }
     }
 
-    auto Application::OnApplicationQuit(const Cobalt::ApplicationQuitEvent& event) -> void {
+    auto Application::OnApplicationQuit(const ApplicationQuitEvent& event) -> void {
         _close_requested = true;
     }
 
     Application::~Application() {
-        AssetManager::Get().SaveRegistry();
         ScriptManager::Get().ShutDown();
         Window::Get().ShutDown();
     }

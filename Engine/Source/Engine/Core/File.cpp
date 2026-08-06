@@ -24,6 +24,16 @@ namespace Cobalt
         return {};
     }
 
+    auto File::Save(const Filepath& path, const String& content) -> bool {
+        if (std::ofstream stream(path); stream) {
+            stream << content;
+            stream.close();
+            return true;
+        }
+
+        return false;
+    }
+
     auto File::Exists(const Filepath& path) -> bool {
         return std::filesystem::exists(path);
     }
