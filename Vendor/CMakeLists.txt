@@ -26,6 +26,7 @@ file(GLOB SIMDJSON_SOURCES
 )
 add_library(simdjson STATIC ${SIMDJSON_SOURCES})
 target_include_directories(simdjson PUBLIC "SIMDJSON/singleheader")
+
 add_subdirectory(ANGELSCRIPT/sdk/angelscript/projects/cmake)
 file(GLOB ANGELSCRIPT_ADDONS
 	"ANGELSCRIPT/sdk/add_on/scriptstdstring/*.cpp"
@@ -43,4 +44,14 @@ add_library(angelscript_addons STATIC ${ANGELSCRIPT_ADDONS})
 target_link_libraries(angelscript_addons PRIVATE angelscript)
 target_include_directories(angelscript_addons PUBLIC
 	"ANGELSCRIPT/sdk/add_on"
+)
+
+file(GLOB RPMALLOC_SOURCES
+	"RPMALLOC/rpmalloc/*.h"
+	"RPMALLOC/rpmalloc/*.c"
+)
+add_library(rpmalloc STATIC ${RPMALLOC_SOURCES})
+target_include_directories(rpmalloc PUBLIC "RPMALLOC/rpmalloc")
+target_compile_options(rpmalloc PRIVATE
+	$<$<C_COMPILER_ID:MSVC>:/experimental:c11atomics>
 )

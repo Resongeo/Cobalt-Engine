@@ -81,7 +81,8 @@ cmake --build cmake-min-size-release
 - [Dear ImGui](https://github.com/ocornut/imgui) - Immediate-mode GUI library for the editor
 - [ImGuizmo](https://github.com/cedricguillemet/imguizmo) - A collection of Dear ImGui widgets for 3D manipulation and more
 - [SDL3](https://wiki.libsdl.org/SDL3/FrontPage) - Simple DirectMedia Layer for low level multi-media
-- [simdjson](https://github.com/simdjson/simdjson) - Fast json parser and serializer
+- [simdjson](https://github.com/simdjson/simdjson) - Fast JSON parser and serializer
 - [spdlog](https://github.com/gabime/spdlog) - Fast C++ logging library
 - [stb](https://github.com/nothings/stb) - Single-file public domain libraries
 - [Toml++](https://github.com/marzer/tomlplusplus) - TOML config parser and serializer
+- [rpmalloc](https://github.com/mjansson/rpmalloc) - Optimized cross-platform lock free memory allocator

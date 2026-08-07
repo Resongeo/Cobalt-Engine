@@ -33,3 +33,6 @@
 [submodule "Vendor/SPDLOG"]
 	path = Vendor/SPDLOG
 	url = https://github.com/gabime/spdlog
+[submodule "Vendor/RPMALLOC"]
+	path = Vendor/RPMALLOC
+	url = https://github.com/mjansson/rpmalloc

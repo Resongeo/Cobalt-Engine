@@ -113,6 +113,7 @@ target_link_libraries(Engine PUBLIC
 	angelscript
 	angelscript_addons
 	spdlog::spdlog
+	rpmalloc
 )
 
 target_include_directories(Engine PUBLIC
