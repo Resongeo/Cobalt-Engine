@@ -93,6 +93,7 @@ set(ENGINE_SOURCES
 	Source/Engine/Core/Time.hpp
 	Source/Engine/Assets/AssetRegistry.cpp
 	Source/Engine/Assets/AssetRegistry.hpp
+	Source/Engine/Platform/EASTLConfig.cpp
 )
 
 # -- Platform specific source files --
@@ -114,6 +115,7 @@ target_link_libraries(Engine PUBLIC
 	angelscript_addons
 	spdlog::spdlog
 	rpmalloc
+	EASTL
 )
 
 target_include_directories(Engine PUBLIC

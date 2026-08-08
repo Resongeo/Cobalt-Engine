@@ -20,7 +20,6 @@
 [submodule "Vendor/SDL"]
 	path = Vendor/SDL
 	url = https://github.com/libsdl-org/SDL.git
-[submodule "Vendor/EASTL"]
 [submodule "Vendor/SIMDJSON"]
 	path = Vendor/SIMDJSON
 	url = https://github.com/simdjson/simdjson
@@ -36,3 +35,6 @@
 [submodule "Vendor/RPMALLOC"]
 	path = Vendor/RPMALLOC
 	url = https://github.com/mjansson/rpmalloc
+[submodule "Vendor/EASTL"]
+	path = Vendor/EASTL
+	url = https://github.com/electronicarts/EASTL
