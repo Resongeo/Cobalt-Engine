@@ -12,6 +12,7 @@
 #include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
+#include <rpmalloc.h>
 
 namespace Cobalt
 {

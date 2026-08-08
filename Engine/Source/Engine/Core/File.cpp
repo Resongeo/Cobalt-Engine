@@ -26,7 +26,7 @@ namespace Cobalt
 
     auto File::Save(const Filepath& path, const String& content) -> bool {
         if (std::ofstream stream(path); stream) {
-            stream << content;
+            stream << content.c_str();
             stream.close();
             return true;
         }

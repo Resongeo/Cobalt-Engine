@@ -13,7 +13,7 @@
 
 namespace Cobalt
 {
-    auto TestPrint(String& msg) -> void {
+    auto TestPrint(std::string& msg) -> void {
         CORE_INFO("Script: {}", msg);
     }
 
@@ -29,7 +29,7 @@ namespace Cobalt
         new(memory)Vec2(scalar);
     }
 
-    auto EntityFindByName(const String& name) -> ScriptEntity {
+    auto EntityFindByName(const std::string& name) -> ScriptEntity {
         const auto scene = SceneManager::Get().GetActiveScene();
         if (!scene) {
             return ScriptEntity{};
@@ -39,7 +39,7 @@ namespace Cobalt
 
         const auto view = registry.view<TagComponent>();
         for (auto entity : view) {
-            if (view.get<TagComponent>(entity).name == name) {
+            if (!strcmp(view.get<TagComponent>(entity).name.c_str(), name.c_str())) {
                 auto script_entity = ScriptEntity{};
                 script_entity.entity = {entity, &registry};
 

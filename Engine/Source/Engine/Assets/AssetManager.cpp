@@ -115,7 +115,7 @@ namespace Cobalt
             static auto filter = AssetTypeToFilters(meta.type);
             const auto default_path = Project::Get().GetProjectAssetsPath().string();
 
-            DialogManager::Get().ShowSaveDialog(default_path, filter, [sync_data](const Filepath& chosen_path) {
+            DialogManager::Get().ShowSaveDialog(default_path.c_str(), filter, [sync_data](const Filepath& chosen_path) {
                 sync_data->path = chosen_path;
                 sync_data->completed = true;
             });
@@ -208,8 +208,8 @@ namespace Cobalt
         auto table = result.table();
         auto meta_table = table["asset metadata"];
 
-        meta.uuid = UUID(std::stoull(meta_table["uuid"].value_or<String>("0")));
-        meta.type = StringToAssetType(meta_table["type"].value_or<String>("None"));
+        meta.uuid = UUID(std::stoull(meta_table["uuid"].value_or<const char*>("0")));
+        meta.type = StringToAssetType(meta_table["type"].value_or<const char*>("None"));
         meta.path = path;
 
         return meta;
@@ -222,7 +222,7 @@ namespace Cobalt
         const auto table = toml::table{
             {"asset metadata", toml::table{
                 {"uuid", std::to_string(meta.uuid.value)},
-                {"type", AssetTypeToString(meta.type)},
+                {"type", AssetTypeToString(meta.type).c_str()},
                 /* TODO: Save last_modified when implementing asset reloading */
             }}
         };
@@ -231,6 +231,6 @@ namespace Cobalt
         serialized_meta_table << table;
         const auto result = serialized_meta_table.str();
 
-        File::Save(meta_path, result);
+        File::Save(meta_path, result.c_str());
     }
 } // namespace Cobalt

@@ -5,6 +5,7 @@
 
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+
 #include <random>
 
 namespace Cobalt
@@ -15,7 +16,11 @@ namespace Cobalt
 
         UUID() : value(0) {}
         explicit UUID(const u64 val) : value(val) {}
-        explicit UUID(const String& val) : value(std::stoll(val)) {}
+        explicit UUID(const String& val) {
+            const auto str = val.c_str();
+            char* end;
+            value = strtoll(str, &end, 10);
+        }
 
         auto IsValid() const -> bool {
             return value != 0;
@@ -44,14 +49,14 @@ namespace Cobalt
     };
 } // namespace Cobalt
 
-// UUID hashing needed for std::unordered_map
-namespace std
+// UUID hashing needed for eastl::hash_map
+namespace eastl
 {
     template <>
     struct hash<Cobalt::UUID>
     {
-        auto operator()(const Cobalt::UUID& id) const -> Cobalt::usize {
-            return hash<uint64_t>()(id.value);
+        size_t operator()(const Cobalt::UUID& uuid) const {
+            return uuid.value;
         }
     };
-} // namespace std
+} // namespace eastl

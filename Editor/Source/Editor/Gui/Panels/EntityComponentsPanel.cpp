@@ -55,7 +55,7 @@ namespace Cobalt
                 if (entity.HasComponent<TagComponent>()) {
                     if (Widgets::CollapsingHeader("Tag", Colors::tag)) {
                         auto& [name, uuid] = entity.GetComponent<TagComponent>();
-                        ImGui::InputText("Name", &name);
+                        Widgets::TextInput("Name", &name);
 
                         ImGui::PushStyleColor(ImGuiCol_Text, IMVEC4(Colors::text_muted));
                         ImGui::Text("UUID: %s", std::to_string(uuid.value).c_str());
@@ -162,7 +162,7 @@ namespace Cobalt
                         auto class_name = String{};
                         if (auto meta_opt = AssetManager::Get().GetRegistry().GetMetadata(uuid)) {
                             auto& meta = meta_opt.value();
-                            class_name = meta.path.filename().string();
+                            class_name = meta.path.filename().string().c_str();
                         } else {
                             class_name = "None";
                         }

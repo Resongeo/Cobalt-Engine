@@ -7,10 +7,11 @@
 
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
+#include <memory>
 
 namespace Cobalt
 {
-    Rc<spdlog::logger> Log::_core_logger = nullptr;
+    SinkPtr Log::_core_logger = nullptr;
 
     struct PendingLogEntry
     {
@@ -22,12 +23,12 @@ namespace Cobalt
     static Vector<PendingLogEntry> pending_logs;
 
     auto Log::Init() -> void {
-        auto callback_sink = Memory::MakeRc<spdlog::sinks::callback_sink_mt>([&](const spdlog::details::log_msg& msg) {
+        auto callback_sink = std::make_shared<spdlog::sinks::callback_sink_mt>([&](const spdlog::details::log_msg& msg) {
             std::lock_guard lock(log_queue_mutex);
             pending_logs.push_back({msg.level, String(msg.payload.data(), msg.payload.size())});
         });
-        auto console_sink = Memory::MakeRc<spdlog::sinks::stdout_color_sink_mt>();
-        _core_logger = Memory::MakeRc<spdlog::logger>("Engine", spdlog::sinks_init_list{console_sink, callback_sink});
+        auto console_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
+        _core_logger = std::make_shared<spdlog::logger>("Engine", spdlog::sinks_init_list{console_sink, callback_sink});
     }
 
     auto Log::FlushEvents() -> void {
@@ -57,7 +58,7 @@ namespace Cobalt
         pending_logs.clear();
     }
 
-    auto Log::CoreLogger() -> Rc<spdlog::logger>& {
+    auto Log::CoreLogger() -> SinkPtr& {
         return _core_logger;
     }
 } // namespace Cobalt

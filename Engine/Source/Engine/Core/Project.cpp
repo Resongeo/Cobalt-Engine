@@ -15,20 +15,20 @@ namespace Cobalt
         _name = "No Project";
         _version = "0.0.0";
 
-        _editor_path = Filepath(_args[0]).parent_path();
+        _editor_path = Filepath(_args[0].c_str()).parent_path();
 
         if (_args.size() < 2) {
             CORE_WARN("Project: No file is provided. Please provide a valid path to a .cbproj file");
             return;
         }
 
-        if (!std::filesystem::exists(_args[1])) {
+        if (!std::filesystem::exists(_args[1].c_str())) {
             CORE_ERROR("Project: File path does not exists: {}", _args[1]);
             return;
         }
 
         auto valid_file = true;
-        const auto project_file_path = Filepath(_args[1]);
+        const auto project_file_path = Filepath(_args[1].c_str());
         _project_path = project_file_path.parent_path();
 
         if (project_file_path.extension() != ".cbproj") {
@@ -51,8 +51,8 @@ namespace Cobalt
         }
 
         auto table = result.table();
-        _name = table["project"]["name"].value_or<String>("Default");
-        _version = table["project"]["version"].value_or<String>("0.0.0");
+        _name = table["project"]["name"].value_or<const char*>("Default");
+        _version = table["project"]["version"].value_or<const char*>("0.0.0");
         _startup_scene = UUID(table["project"]["startup_scene"].value_or<u64>(0));
 
         CORE_INFO("Project: Loading. Name: {}. Version: {}", _name, _version);

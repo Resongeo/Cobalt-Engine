@@ -18,6 +18,8 @@ namespace Cobalt
         Secondary
     };
 
+
+
     namespace Widgets
     {
         auto Begin(StringView title, ImVec2 padding = {0, 0}) -> bool;
@@ -26,5 +28,6 @@ namespace Cobalt
         auto Separator() -> void;
         auto Button(StringView label, Variant variant = Variant::Default, ImVec2 size = {0, 0}, bool icon = false) -> bool;
         auto CollapsingHeader(StringView label, const Color& text_color = Colors::text, bool default_opened = true) -> bool;
+        auto TextInput(StringView label, String* str, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = nullptr, void* user_data = nullptr) -> bool;
     }
 }

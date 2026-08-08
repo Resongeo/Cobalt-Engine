@@ -17,7 +17,7 @@ namespace Cobalt
     namespace Helpers
     {
         static auto ColorToJsonObject(simdjson::builder::string_builder& sb, const String& name, const Color& col) -> void {
-            sb.escape_and_append_with_quotes(name);
+            sb.escape_and_append_with_quotes(name.c_str());
             sb.append_colon();
             sb.start_object();
             {
@@ -33,7 +33,7 @@ namespace Cobalt
         }
 
         static auto VecToJsonObject(simdjson::builder::string_builder& sb, const String& name, const Vec3& vec) -> void {
-            sb.escape_and_append_with_quotes(name);
+            sb.escape_and_append_with_quotes(name.c_str());
             sb.append_colon();
             sb.start_object();
             {
@@ -47,7 +47,7 @@ namespace Cobalt
         }
 
         static auto VecToJsonObject(simdjson::builder::string_builder& sb, const String& name, const Vec2& vec) -> void {
-            sb.escape_and_append_with_quotes(name);
+            sb.escape_and_append_with_quotes(name.c_str());
             sb.append_colon();
             sb.start_object();
             {
@@ -60,8 +60,8 @@ namespace Cobalt
 
         static auto ParseFloat(simdjson::ondemand::object& obj, const StringView key, const f32 default_val = 0.0f) -> f32 {
             f32 value = default_val;
-            StringView str_view;
-            if (obj[key].get_string().get(str_view) == simdjson::SUCCESS) {
+            std::string_view str_view;
+            if (obj[key.data()].get_string().get(str_view) == simdjson::SUCCESS) {
                 std::from_chars(str_view.data(), str_view.data() + str_view.size(), value);
             }
             return value;
@@ -81,11 +81,11 @@ namespace Cobalt
             return nullptr;
         }
 
-        StringView scene_name;
+        std::string scene_name;
         if (const auto error = doc["name"].get_string().get(scene_name)) {
             CORE_ERROR("Assets::Loaders::SceneLoader: {} Expected: \"name\"", simdjson::error_message(error));
         } else {
-            scene->SetName(std::string(scene_name));
+            scene->SetName(String(scene_name.c_str()));
         }
 
         simdjson::ondemand::array entities;
@@ -104,7 +104,7 @@ namespace Cobalt
             auto entity = Entity(entity_id, &registry);
 
             for (auto field : entity_obj) {
-                StringView component_type = field.unescaped_key();
+                std::string_view component_type = field.unescaped_key();
                 auto value = field.value();
 
                 if (component_type == "tag") {
@@ -116,9 +116,9 @@ namespace Cobalt
                         comp_obj["uuid"].get(uuid_val);
                         tag.uuid.value = uuid_val;
 
-                        StringView name_view;
+                        std::string name_view;
                         if (comp_obj["name"].get_string().get(name_view) == simdjson::SUCCESS) {
-                            tag.name = std::string(name_view);
+                            tag.name = String(name_view.c_str());
                         }
                     }
                 } else if (component_type == "transform") {
@@ -138,7 +138,7 @@ namespace Cobalt
                             transform.scale.y = Helpers::ParseFloat(scale_obj, "y", 1.0f);
                         }
 
-                        StringView rot_view;
+                        std::string_view rot_view;
                         if (comp_obj["rotation"].get_string().get(rot_view) == simdjson::SUCCESS) {
                             float rot_val = 0.0f;
                             std::from_chars(rot_view.data(), rot_view.data() + rot_view.size(), rot_val);
@@ -180,13 +180,13 @@ namespace Cobalt
     }
 
     auto SceneSerializer::Serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool {
-        const auto scene = std::static_pointer_cast<Scene>(asset);
+        const auto scene = eastl::static_pointer_cast<Scene>(asset);
         auto& registry = scene->GetRegistry();
         auto sb = simdjson::builder::string_builder{};
 
         sb.start_object();
         {
-            sb.append_key_value("name", scene->GetName());
+            sb.append_key_value("name", scene->GetName().c_str());
             sb.append_comma();
 
             sb.escape_and_append_with_quotes("entities");
@@ -219,7 +219,7 @@ namespace Cobalt
                             const auto& tag = entity.GetComponent<TagComponent>();
                             sb.append_key_value("uuid", tag.uuid.value);
                             sb.append_comma();
-                            sb.append_key_value("name", tag.name);
+                            sb.append_key_value("name", tag.name.c_str());
                         }
                         sb.end_object();
                     }

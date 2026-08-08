@@ -3,26 +3,27 @@
 
 #pragma once
 
-#include <memory>
+#include <EASTL/unique_ptr.h>
+#include <EASTL/shared_ptr.h>
 
 namespace Cobalt
 {
     template <typename T>
-    using Box = std::unique_ptr<T>;
+    using Box = eastl::unique_ptr<T>;
 
     template <typename T>
-    using Rc = std::shared_ptr<T>;
+    using Rc = eastl::shared_ptr<T>;
 
     namespace Memory
     {
         template <typename T, typename... Args>
         constexpr auto MakeBox(Args&&... args) -> Box<T> {
-            return std::make_unique<T>(std::forward<Args>(args)...);
+            return eastl::make_unique<T>(std::forward<Args>(args)...);
         }
 
         template <typename T, typename... Args>
         constexpr auto MakeRc(Args&&... args) -> Rc<T> {
-            return std::make_shared<T>(std::forward<Args>(args)...);
+            return eastl::make_shared<T>(std::forward<Args>(args)...);
         }
     } // namespace Memory
 } // namespace Cobalt

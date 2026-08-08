@@ -35,7 +35,7 @@ namespace Cobalt
             }
 
             if (const auto it = _loaded.find(uuid); it != _loaded.end()) {
-                return std::static_pointer_cast<T>(it->second);
+                return eastl::static_pointer_cast<T>(it->second);
             }
 
             const auto metadata_opt = _registry.GetMetadata(uuid);
@@ -52,7 +52,7 @@ namespace Cobalt
 
             if (const auto asset = serializer->Deserialize(metadata)) {
                 _loaded[uuid] = asset;
-                return std::static_pointer_cast<T>(asset);
+                return eastl::static_pointer_cast<T>(asset);
             }
 
             return nullptr;

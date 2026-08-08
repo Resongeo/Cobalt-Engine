@@ -10,15 +10,17 @@
 
 namespace Cobalt
 {
+    using SinkPtr = std::shared_ptr<spdlog::logger>;
+
     class Log final
     {
     public:
         static auto Init() -> void;
         static auto FlushEvents() -> void;
-        static auto CoreLogger() -> Rc<spdlog::logger>&;
+        static auto CoreLogger() -> SinkPtr&;
 
     private:
-        static Rc<spdlog::logger> _core_logger;
+        static SinkPtr _core_logger;
     };
 } // namespace Cobalt
 

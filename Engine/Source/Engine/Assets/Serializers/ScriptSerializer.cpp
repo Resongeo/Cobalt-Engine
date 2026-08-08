@@ -8,7 +8,7 @@ namespace Cobalt
 {
     auto ScriptSerializer::Deserialize(const AssetMetadata& metadata) -> Rc<IAsset> {
         // TODO: Load bytecode when implemented
-        return ScriptManager::Get().LoadScript(metadata.path.string());
+        return ScriptManager::Get().LoadScript(metadata.path.string().c_str());
     }
 
     auto ScriptSerializer::Serialize(const Rc<IAsset>& asset, const AssetMetadata& metadata) -> bool {
