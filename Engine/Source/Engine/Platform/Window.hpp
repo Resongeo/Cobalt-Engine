@@ -21,6 +21,8 @@ namespace Cobalt
         auto ShutDown() const -> void;
 
         auto SetNativeEventCallback(NativeEventCallback callback) -> void;
+        auto SetVSyncEnabled(bool enabled) const -> void;
+        auto GetVSyncEnabled() const -> bool;
         auto GetHandle() const -> SDL_Window*;
         auto GetGLContext() const -> SDL_GLContextState*;
         auto GetSize() const -> Vec<2, i32>;

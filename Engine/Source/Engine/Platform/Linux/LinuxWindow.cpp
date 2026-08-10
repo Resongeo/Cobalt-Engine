@@ -242,4 +242,14 @@ namespace Cobalt
     auto Window::SetNativeEventCallback(NativeEventCallback callback) -> void {
         _native_event_hook = std::move(callback);
     }
+
+    auto Window::SetVSyncEnabled(const bool enabled) const -> void {
+        SDL_GL_SetSwapInterval(enabled);
+    }
+
+    auto Window::GetVSyncEnabled() const -> bool {
+        i32 result;
+        SDL_GL_GetSwapInterval(&result);
+        return static_cast<bool>(result);
+    }
 } // namespace Cobalt
