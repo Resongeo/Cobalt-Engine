@@ -7,10 +7,13 @@
 #include "Engine/Core/Time.hpp"
 #include "Engine/Scripting/Script.hpp"
 #include "Engine/Scripting/ScriptManager.hpp"
+#include "Engine/Profiling/FrameProfiler.hpp"
 
 namespace Cobalt
 {
     void ScriptUpdateSystem::Update(entt::registry& registry) {
+        FRAME_PROFILER_EVENT("Script Update");
+
         for (const auto entity : registry.view<ScriptComponent>()) {
             auto& [script_id, instance] = registry.get<ScriptComponent>(entity);
 

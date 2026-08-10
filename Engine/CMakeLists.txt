@@ -94,6 +94,10 @@ set(ENGINE_SOURCES
 	Source/Engine/Assets/AssetRegistry.cpp
 	Source/Engine/Assets/AssetRegistry.hpp
 	Source/Engine/Platform/EASTLConfig.cpp
+	Source/Engine/Profiling/FrameProfiler.cpp
+	Source/Engine/Profiling/FrameProfiler.hpp
+	Source/Engine/Profiling/ScopedFrameProfileTimer.hpp
+	Source/Engine/Profiling/ScopedFrameProfileTimer.cpp
 )
 
 # -- Platform specific source files --

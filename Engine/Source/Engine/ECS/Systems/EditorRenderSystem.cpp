@@ -7,6 +7,7 @@
 #include "Engine/Assets/AssetManager.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Graphics/Renderer.hpp"
+#include "Engine/Profiling/FrameProfiler.hpp"
 
 namespace Cobalt
 {
@@ -14,6 +15,8 @@ namespace Cobalt
         _renderer(renderer), _camera(camera), _framebuffer(framebuffer) {}
 
     auto EditorRenderSystem::Update(entt::registry& registry) -> void {
+        FRAME_PROFILER_EVENT("Editor Render System");
+
         _framebuffer->Bind();
 
         const auto viewport_size = _framebuffer->GetSize();

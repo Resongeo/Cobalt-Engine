@@ -8,6 +8,7 @@
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"
+#include "Engine/Profiling/FrameProfiler.hpp"
 
 namespace Cobalt
 {
@@ -22,5 +23,7 @@ namespace Cobalt
         Camera _camera = {};
         EditorState _state = {};
         Vector<Box<IPanel>> _panels = {};
+        FrameProfilerData _frame_profiler_data = {};
+        f32 _profiler_update_time = 0.0f;
     };
 } // namespace Cobalt

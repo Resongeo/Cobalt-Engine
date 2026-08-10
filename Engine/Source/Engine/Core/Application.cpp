@@ -2,14 +2,15 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Core/Application.hpp"
-#include "Engine/Core/Log.hpp"
-#include "Engine/Core/Time.hpp"
-#include "Engine/Core/Project.hpp"
-#include "Engine/Events/EventBus.hpp"
 #include "Engine/Assets/AssetManager.hpp"
+#include "Engine/Core/Log.hpp"
+#include "Engine/Core/Project.hpp"
+#include "Engine/Core/Time.hpp"
+#include "Engine/Events/EventBus.hpp"
+#include "Engine/Platform/Window.hpp"
+#include "Engine/Profiling/FrameProfiler.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 #include "Engine/Scripting/ScriptManager.hpp"
-#include "Engine/Platform/Window.hpp"
 
 #include <SDL3/SDL.h>
 #include <rpmalloc.h>
@@ -28,6 +29,7 @@ namespace Cobalt
     }
 
     auto Application::Init(const CommandLineArgs& args) -> bool {
+        rpmalloc_linker_reference();
         Log::Init();
 
         // TODO: Have proper error types and TRY macro
@@ -48,11 +50,15 @@ namespace Cobalt
 
     auto Application::MainLoop() -> void {
         while (!_close_requested) {
+            FRAME_PROFILER_BEGIN();
+
             Window::Get().PollEvents();
             Time::Update();
             Log::FlushEvents();
             OnUpdate();
             Window::Get().SwapBuffers();
+
+            FRAME_PROFILER_END();
         }
     }
 

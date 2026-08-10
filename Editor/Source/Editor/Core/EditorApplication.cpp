@@ -17,6 +17,7 @@
 #include "Engine/ECS/Systems/ScriptStartSystem.hpp"
 #include "Engine/ECS/Systems/ScriptUpdateSystem.hpp"
 #include "Engine/Scene/SceneManager.hpp"
+#include "Engine/Core/Time.hpp"
 
 #include <SDL3/SDL.h>
 #include <imgui.h>
@@ -126,8 +127,38 @@ namespace Cobalt
                 CORE_ERROR("ASD");
                 CORE_CRITICAL("ASD");
             }
+
+            if (Widgets::Button("Toggle VSync")) {
+                const auto& window = Window::Get();
+                window.SetVSyncEnabled(!window.GetVSyncEnabled());
+            }
         }
         ImGui::End();
+
+        Widgets::Begin("Frame Times", {8, 8});
+        {
+            _profiler_update_time += Time::GetDeltaTime();
+
+            if (_profiler_update_time >= 0.051f) {
+                _frame_profiler_data = FrameProfiler::Get().GetLastFrameData();
+                _profiler_update_time = 0.0f;
+            }
+
+            const auto frame_time_ms = static_cast<f32>(_frame_profiler_data.frame_time / 1000.0);
+            const auto vsync = Window::Get().GetVSyncEnabled();
+            const auto fps = static_cast<u32>(1000.0 / frame_time_ms);
+            ImGui::Text("Frame time: %.3f ms (VSync: %s) FPS: %d", frame_time_ms, vsync ? "on" : "off", fps);
+
+            auto& event_times = _frame_profiler_data.event_times;
+            for (auto it = event_times.begin(), it_end = event_times.end(); it != it_end; ++it) {
+                ImGui::Columns(2);
+                ImGui::Text("%s", it->first.c_str());
+                ImGui::NextColumn();
+                ImGui::Text("%.3f ms", static_cast<f32>(it->second / 1000.0));
+                ImGui::Columns(1);
+            }
+        }
+        Widgets::End();
 
         Gui::EndFrame();
     }
