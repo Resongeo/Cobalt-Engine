@@ -22,6 +22,12 @@ add_executable(Editor
 	Source/Editor/Gui/Colors.hpp
 	Source/Editor/Gui/Panels/LogPanel.cpp
 	Source/Editor/Gui/Panels/LogPanel.hpp
+	Source/Editor/Gui/AssetEditors/AssetEditor.cpp
+	Source/Editor/Gui/AssetEditors/AssetEditor.hpp
+	Source/Editor/Gui/AssetEditors/AssetEditorManager.cpp
+	Source/Editor/Gui/AssetEditors/AssetEditorManager.hpp
+	Source/Editor/Gui/AssetEditors/SceneEditor.cpp
+	Source/Editor/Gui/AssetEditors/SceneEditor.hpp
 )
 
 target_link_libraries(Editor PRIVATE

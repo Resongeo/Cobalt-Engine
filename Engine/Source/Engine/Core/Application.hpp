@@ -17,6 +17,7 @@ namespace Cobalt
 
         virtual auto OnBegin() -> void {}
         virtual auto OnUpdate() -> void {}
+        virtual auto OnDraw() -> void {}
         virtual auto OnShutdown() -> void {}
 
     private:

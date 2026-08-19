@@ -17,6 +17,11 @@ namespace Cobalt
     public:
         auto OnBegin() -> void override;
         auto OnUpdate() -> void override;
+        auto OnDraw() -> void override;
+
+    private:
+        auto DrawMainDockSpace() -> void;
+        auto DrawMainMenuBar() -> void;
 
     private:
         Renderer _renderer = {};

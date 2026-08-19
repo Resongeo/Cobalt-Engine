@@ -12,7 +12,7 @@ namespace Cobalt
     public:
         virtual ~IPanel() = default;
 
-        virtual auto Begin( EditorState& state) -> void {}
+        virtual auto Begin(EditorState& state) -> void {}
         virtual auto Draw(EditorState& state) -> void = 0;
     };
 } // namespace Cobalt

@@ -16,7 +16,7 @@
 
 namespace Cobalt
 {
-    inline auto gizmo_operation_to_imguizmo(const GizmoOperation operation) -> ImGuizmo::OPERATION {
+    inline auto GizmoOperationToImGuizmo(const GizmoOperation operation) -> ImGuizmo::OPERATION {
         switch (operation) {
             case GizmoOperation::Universal: return ImGuizmo::UNIVERSAL;
             case GizmoOperation::Translate: return ImGuizmo::TRANSLATE;
@@ -110,7 +110,7 @@ namespace Cobalt
 
                 ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.GetView()),
                                      glm::value_ptr(state.editor_camera.GetProjection(state.framebuffer.GetSize())),
-                                     gizmo_operation_to_imguizmo(state.gizmo_operation), mode,
+                                     GizmoOperationToImGuizmo(state.gizmo_operation), mode,
                                      glm::value_ptr(transform_matrix), nullptr, should_snap ? &snap_amount : nullptr);
 
                 if (ImGuizmo::IsUsing()) {

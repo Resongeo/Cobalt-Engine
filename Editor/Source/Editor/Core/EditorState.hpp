@@ -9,6 +9,8 @@
 #include "Engine/Scene/Scene.hpp"
 
 #include <entt/entity/entity.hpp>
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include <imgui.h>
 
 namespace Cobalt
 {
@@ -27,5 +29,7 @@ namespace Cobalt
         Camera editor_camera = {};
         Framebuffer framebuffer = {};
         GizmoOperation gizmo_operation = {};
+        ImGuiWindowClass main_dockspace_window_class = {};
+        ImGuiID main_dockspace_id = {};
     };
 } // namespace Cobalt

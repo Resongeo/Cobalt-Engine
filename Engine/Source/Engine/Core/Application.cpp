@@ -56,6 +56,7 @@ namespace Cobalt
             Time::Update();
             Log::FlushEvents();
             OnUpdate();
+            OnDraw();
             Window::Get().SwapBuffers();
 
             FRAME_PROFILER_END();
