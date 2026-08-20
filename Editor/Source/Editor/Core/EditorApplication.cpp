@@ -4,6 +4,7 @@
 #include "Editor/Core/EditorApplication.hpp"
 #include "Editor/Gui/AssetEditors/AssetEditorManager.hpp"
 #include "Editor/Gui/Gui.hpp"
+#include "Editor/Gui/FontIcons.hpp"
 #include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Editor/Gui/Panels/EntityComponentsPanel.hpp"
 #include "Editor/Gui/Panels/LogPanel.hpp"

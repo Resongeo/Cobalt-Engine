@@ -35,6 +35,10 @@ namespace Cobalt
         return _name;
     }
 
+    auto AssetEditor::GetIcon() const -> const String {
+        return String(_icon);
+    }
+
     auto AssetEditor::GetIsDirty() const -> bool {
         return _is_dirty;
     }
@@ -61,6 +65,10 @@ namespace Cobalt
 
     auto AssetEditor::SetName(const String& name) -> void {
         _name = name;
+    }
+
+    auto AssetEditor::SetIcon(const char* icon) -> void {
+        _icon = icon;
     }
 
     auto AssetEditor::SetIsDirty(const bool is_dirty) -> void {

@@ -28,11 +28,11 @@ namespace Cobalt
                 asset_editor->Unfocus();
             }
 
-            auto main_dockspace_id = ImGui::DockBuilderGetCentralNode(state.main_dockspace_id)->ID;
+            const auto main_dockspace_id = ImGui::DockBuilderGetCentralNode(state.main_dockspace_id)->ID;
 
             ImGui::SetNextWindowDockID(main_dockspace_id, ImGuiCond_FirstUseEver);
             ImGui::SetNextWindowClass(&state.main_dockspace_window_class);
-            ImGui::Begin(asset_editor->GetName().c_str(), nullptr, flags);
+            ImGui::Begin((asset_editor->GetIcon() + " " + asset_editor->GetName()).c_str(), nullptr, flags);
             asset_editor->Draw(state);
             ImGui::End();
         }

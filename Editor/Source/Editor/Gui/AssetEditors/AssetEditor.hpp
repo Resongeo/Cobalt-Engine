@@ -28,6 +28,7 @@ namespace Cobalt
         auto FinishLayoutInitialization() -> void;
 
         auto GetName() const -> const String&;
+        auto GetIcon() const -> const String;
         auto GetIsDirty() const -> bool;
         auto GetIsLayoutInitialized() const -> bool;
         auto GetAssetUUID() const -> UUID;
@@ -36,12 +37,14 @@ namespace Cobalt
 
     protected:
         auto SetName(const String& name) -> void;
+        auto SetIcon(const char* icon) -> void;
         auto SetIsDirty(bool is_dirty) -> void;
 
     private:
         bool _is_layout_initialized = false;
         bool _is_dirty = false;
         bool _wants_focus = false;
+        const char* _icon = "";
         String _name = {};
         UUID _asset_uuid;
         ImGuiWindowClass _window_class = {};

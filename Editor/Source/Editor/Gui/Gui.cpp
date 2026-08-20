@@ -40,24 +40,22 @@ namespace Cobalt
         style.ScaleAllSizes(main_scale);
         style.FontScaleDpi = main_scale;
 
-        static constexpr ImWchar icon_ranges[] = { ICON_RANGE_MIN, ICON_RANGE_MAX, 0 };
+        auto LoadFontWithIcon = [](const ImGuiIO& io, const char* font_data, const ImFontConfig* font_config) -> ImFont* {
+            const auto font = io.Fonts->AddFontFromMemoryCompressedBase85TTF(font_data);
+            io.Fonts->AddFontFromMemoryCompressedBase85TTF(lucide_base85, 24, font_config);
+            return font;
+        };
+
         auto icon_font_config = ImFontConfig{};
-        icon_font_config.MergeMode = false;
+        icon_font_config.MergeMode = true;
         icon_font_config.GlyphMinAdvanceX = 20.0f;
-        icon_font_config.GlyphOffset = {0, 0};
-        icon_font_config.GlyphRanges = icon_ranges;
+        icon_font_config.GlyphOffset = {0, 3};
         icon_font_config.PixelSnapV = true;
 
-        Fonts::regular = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_regular_base85);
-        Fonts::semibold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_semibold_base85);
-        Fonts::bold = io.Fonts->AddFontFromMemoryCompressedBase85TTF(inter_bold_base85);
+        Fonts::regular = LoadFontWithIcon(io, inter_regular_base85, &icon_font_config);
+        Fonts::semibold = LoadFontWithIcon(io, inter_semibold_base85, &icon_font_config);
+        Fonts::bold = LoadFontWithIcon(io, inter_bold_base85, &icon_font_config);
         io.FontDefault = Fonts::regular;
-
-        Fonts::icon = io.Fonts->AddFontFromMemoryCompressedBase85TTF(
-            lucide_fonticon_base85,
-            20.0f,
-            &icon_font_config
-        );
 
         ImGui_ImplSDL3_InitForOpenGL(Window::Get().GetHandle(), Window::Get().GetGLContext());
         ImGui_ImplOpenGL3_Init("#version 450 core");

@@ -18,8 +18,13 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
+
 namespace Cobalt
 {
+    constexpr auto VIEWPORT_PANEL_NAME = "Viewport";
+    constexpr auto SCENE_HIERARCHY_PANEL_NAME = ICON_HIERARCHY " Scene Hierarchy";
+    constexpr auto COMPONENTS_PANEL_NAME = ICON_COMPONENTS " Components";
+
     inline auto GizmoOperationToImGuizmo(const GizmoOperation operation) -> ImGuizmo::OPERATION {
         switch (operation) {
             case GizmoOperation::Universal: return ImGuizmo::UNIVERSAL;
@@ -33,6 +38,7 @@ namespace Cobalt
 
     SceneEditor::SceneEditor(const UUID& asset_uuid) : AssetEditor(asset_uuid) {
         SetName("Scene Editor");
+        SetIcon(ICON_SCENE);
     }
 
     void SceneEditor::OnInitLayout(ImGuiID dockspace_id) {
@@ -53,9 +59,9 @@ namespace Cobalt
             node->LocalFlags |= ImGuiDockNodeFlags_NoTabBar;
         }
 
-        ImGui::DockBuilderDockWindow("Viewport", viewport_node);
-        ImGui::DockBuilderDockWindow("Scene Hierarchy", hierarchy_node);
-        ImGui::DockBuilderDockWindow("Components", components_node);
+        ImGui::DockBuilderDockWindow(VIEWPORT_PANEL_NAME, viewport_node);
+        ImGui::DockBuilderDockWindow(SCENE_HIERARCHY_PANEL_NAME, hierarchy_node);
+        ImGui::DockBuilderDockWindow(COMPONENTS_PANEL_NAME, components_node);
 
         ImGui::DockBuilderFinish(dockspace_id);
     }
@@ -73,7 +79,7 @@ namespace Cobalt
     auto SceneEditor::DrawViewport(EditorState& state) const -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);
-        ImGui::Begin("Viewport", nullptr, 0);
+        ImGui::Begin(VIEWPORT_PANEL_NAME, nullptr, 0);
         {
             static auto mode = ImGuizmo::LOCAL;
             static auto should_snap = false;
@@ -186,7 +192,7 @@ namespace Cobalt
         const auto window_class = GetWindowClass();
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0, 0});
         ImGui::SetNextWindowClass(&window_class);
-        ImGui::Begin("Scene Hierarchy");
+        ImGui::Begin(SCENE_HIERARCHY_PANEL_NAME);
         {
             // Fix annoyance of have to click into the viewport in order to change the gizmo operation
             if (ImGui::IsWindowFocused()) {
@@ -283,13 +289,14 @@ namespace Cobalt
     auto SceneEditor::DrawComponents(EditorState& state) const -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);
-        Widgets::Begin("Components", {8, 8});
+        Widgets::Begin(COMPONENTS_PANEL_NAME, {8, 8});
         {
             auto& imgui_style = ImGui::GetStyle();
 
             if (state.selected_entity != entt::null) {
                 auto entity = Entity(state.selected_entity, &state.active_scene->GetRegistry());
 
+                // TODO: Rework this popup menu
                 ImGui::PushFont(Fonts::icon);
                 if (Widgets::Button(ICON_PLUS, Variant::Default, {0, 0}, true)) {
                     ImGui::OpenPopup("Add Component Popup Menu");
@@ -320,7 +327,7 @@ namespace Cobalt
                 ImGui::PopStyleVar(2);
 
                 if (entity.HasComponent<TagComponent>()) {
-                    if (Widgets::CollapsingHeader("Tag", Colors::tag)) {
+                    if (Widgets::CollapsingHeader(ICON_TAG" Tag", Colors::tag)) {
                         auto& [name, uuid] = entity.GetComponent<TagComponent>();
                         Widgets::TextInput("Name", &name);
 
@@ -331,7 +338,7 @@ namespace Cobalt
                 }
 
                 if (entity.HasComponent<TransformComponent>()) {
-                    if (Widgets::CollapsingHeader("Transform", Colors::transform)) {
+                    if (Widgets::CollapsingHeader(ICON_TRANSFORM" Transform", Colors::transform)) {
                         auto& [position, scale, rotation] = entity.GetComponent<TransformComponent>();
                         ImGui::DragFloat2("Position", &position[0], 0.1f);
                         ImGui::DragFloat2("Scale", &scale[0], 0.1f);
@@ -340,7 +347,7 @@ namespace Cobalt
                 }
 
                 if (entity.HasComponent<SpriteComponent>()) {
-                    if (Widgets::CollapsingHeader("Sprite", Colors::sprite)) {
+                    if (Widgets::CollapsingHeader(ICON_SPRITE " Sprite", Colors::sprite)) {
                         auto& [tint, uuid] = entity.GetComponent<SpriteComponent>();
                         ImGui::ColorEdit4("Tint", &tint.r);
 
@@ -398,7 +405,7 @@ namespace Cobalt
                 }
 
                 if (entity.HasComponent<ScriptComponent>()) {
-                    if (Widgets::CollapsingHeader("Script", Colors::script)) {
+                    if (Widgets::CollapsingHeader(ICON_SCRIPT " Script", Colors::script)) {
                         auto& [uuid, _] = entity.GetComponent<ScriptComponent>();
 
                         const auto uuid_str = std::to_string(uuid.value);
