@@ -4,7 +4,7 @@
 #pragma once
 
 #include "Editor/Core/EditorState.hpp"
-#include "Editor/Gui/IPanel.hpp"
+#include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"
@@ -27,7 +27,6 @@ namespace Cobalt
         Renderer _renderer = {};
         Camera _camera = {};
         EditorState _state = {};
-        Vector<Box<IPanel>> _panels = {};
         FrameProfilerData _frame_profiler_data = {};
         f32 _profiler_update_time = 0.0f;
     };

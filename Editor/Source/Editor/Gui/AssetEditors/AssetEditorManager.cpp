@@ -39,7 +39,7 @@ namespace Cobalt
     }
 
     auto AssetEditorManager::OpenEditor(const UUID asset_uuid) -> void {
-        auto asset_meta = AssetManager::Get().GetRegistry().GetMetadata(asset_uuid);
+        const auto asset_meta = AssetManager::Get().GetRegistry().GetMetadata(asset_uuid);
 
         bool found_opened = false;
         for (const auto& asset_editor : _editors) {

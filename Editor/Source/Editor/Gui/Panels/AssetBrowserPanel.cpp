@@ -6,9 +6,9 @@
 #include "Editor/Gui/FontIcons.hpp"
 #include "Editor/Gui/Fonts.hpp"
 #include "Editor/Gui/Widgets.hpp"
+#include "Engine/Assets/AssetManager.hpp"
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
-#include "Engine/Assets/AssetManager.hpp"
 
 #include <imgui.h>
 
@@ -123,12 +123,7 @@ namespace Cobalt
                 }
 
                 ImGui::SetCursorScreenPos(cursor_pos);
-                ImGui::ImageWithBg(
-                    texture->GetRendererID(),
-                    {thumbnail_size, thumbnail_size},
-                    {0, 1}, {1, 0},
-                    {0, 0, 0, 0}, tint_col
-                );
+                ImGui::ImageWithBg(texture->GetRendererID(), {thumbnail_size, thumbnail_size}, {0, 1}, {1, 0}, {0, 0, 0, 0}, tint_col);
                 ImGui::TextWrapped("%s", filename_string.c_str());
 
                 ImGui::NextColumn();
@@ -159,8 +154,7 @@ namespace Cobalt
         Widgets::End();
     }
 
-    auto AssetBrowserPanel::GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const
-            -> Texture2D* {
+    auto AssetBrowserPanel::GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const -> Texture2D* {
         if (entry.is_directory()) {
             return _directory_texture.get();
         }

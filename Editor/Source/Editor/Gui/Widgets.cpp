@@ -9,9 +9,9 @@
 
 namespace Cobalt::Widgets
 {
-    auto Begin(const StringView title, const ImVec2 padding) -> bool {
+    auto Begin(const StringView title, const ImVec2 padding, const ImGuiWindowFlags flags) -> bool {
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, padding);
-        const auto result = ImGui::Begin(title.data());
+        const auto result = ImGui::Begin(title.data(), nullptr, flags);
         ImGui::PopStyleVar();
 
         return result;

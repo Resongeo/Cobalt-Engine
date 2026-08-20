@@ -28,6 +28,7 @@ add_executable(Editor
 	Source/Editor/Gui/AssetEditors/AssetEditorManager.hpp
 	Source/Editor/Gui/AssetEditors/SceneEditor.cpp
 	Source/Editor/Gui/AssetEditors/SceneEditor.hpp
+	Source/Editor/Gui/Textures.hpp
 )
 
 target_link_libraries(Editor PRIVATE

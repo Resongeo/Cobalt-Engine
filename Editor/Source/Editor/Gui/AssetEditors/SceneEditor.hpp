@@ -7,6 +7,9 @@
 
 namespace Cobalt
 {
+    class AssetBrowserPanel;
+    class Texture2D;
+
     class SceneEditor final : public AssetEditor
     {
     public:
@@ -20,5 +23,14 @@ namespace Cobalt
         auto DrawViewport(EditorState& state) const -> void;
         auto DrawHierarchy(EditorState& state) const -> void;
         auto DrawComponents(EditorState& state) const -> void;
+        auto DrawAssetsBrowser(EditorState& state) -> void;
+
+        auto GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const -> Texture2D*;
+
+    private:
+        Filepath _assets_base_dir = {};
+        Filepath _current_dir = {};
+        HashMap<Filepath, Color> _directory_colors = {};
+        bool _directory_changed = false;
     };
 }

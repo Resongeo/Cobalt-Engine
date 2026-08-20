@@ -18,6 +18,7 @@ namespace Cobalt
 #define ICON_CRITICAL    "\xee\x84\xa8"  // U+E128
 #define ICON_HIERARCHY   "\xee\x98\xa4"  // U+E624
 #define ICON_SCENE       "\xee\x92\xb3"  // U+E4B3
+#define ICON_ASSETS      "\xee\x8c\xbf"  // U+E33F
 #define ICON_TAG         "\xee\x85\xbf"  // U+E17F
 #define ICON_TRANSFORM   "\xee\x8b\xa5"  // U+E2E5
 #define ICON_SPRITE      "\xee\x83\xb6"  // U+E0F6

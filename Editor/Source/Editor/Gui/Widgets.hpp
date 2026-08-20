@@ -20,7 +20,7 @@ namespace Cobalt
 
     namespace Widgets
     {
-        auto Begin(StringView title, ImVec2 padding = {0, 0}) -> bool;
+        auto Begin(StringView title, ImVec2 padding = {0, 0}, ImGuiWindowFlags flags = 0) -> bool;
         auto End() -> void;
 
         auto Separator() -> void;

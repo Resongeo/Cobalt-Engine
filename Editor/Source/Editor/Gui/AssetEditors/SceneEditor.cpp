@@ -4,8 +4,10 @@
 #include "Editor/Gui/AssetEditors/SceneEditor.hpp"
 #include "Editor/Gui/FontIcons.hpp"
 #include "Editor/Gui/Fonts.hpp"
+#include "Editor/Gui/Textures.hpp"
 #include "Editor/Gui/Widgets.hpp"
 #include "Engine/Assets/AssetManager.hpp"
+#include "Engine/Core/Log.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Graphics/Texture2D.hpp"
 #include "Engine/Scene/SceneManager.hpp"
@@ -18,12 +20,16 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
+#include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 
 namespace Cobalt
 {
     constexpr auto VIEWPORT_PANEL_NAME = "Viewport";
+    constexpr auto ASSET_BROWSER_PANEL_NAME = ICON_ASSETS " Asset Browser";
     constexpr auto SCENE_HIERARCHY_PANEL_NAME = ICON_HIERARCHY " Scene Hierarchy";
     constexpr auto COMPONENTS_PANEL_NAME = ICON_COMPONENTS " Components";
+
+    constexpr auto PANEL_FLAGS = ImGuiWindowFlags_None;
 
     inline auto GizmoOperationToImGuizmo(const GizmoOperation operation) -> ImGuizmo::OPERATION {
         switch (operation) {
@@ -39,18 +45,29 @@ namespace Cobalt
     SceneEditor::SceneEditor(const UUID& asset_uuid) : AssetEditor(asset_uuid) {
         SetName("Scene Editor");
         SetIcon(ICON_SCENE);
+
+        _assets_base_dir = Project::Get().GetProjectAssetsPath();
+        _current_dir = _assets_base_dir;
     }
 
-    void SceneEditor::OnInitLayout(ImGuiID dockspace_id) {
+    void SceneEditor::OnInitLayout(const ImGuiID dockspace_id) {
         ImGui::DockBuilderRemoveNode(dockspace_id);
-
         ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
         ImGui::DockBuilderSetNodeSize(dockspace_id, ImGui::GetMainViewport()->Size);
 
-        ImGuiID viewport_node;
+        ImGuiID main_area_node;
         ImGuiID right_sidebar_node;
-        ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.20f, &right_sidebar_node, &viewport_node);
 
+        // 1. Split right sidebar (20%) from root -> sidebar gets full height on the right
+        ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Right, 0.20f, &right_sidebar_node, &main_area_node);
+
+        ImGuiID viewport_node;
+        ImGuiID bottom_node;
+
+        // 2. Split bottom panel (20%) from main_area_node -> stays strictly under viewport
+        ImGui::DockBuilderSplitNode(main_area_node, ImGuiDir_Down, 0.20f, &bottom_node, &viewport_node);
+
+        // 3. Split right sidebar vertically
         ImGuiID hierarchy_node;
         ImGuiID components_node;
         ImGui::DockBuilderSplitNode(right_sidebar_node, ImGuiDir_Up, 0.50f, &hierarchy_node, &components_node);
@@ -60,6 +77,7 @@ namespace Cobalt
         }
 
         ImGui::DockBuilderDockWindow(VIEWPORT_PANEL_NAME, viewport_node);
+        ImGui::DockBuilderDockWindow(ASSET_BROWSER_PANEL_NAME, bottom_node);
         ImGui::DockBuilderDockWindow(SCENE_HIERARCHY_PANEL_NAME, hierarchy_node);
         ImGui::DockBuilderDockWindow(COMPONENTS_PANEL_NAME, components_node);
 
@@ -74,12 +92,13 @@ namespace Cobalt
         DrawViewport(state);
         DrawHierarchy(state);
         DrawComponents(state);
+        DrawAssetsBrowser(state);
     }
 
     auto SceneEditor::DrawViewport(EditorState& state) const -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);
-        ImGui::Begin(VIEWPORT_PANEL_NAME, nullptr, 0);
+        ImGui::Begin(VIEWPORT_PANEL_NAME, nullptr, PANEL_FLAGS);
         {
             static auto mode = ImGuizmo::LOCAL;
             static auto should_snap = false;
@@ -192,7 +211,7 @@ namespace Cobalt
         const auto window_class = GetWindowClass();
         ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {0, 0});
         ImGui::SetNextWindowClass(&window_class);
-        ImGui::Begin(SCENE_HIERARCHY_PANEL_NAME);
+        ImGui::Begin(SCENE_HIERARCHY_PANEL_NAME, nullptr, PANEL_FLAGS);
         {
             // Fix annoyance of have to click into the viewport in order to change the gizmo operation
             if (ImGui::IsWindowFocused()) {
@@ -289,7 +308,7 @@ namespace Cobalt
     auto SceneEditor::DrawComponents(EditorState& state) const -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);
-        Widgets::Begin(COMPONENTS_PANEL_NAME, {8, 8});
+        Widgets::Begin(COMPONENTS_PANEL_NAME, {8, 8}, PANEL_FLAGS);
         {
             auto& imgui_style = ImGui::GetStyle();
 
@@ -327,7 +346,7 @@ namespace Cobalt
                 ImGui::PopStyleVar(2);
 
                 if (entity.HasComponent<TagComponent>()) {
-                    if (Widgets::CollapsingHeader(ICON_TAG" Tag", Colors::tag)) {
+                    if (Widgets::CollapsingHeader(ICON_TAG " Tag", Colors::tag)) {
                         auto& [name, uuid] = entity.GetComponent<TagComponent>();
                         Widgets::TextInput("Name", &name);
 
@@ -338,7 +357,7 @@ namespace Cobalt
                 }
 
                 if (entity.HasComponent<TransformComponent>()) {
-                    if (Widgets::CollapsingHeader(ICON_TRANSFORM" Transform", Colors::transform)) {
+                    if (Widgets::CollapsingHeader(ICON_TRANSFORM " Transform", Colors::transform)) {
                         auto& [position, scale, rotation] = entity.GetComponent<TransformComponent>();
                         ImGui::DragFloat2("Position", &position[0], 0.1f);
                         ImGui::DragFloat2("Scale", &scale[0], 0.1f);
@@ -369,12 +388,8 @@ namespace Cobalt
                             ImGui::EndDragDropTarget();
                         }
 
-                        draw_list->AddRectFilled(
-                            cursor_pos,
-                            cursor_pos + ImVec2{region_avail.x, rect_height},
-                            ImGui::GetColorU32(imgui_style.Colors[ImGuiCol_FrameBg]),
-                            imgui_style.FrameRounding
-                        );
+                        draw_list->AddRectFilled(cursor_pos, cursor_pos + ImVec2{region_avail.x, rect_height},
+                                                 ImGui::GetColorU32(imgui_style.Colors[ImGuiCol_FrameBg]), imgui_style.FrameRounding);
 
                         const auto texture = AssetManager::Get().GetAsset<Texture2D>(uuid);
                         const auto text_line_height = ImGui::GetTextLineHeight();
@@ -389,11 +404,7 @@ namespace Cobalt
                             ImGui::Text("%s", texture_name_string.c_str());
                         } else {
                             const auto min = cursor_pos + ImVec2{thumbnail_padding, thumbnail_padding};
-                            draw_list->AddRectFilled(
-                                min,
-                                min + thumbnail_size,
-                                IM_COL32_WHITE
-                                );
+                            draw_list->AddRectFilled(min, min + thumbnail_size, IM_COL32_WHITE);
 
                             ImGui::SetCursorScreenPos(cursor_pos + ImVec2{thumbnail_size.x + thumbnail_padding * 2, text_y_offset});
                             ImGui::Text("Default Texture");
@@ -426,12 +437,8 @@ namespace Cobalt
                             ImGui::EndDragDropTarget();
                         }
 
-                        draw_list->AddRectFilled(
-                            cursor_pos,
-                            cursor_pos + ImVec2{region_avail.x, rect_height},
-                            ImGui::GetColorU32(imgui_style.Colors[ImGuiCol_FrameBg]),
-                            imgui_style.FrameRounding
-                        );
+                        draw_list->AddRectFilled(cursor_pos, cursor_pos + ImVec2{region_avail.x, rect_height},
+                                                 ImGui::GetColorU32(imgui_style.Colors[ImGuiCol_FrameBg]), imgui_style.FrameRounding);
 
                         auto class_name = String{};
                         if (auto meta_opt = AssetManager::Get().GetRegistry().GetMetadata(uuid)) {
@@ -451,5 +458,141 @@ namespace Cobalt
             }
         }
         Widgets::End();
+    }
+
+    constexpr float THUMBNAIL_MIN_SIZE = 70.0f;
+    constexpr float THUMBNAIL_MAX_SIZE = 150.0f;
+
+    auto SceneEditor::DrawAssetsBrowser(EditorState& state) -> void {
+        const auto window_class = GetWindowClass();
+        ImGui::SetNextWindowClass(&window_class);
+        Widgets::Begin(ASSET_BROWSER_PANEL_NAME, {8, 8}, PANEL_FLAGS);
+        {
+            ImGui::PushFont(Fonts::icon);
+
+            if (Widgets::Button(ICON_ARROW_LEFT, Variant::Default, {0, 0}, true)) {
+                if (_current_dir != std::filesystem::path(_assets_base_dir)) {
+                    _current_dir = _current_dir.parent_path();
+                    _directory_changed = true;
+                }
+            }
+
+            ImGui::SameLine();
+
+            if (Widgets::Button(ICON_REFRESH, Variant::Default, {0, 0}, true) || _directory_changed) {
+                for (auto& entry : std::filesystem::directory_iterator(_current_dir)) {
+                    if (!entry.is_directory() && entry.path().extension() != ".meta") {
+                        AssetManager::Get().RegisterAsset(entry.path());
+                    }
+                }
+
+                _directory_changed = false;
+            }
+
+            ImGui::PopFont();
+
+            static auto padding = 8.0f;
+            static auto thumbnail_size = 100.0f;
+            const auto cell_size = thumbnail_size + padding;
+
+            const auto panel_width = ImGui::GetContentRegionAvail().x;
+            auto columnCount = static_cast<i32>(panel_width / cell_size);
+            if (columnCount < 1) {
+                columnCount = 1;
+            }
+
+            ImGui::Columns(columnCount, nullptr, false);
+
+            for (auto& directory_entry : std::filesystem::directory_iterator(_current_dir)) {
+                const auto& path = directory_entry.path();
+                if (path.extension() == ".meta") {
+                    continue;
+                }
+
+                auto filename_string = path.filename().string();
+
+                const auto texture = GetTextureFromDirEntry(directory_entry);
+                auto tint_col = ImVec4{1, 1, 1, 1};
+
+                if (directory_entry.is_directory()) {
+                    if (_directory_colors.contains(path)) {
+                        tint_col = IMVEC4(_directory_colors[path]);
+                    } else {
+                        tint_col = IMVEC4(Colors::directory);
+                    }
+                }
+
+                auto cursor_pos = ImGui::GetCursorScreenPos();
+                ImGui::InvisibleButton(filename_string.c_str(), {thumbnail_size, thumbnail_size});
+
+                if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+                    if (auto metadata_opt = AssetManager::Get().GetRegistry().GetMetadata(path)) {
+                        auto metadata = metadata_opt.value();
+                        ImGui::SetDragDropPayload("ASSET_DRAG_AND_DROP", &metadata.uuid.value, sizeof(u64));
+
+                        auto asset_name = metadata.path.filename().string();
+                        ImGui::Text("%s", asset_name.c_str());
+                    }
+                    ImGui::EndDragDropSource();
+                }
+
+                if (ImGui::IsItemHovered()) {
+                    tint_col *= 0.9f;
+
+                    if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) {
+                        if (directory_entry.is_directory()) {
+                            _current_dir /= path.filename();
+                            _directory_changed = true;
+                        }
+                    }
+
+                    if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+                        ImGui::OpenPopup("Asset Context Menu");
+                    }
+                }
+
+                ImGui::SetCursorScreenPos(cursor_pos);
+                ImGui::ImageWithBg(texture->GetRendererID(), {thumbnail_size, thumbnail_size}, {0, 1}, {1, 0}, {0, 0, 0, 0}, tint_col);
+                ImGui::TextWrapped("%s", filename_string.c_str());
+
+                ImGui::NextColumn();
+            }
+
+            ImGui::Columns(1);
+
+            if (const auto& io = ImGui::GetIO(); io.MouseWheel != 0 && io.KeyCtrl && ImGui::IsWindowHovered()) {
+                thumbnail_size += 2.0f * io.MouseWheel;
+
+                if (thumbnail_size < THUMBNAIL_MIN_SIZE) {
+                    thumbnail_size = THUMBNAIL_MIN_SIZE;
+                } else if (thumbnail_size > THUMBNAIL_MAX_SIZE) {
+                    thumbnail_size = THUMBNAIL_MAX_SIZE;
+                }
+            }
+
+            ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, {8, 8});
+            if (ImGui::BeginPopupContextItem("Asset Context Menu")) {
+                if (Widgets::Button("Change Color")) {
+                    CORE_INFO("Editor::AssetBrowser: Pressed Change Color");
+                }
+
+                ImGui::EndPopup();
+            }
+            ImGui::PopStyleVar(1);
+        }
+        Widgets::End();
+    }
+
+    auto SceneEditor::GetTextureFromDirEntry(const std::filesystem::directory_entry& entry) const -> Texture2D* {
+        if (entry.is_directory()) {
+            return &Textures::directory;
+        }
+
+        switch (AssetManager::GetAssetTypeFromExtension(entry.path())) {
+            case AssetType::Texture: return &Textures::sprite;
+            case AssetType::Script: return &Textures::script;
+            case AssetType::Scene:
+            default: return &Textures::placeholder;
+        }
     }
 } // namespace Cobalt

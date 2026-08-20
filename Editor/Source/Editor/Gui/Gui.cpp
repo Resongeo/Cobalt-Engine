@@ -2,16 +2,17 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Editor/Gui/Gui.hpp"
-#include "Editor/Gui/Fonts.hpp"
 #include "Editor/Gui/Colors.hpp"
 #include "Editor/Gui/FontIcons.hpp"
+#include "Editor/Gui/Fonts.hpp"
+#include "Editor/Gui/Textures.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Types/Color.hpp"
 #include "Engine/Platform/Window.hpp"
 
+#include "Editor/Embedded/Fonts/InterBold.embed"
 #include "Editor/Embedded/Fonts/InterRegular.embed"
 #include "Editor/Embedded/Fonts/InterSemibold.embed"
-#include "Editor/Embedded/Fonts/InterBold.embed"
 #include "Editor/Embedded/Icons/Lucide.embed"
 
 #include <SDL3/SDL.h>
@@ -49,7 +50,7 @@ namespace Cobalt
         auto icon_font_config = ImFontConfig{};
         icon_font_config.MergeMode = true;
         icon_font_config.GlyphMinAdvanceX = 20.0f;
-        icon_font_config.GlyphOffset = {0, 3};
+        icon_font_config.GlyphOffset = {0, 4};
         icon_font_config.PixelSnapV = true;
 
         Fonts::regular = LoadFontWithIcon(io, inter_regular_base85, &icon_font_config);
@@ -59,6 +60,12 @@ namespace Cobalt
 
         ImGui_ImplSDL3_InitForOpenGL(Window::Get().GetHandle(), Window::Get().GetGLContext());
         ImGui_ImplOpenGL3_Init("#version 450 core");
+
+        const auto editor_asset_path = Project::Get().GetEditorAssetsPath();
+        Textures::directory.LoadFromFile(editor_asset_path / "Textures" / "Directory.png");
+        Textures::placeholder.LoadFromFile(editor_asset_path / "Textures" / "Default.png");
+        Textures::script.LoadFromFile(editor_asset_path / "Textures" / "Script.png");
+        Textures::sprite.LoadFromFile(editor_asset_path / "Textures" / "Texture.png");
     }
 
     auto Gui::SetupStyle() -> void {
