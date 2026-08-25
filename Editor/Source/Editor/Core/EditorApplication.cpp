@@ -69,6 +69,8 @@ namespace Cobalt
             DrawMainMenuBar();
 
             AssetEditorManager::Get().Draw(_state);
+
+            //ImGui::ShowMetricsWindow();
         }
         Gui::EndFrame();
     }
@@ -83,7 +85,7 @@ namespace Cobalt
         _state.main_dockspace_id = ImGui::DockSpaceOverViewport(dockspace_id, viewport, flags, &_state.main_dockspace_window_class);
     }
 
-    auto EditorApplication::DrawMainMenuBar() -> void {
+    auto EditorApplication::DrawMainMenuBar() const -> void {
         ImGui::BeginMainMenuBar();
         {
             if (ImGui::BeginMenu("File")) {

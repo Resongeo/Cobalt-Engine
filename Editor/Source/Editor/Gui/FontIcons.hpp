@@ -24,6 +24,6 @@ namespace Cobalt
 #define ICON_SPRITE      "\xee\x83\xb6"  // U+E0F6
 #define ICON_SCRIPT      "\xee\x8b\xad"  // U+E2ED
 
-#define ICON_REFRESH     "\xee\x85\x88"  // U+E148
+#define ICON_REFRESH     "\xee\x90\xa4"  // U+E424
 #define ICON_PLUS        "\xee\x84\xbd"  // U+E13d
 } // namespace Cobalt

@@ -21,7 +21,7 @@ namespace Cobalt
 
     private:
         auto DrawMainDockSpace() -> void;
-        auto DrawMainMenuBar() -> void;
+        auto DrawMainMenuBar() const -> void;
 
     private:
         Renderer _renderer = {};

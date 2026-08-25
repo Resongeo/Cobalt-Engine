@@ -317,7 +317,7 @@ namespace Cobalt
 
                 // TODO: Rework this popup menu
                 ImGui::PushFont(Fonts::icon);
-                if (Widgets::Button(ICON_PLUS, Variant::Default, {0, 0}, true)) {
+                if (Widgets::Button("Add Component", Variant::Default)) {
                     ImGui::OpenPopup("Add Component Popup Menu");
                 }
                 ImGui::PopFont();
