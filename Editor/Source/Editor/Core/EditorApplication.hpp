@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Editor/Core/EditorState.hpp"
-#include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
 #include "Engine/Core/Application.hpp"
 #include "Engine/Graphics/Camera.hpp"
 #include "Engine/Graphics/Renderer.hpp"

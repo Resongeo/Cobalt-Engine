@@ -7,21 +7,11 @@ add_executable(Editor
 	Source/Editor/Gui/Gui.hpp
 	Source/Editor/Gui/IPanel.hpp
 	Source/Editor/Core/EditorState.hpp
-	Source/Editor/Gui/Panels/SceneHierarchyPanel.cpp
-	Source/Editor/Gui/Panels/SceneHierarchyPanel.hpp
-	Source/Editor/Gui/Panels/ViewportPanel.cpp
-	Source/Editor/Gui/Panels/ViewportPanel.hpp
-	Source/Editor/Gui/Panels/EntityComponentsPanel.cpp
-	Source/Editor/Gui/Panels/EntityComponentsPanel.hpp
-	Source/Editor/Gui/Panels/AssetBrowserPanel.cpp
-	Source/Editor/Gui/Panels/AssetBrowserPanel.hpp
 	Source/Editor/Gui/Fonts.hpp
 	Source/Editor/Gui/Widgets.hpp
 	Source/Editor/Gui/Widgets.cpp
 	Source/Editor/Gui/Helpers.hpp
 	Source/Editor/Gui/Colors.hpp
-	Source/Editor/Gui/Panels/LogPanel.cpp
-	Source/Editor/Gui/Panels/LogPanel.hpp
 	Source/Editor/Gui/AssetEditors/AssetEditor.cpp
 	Source/Editor/Gui/AssetEditors/AssetEditor.hpp
 	Source/Editor/Gui/AssetEditors/AssetEditorManager.cpp

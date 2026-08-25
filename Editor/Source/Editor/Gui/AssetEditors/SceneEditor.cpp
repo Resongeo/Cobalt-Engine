@@ -20,8 +20,6 @@
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
 
-#include "Editor/Gui/Panels/AssetBrowserPanel.hpp"
-
 namespace Cobalt
 {
     constexpr auto VIEWPORT_PANEL_NAME = "Viewport";
