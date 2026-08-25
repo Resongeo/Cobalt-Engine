@@ -132,29 +132,29 @@ namespace Cobalt
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});
 
             ImGui::SetCursorScreenPos(toolbar_pos);
-            if (ImGui::RadioButton("Universal", state.gizmo_operation == GizmoOperation::Universal)) {
+            if (ImGui::RadioButton(ICON_UNIVERSAL, state.gizmo_operation == GizmoOperation::Universal)) {
                 state.gizmo_operation = GizmoOperation::Universal;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("Translate", state.gizmo_operation == GizmoOperation::Translate)) {
+            if (ImGui::RadioButton(ICON_TRANSLATION, state.gizmo_operation == GizmoOperation::Translate)) {
                 state.gizmo_operation = GizmoOperation::Translate;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("Rotate", state.gizmo_operation == GizmoOperation::Rotate)) {
+            if (ImGui::RadioButton(ICON_ROTATION, state.gizmo_operation == GizmoOperation::Rotate)) {
                 state.gizmo_operation = GizmoOperation::Rotate;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("Scale", state.gizmo_operation == GizmoOperation::Scale)) {
+            if (ImGui::RadioButton(ICON_SCALE2, state.gizmo_operation == GizmoOperation::Scale)) {
                 state.gizmo_operation = GizmoOperation::Scale;
             }
             ImGui::SameLine();
             ImGui::Dummy({20, 0});
             ImGui::SameLine();
-            if (ImGui::RadioButton("Local", mode == ImGuizmo::LOCAL)) {
+            if (ImGui::RadioButton(ICON_LOCAL, mode == ImGuizmo::LOCAL)) {
                 mode = ImGuizmo::LOCAL;
             }
             ImGui::SameLine();
-            if (ImGui::RadioButton("World", mode == ImGuizmo::WORLD)) {
+            if (ImGui::RadioButton(ICON_WORLD, mode == ImGuizmo::WORLD)) {
                 mode = ImGuizmo::WORLD;
             }
 

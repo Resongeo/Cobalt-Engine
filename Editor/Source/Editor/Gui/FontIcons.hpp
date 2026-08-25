@@ -23,7 +23,14 @@ namespace Cobalt
 #define ICON_TRANSFORM   "\xee\x8b\xa5"  // U+E2E5
 #define ICON_SPRITE      "\xee\x83\xb6"  // U+E0F6
 #define ICON_SCRIPT      "\xee\x8b\xad"  // U+E2ED
+#define ICON_REFRESH     "\xee\x90\x91"  // U+E411
+#define ICON_UNIVERSAL   "\xee\x8f\xa7"  // U+E3E7
+#define ICON_TRANSLATION "\xee\x8b\xa5"  // U+E2E5
+#define ICON_ROTATION    "\xee\x8b\xaa"  // U+E2EA
+#define ICON_SCALE       "\xee\x97\xa2"  // U+E5E2
+#define ICON_SCALE2      "\xee\x98\xb7"  // U+E637
+#define ICON_WORLD       "\xee\x83\xa8"  // U+E0E8
+#define ICON_LOCAL       "\xee\x94\xad"  // U+E52D
 
-#define ICON_REFRESH     "\xee\x90\xa4"  // U+E424
 #define ICON_PLUS        "\xee\x84\xbd"  // U+E13d
 } // namespace Cobalt

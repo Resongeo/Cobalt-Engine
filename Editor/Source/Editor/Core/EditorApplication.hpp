@@ -20,7 +20,7 @@ namespace Cobalt
 
     private:
         auto DrawMainDockSpace() -> void;
-        auto DrawMainMenuBar() const -> void;
+        auto DrawMainMenuBar() -> void;
 
     private:
         Renderer _renderer = {};
@@ -28,5 +28,6 @@ namespace Cobalt
         EditorState _state = {};
         FrameProfilerData _frame_profiler_data = {};
         f32 _profiler_update_time = 0.0f;
+        bool _show_metrics_window = false;
     };
 } // namespace Cobalt
