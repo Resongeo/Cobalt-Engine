@@ -98,6 +98,8 @@ set(ENGINE_SOURCES
 	Source/Engine/Profiling/FrameProfiler.hpp
 	Source/Engine/Profiling/ScopedFrameProfileTimer.hpp
 	Source/Engine/Profiling/ScopedFrameProfileTimer.cpp
+	Source/Engine/Core/JobSystem.cpp
+	Source/Engine/Core/JobSystem.hpp
 )
 
 # -- Platform specific source files --
@@ -120,6 +122,7 @@ target_link_libraries(Engine PUBLIC
 	spdlog::spdlog
 	rpmalloc
 	EASTL
+	enkiTS
 )
 
 target_include_directories(Engine PUBLIC

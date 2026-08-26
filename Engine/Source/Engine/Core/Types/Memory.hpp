@@ -5,6 +5,7 @@
 
 #include <EASTL/unique_ptr.h>
 #include <EASTL/shared_ptr.h>
+#include <rpmalloc.h>
 
 namespace Cobalt
 {
@@ -16,6 +17,10 @@ namespace Cobalt
 
     namespace Memory
     {
+        inline auto Init() -> void {
+            rpmalloc_linker_reference();
+        }
+
         template <typename T, typename... Args>
         constexpr auto MakeBox(Args&&... args) -> Box<T> {
             return eastl::make_unique<T>(std::forward<Args>(args)...);

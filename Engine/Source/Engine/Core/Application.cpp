@@ -6,6 +6,7 @@
 #include "Engine/Core/Log.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Time.hpp"
+#include "Engine/Core/JobSystem.hpp"
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Platform/Window.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
@@ -29,10 +30,11 @@ namespace Cobalt
     }
 
     auto Application::Init(const CommandLineArgs& args) -> bool {
-        rpmalloc_linker_reference();
+        // TODO: Have proper error types and TRY macro
+        Memory::Init();
         Log::Init();
 
-        // TODO: Have proper error types and TRY macro
+        JobSystem::Get().Init();
         Project::Get().Init(args);
         AssetManager::Get().Init();
         SceneManager::Get().Init();
@@ -68,6 +70,7 @@ namespace Cobalt
     }
 
     Application::~Application() {
+        JobSystem::Get().Shutdown();
         ScriptManager::Get().ShutDown();
         Window::Get().ShutDown();
     }

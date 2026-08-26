@@ -38,3 +38,6 @@
 [submodule "Vendor/EASTL"]
 	path = Vendor/EASTL
 	url = https://github.com/electronicarts/EASTL
+[submodule "Vendor/ENKITS"]
+	path = Vendor/ENKITS
+	url = https://github.com/dougbinks/enkiTS
