@@ -4,8 +4,6 @@
 #pragma once
 
 #include "Engine/Core/Types/Memory.hpp"
-#include "Engine/Graphics/Camera.hpp"
-#include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Scene/Scene.hpp"
 
 #include <entt/entity/entity.hpp>
@@ -26,8 +24,6 @@ namespace Cobalt
     {
         entt::entity selected_entity = entt::null;
         Rc<Scene> active_scene = nullptr;
-        Camera editor_camera = {};
-        Framebuffer framebuffer = {};
         GizmoOperation gizmo_operation = {};
         ImGuiWindowClass main_dockspace_window_class = {};
         ImGuiID main_dockspace_id = {};

@@ -4,6 +4,9 @@
 #pragma once
 
 #include "Editor/Gui/AssetEditors/AssetEditor.hpp"
+#include "Engine/Graphics/Camera.hpp"
+#include "Engine/Graphics/Framebuffer.hpp"
+#include "Engine/Graphics/Renderer.hpp"
 
 namespace Cobalt
 {
@@ -20,7 +23,7 @@ namespace Cobalt
         auto OnDrawPanels(EditorState& state) -> void override;
 
     private:
-        auto DrawViewport(EditorState& state) const -> void;
+        auto DrawViewport(EditorState& state) -> void;
         auto DrawHierarchy(EditorState& state) const -> void;
         auto DrawComponents(EditorState& state) const -> void;
         auto DrawAssetsBrowser(EditorState& state) -> void;
@@ -31,6 +34,9 @@ namespace Cobalt
         Filepath _assets_base_dir = {};
         Filepath _current_dir = {};
         HashMap<Filepath, Color> _directory_colors = {};
+        Camera _editor_camera = {};
+        Framebuffer _viewport_framebuffer = {};
+        Renderer _renderer = {};
         bool _directory_changed = false;
     };
 }

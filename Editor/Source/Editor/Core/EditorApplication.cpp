@@ -29,14 +29,9 @@ namespace Cobalt
         Gui::Init();
         Gui::SetupStyle();
 
-        _renderer.Init(10000, Project::Get().GetEditorAssetsPath());
-
-        _state.framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
-        _state.framebuffer.Unbind();
-
         auto& scene_manager = SceneManager::Get();
-        scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
-        scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate, &_renderer, &_state.editor_camera, &_state.framebuffer);
+        scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate);
+        scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate);
         scene_manager.AddSystem<ScriptStartSystem>(Schedule::RuntimeStart);
         scene_manager.AddSystem<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
 

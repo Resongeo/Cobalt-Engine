@@ -5,8 +5,6 @@
 
 #include "Editor/Core/EditorState.hpp"
 #include "Engine/Core/Application.hpp"
-#include "Engine/Graphics/Camera.hpp"
-#include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
 
 namespace Cobalt
@@ -23,8 +21,6 @@ namespace Cobalt
         auto DrawMainMenuBar() -> void;
 
     private:
-        Renderer _renderer = {};
-        Camera _camera = {};
         EditorState _state = {};
         FrameProfilerData _frame_profiler_data = {};
         f32 _profiler_update_time = 0.0f;

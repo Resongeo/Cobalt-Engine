@@ -46,6 +46,16 @@ namespace Cobalt
 
         _assets_base_dir = Project::Get().GetProjectAssetsPath();
         _current_dir = _assets_base_dir;
+
+        _renderer.Init(10000, Project::Get().GetEditorAssetsPath());
+
+        _viewport_framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
+        _viewport_framebuffer.Unbind();
+
+        auto& registry = SceneManager::Get().GetActiveScene()->GetRegistry();
+        registry.ctx().emplace<Renderer*>(&_renderer);
+        registry.ctx().emplace<Framebuffer*>(&_viewport_framebuffer);
+        registry.ctx().emplace<Camera*>(&_editor_camera);
     }
 
     void SceneEditor::OnInitLayout(const ImGuiID dockspace_id) {
@@ -93,7 +103,7 @@ namespace Cobalt
         DrawAssetsBrowser(state);
     }
 
-    auto SceneEditor::DrawViewport(EditorState& state) const -> void {
+    auto SceneEditor::DrawViewport(EditorState& state) -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);
         ImGui::Begin(VIEWPORT_PANEL_NAME, nullptr, PANEL_FLAGS);
@@ -123,9 +133,9 @@ namespace Cobalt
             static auto toolbar_pos = ImVec2();
             toolbar_pos = ImGui::GetCursorScreenPos();
 
-            if (const auto color_id = state.framebuffer.GetColorAttachmentID(0); color_id >= 0) {
+            if (const auto color_id = _viewport_framebuffer.GetColorAttachmentID(0); color_id >= 0) {
                 const auto viewport_size = ImGui::GetContentRegionAvail();
-                state.framebuffer.Resize(viewport_size.x, viewport_size.y);
+                _viewport_framebuffer.Resize(viewport_size.x, viewport_size.y);
                 ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
             }
 
@@ -175,8 +185,8 @@ namespace Cobalt
                     snap_amount = 0.0f;
                 }
 
-                ImGuizmo::Manipulate(glm::value_ptr(state.editor_camera.GetView()),
-                                     glm::value_ptr(state.editor_camera.GetProjection(state.framebuffer.GetSize())),
+                ImGuizmo::Manipulate(glm::value_ptr(_editor_camera.GetView()),
+                                     glm::value_ptr(_editor_camera.GetProjection(_viewport_framebuffer.GetSize())),
                                      GizmoOperationToImGuizmo(state.gizmo_operation), mode, glm::value_ptr(transform_matrix), nullptr,
                                      should_snap ? &snap_amount : nullptr);
 

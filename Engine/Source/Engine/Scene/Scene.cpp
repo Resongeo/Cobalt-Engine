@@ -49,6 +49,8 @@ namespace Cobalt
         auto scene = Memory::MakeRc<Scene>();
         scene->SetName(_name);
 
+        scene->_registry.ctx() = _registry.ctx();
+
         const auto view = _registry.view<entt::entity>();
         for (auto it = view.rbegin(); it != view.rend(); ++it) {
             const auto src_entity = *it;
