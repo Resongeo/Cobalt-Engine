@@ -7,10 +7,10 @@
 
 namespace Cobalt
 {
-    class ScriptStartSystem final : public ISystem
+    class EditorUpdateSystem final : public ISystem
     {
     public:
-        ScriptStartSystem() = default;
+        explicit EditorUpdateSystem() = default;
         auto Update(entt::registry& registry) -> void override;
     };
 } // namespace Cobalt

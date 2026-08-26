@@ -7,10 +7,10 @@
 
 namespace Cobalt
 {
-    class EditorRenderSystem final : public ISystem
+    class RuntimeStartSystem final : public ISystem
     {
     public:
-        explicit EditorRenderSystem() = default;
+        RuntimeStartSystem() = default;
         auto Update(entt::registry& registry) -> void override;
     };
 } // namespace Cobalt

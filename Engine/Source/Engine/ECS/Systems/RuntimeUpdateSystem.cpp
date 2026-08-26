@@ -1,18 +1,32 @@
 // SPDX-License-Identifier: Apache-2.0
 // Copyright (c) 2026 Somogyvári Benedek
 
-#include "Engine/ECS/Systems/EditorRenderSystem.hpp"
+#include "Engine/ECS/Systems/RuntimeUpdateSystem.hpp"
 #include "Engine/Assets/AssetManager.hpp"
-#include "Engine/ECS/Components/SpriteComponent.hpp"
-#include "Engine/ECS/Components/TransformComponent.hpp"
+#include "Engine/Core/Time.hpp"
+#include "Engine/ECS/Components/Minimal.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
+#include "Engine/Scripting/Script.hpp"
+#include "Engine/Scripting/ScriptManager.hpp"
 
 namespace Cobalt
 {
-    auto EditorRenderSystem::Update(entt::registry& registry) -> void {
-        FRAME_PROFILER_EVENT("Editor Render System");
+    void RuntimeUpdateSystem::Update(entt::registry& registry) {
+        FRAME_PROFILER_EVENT("Script Update");
+
+        for (const auto entity : registry.view<ScriptComponent>()) {
+            auto& [script_id, instance] = registry.get<ScriptComponent>(entity);
+
+            if (!script_id.IsValid()) {
+                continue;
+            }
+
+            if (auto script = AssetManager::Get().GetAsset<Script>(script_id); script) {
+                ScriptManager::Get().ExecuteUpdate(script, instance, Time::GetDeltaTime());
+            }
+        }
 
         Framebuffer* framebuffer = nullptr;
         Camera* camera = nullptr;

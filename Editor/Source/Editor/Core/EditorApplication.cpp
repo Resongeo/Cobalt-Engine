@@ -11,10 +11,10 @@
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Time.hpp"
 #include "Engine/ECS/Components/Minimal.hpp"
-#include "Engine/ECS/Systems/EditorRenderSystem.hpp"
+#include "Engine/ECS/Systems/EditorUpdateSystem.hpp"
+#include "Engine/ECS/Systems/RuntimeStartSystem.hpp"
+#include "Engine/ECS/Systems/RuntimeUpdateSystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
-#include "Engine/ECS/Systems/ScriptStartSystem.hpp"
-#include "Engine/ECS/Systems/ScriptUpdateSystem.hpp"
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Events/KeyboardEvents.hpp"
 #include "Engine/Scene/SceneManager.hpp"
@@ -30,10 +30,9 @@ namespace Cobalt
         Gui::SetupStyle();
 
         auto& scene_manager = SceneManager::Get();
-        scene_manager.AddSystem<EditorRenderSystem>(Schedule::EditorUpdate);
-        scene_manager.AddSystem<EditorRenderSystem>(Schedule::RuntimeUpdate);
-        scene_manager.AddSystem<ScriptStartSystem>(Schedule::RuntimeStart);
-        scene_manager.AddSystem<ScriptUpdateSystem>(Schedule::RuntimeUpdate);
+        scene_manager.AddSystem<EditorUpdateSystem>(Schedule::EditorUpdate);
+        scene_manager.AddSystem<RuntimeStartSystem>(Schedule::RuntimeStart);
+        scene_manager.AddSystem<RuntimeUpdateSystem>(Schedule::RuntimeUpdate);
 
         Window::Get().SetNativeEventCallback([](void* event) {
             const auto* sdl_event = static_cast<SDL_Event*>(event);

@@ -36,8 +36,12 @@ set(ENGINE_SOURCES
 	Source/Engine/Graphics/Camera.cpp
 	Source/Engine/Graphics/Camera.hpp
 	Source/Engine/ECS/Systems/ISystem.hpp
-	Source/Engine/ECS/Systems/EditorRenderSystem.cpp
-	Source/Engine/ECS/Systems/EditorRenderSystem.hpp
+	Source/Engine/ECS/Systems/EditorUpdateSystem.cpp
+	Source/Engine/ECS/Systems/EditorUpdateSystem.hpp
+	Source/Engine/ECS/Systems/RuntimeStartSystem.cpp
+	Source/Engine/ECS/Systems/RuntimeStartSystem.hpp
+	Source/Engine/ECS/Systems/RuntimeUpdateSystem.cpp
+	Source/Engine/ECS/Systems/RuntimeUpdateSystem.hpp
 	Source/Engine/ECS/Systems/Schedule.hpp
 	Source/Engine/Scene/SceneState.hpp
 	Source/Engine/Core/Fwd.hpp
@@ -77,14 +81,10 @@ set(ENGINE_SOURCES
 	Source/Engine/Scripting/Script.cpp
 	Source/Engine/Scripting/Script.hpp
 	Source/Engine/ECS/Components/ScriptComponent.hpp
-	Source/Engine/ECS/Systems/ScriptStartSystem.cpp
-	Source/Engine/ECS/Systems/ScriptStartSystem.hpp
 	Source/Engine/Platform/DialogManager.cpp
 	Source/Engine/Platform/DialogManager.hpp
 	Source/Engine/Scripting/ScriptEntity.cpp
 	Source/Engine/Scripting/ScriptEntity.hpp
-	Source/Engine/ECS/Systems/ScriptUpdateSystem.cpp
-	Source/Engine/ECS/Systems/ScriptUpdateSystem.hpp
 	Source/Engine/Scripting/ScriptGlue.cpp
 	Source/Engine/Scripting/ScriptGlue.hpp
 	Source/Engine/Events/LogEvents.hpp
