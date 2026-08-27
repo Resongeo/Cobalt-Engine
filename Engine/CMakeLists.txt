@@ -100,6 +100,7 @@ set(ENGINE_SOURCES
 	Source/Engine/Profiling/ScopedFrameProfileTimer.cpp
 	Source/Engine/Core/JobSystem.cpp
 	Source/Engine/Core/JobSystem.hpp
+	Source/Engine/ECS/Components/CameraComponent.hpp
 )
 
 # -- Platform specific source files --

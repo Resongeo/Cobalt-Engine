@@ -291,15 +291,30 @@ namespace Cobalt
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {8, 4});
             if (ImGui::BeginPopupContextItem("Scene Hierarchy Context Menu")) {
                 ImGui::SeparatorText("Create");
+
                 if (Widgets::Button("Empty Entity")) {
                     const auto entity = state.active_scene->CreateEntity("Entity");
                     state.selected_entity = entity.ID();
 
                     ImGui::CloseCurrentPopup();
                 }
+
                 if (Widgets::Button("Sprite Entity")) {
                     auto entity = state.active_scene->CreateEntity("Sprite");
                     entity.AddComponent<SpriteComponent>();
+                    state.selected_entity = entity.ID();
+
+                    ImGui::CloseCurrentPopup();
+                }
+
+                if (Widgets::Button("Camera")) {
+                    const auto existing_cameras_view = state.active_scene->GetRegistry().view<CameraComponent>();
+                    const auto existing_camera_count = existing_cameras_view.size<CameraComponent>();
+
+                    auto entity = state.active_scene->CreateEntity("Camera");
+                    auto& camera = entity.AddComponent<CameraComponent>();
+                    camera.primary = existing_camera_count == 0;
+
                     state.selected_entity = entity.ID();
 
                     ImGui::CloseCurrentPopup();
@@ -370,6 +385,15 @@ namespace Cobalt
                         ImGui::DragFloat2("Position", &position[0], 0.1f);
                         ImGui::DragFloat2("Scale", &scale[0], 0.1f);
                         ImGui::DragFloat("Rotation", &rotation, 0.1f);
+                    }
+                }
+
+                if (entity.HasComponent<CameraComponent>()) {
+                    if (Widgets::CollapsingHeader(ICON_CAMERA " Camera", Colors::camera)) {
+                        auto& [camera, primary] = entity.GetComponent<CameraComponent>();
+                        ImGui::ColorEdit3("Clear Color", &camera.clear_color.r);
+                        ImGui::DragFloat("Size", &camera.size, 0.1f, 0.1f, 100.0f);
+                        ImGui::Checkbox("Primary", &primary);
                     }
                 }
 

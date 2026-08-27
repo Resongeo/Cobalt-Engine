@@ -32,6 +32,7 @@ namespace Cobalt::Colors
     inline Color arrow     = Color::FromOKLCH(0.65f, 0.0f, 0.0f);
     inline Color tag       = Color::FromRGBU8(88, 153, 232);
     inline Color transform = Color::FromRGBU8(232, 150, 88);
+    inline Color camera    = Color::FromRGBU8(108, 230, 136);
     inline Color sprite    = Color::FromRGBU8(195, 119, 230);
     inline Color script    = Color::FromRGBU8(72, 115, 217);
     inline Color directory = Color::FromRGBU8(194, 159, 83);

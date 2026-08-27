@@ -145,6 +145,33 @@ namespace Cobalt
                             transform.rotation = rot_val;
                         }
                     }
+                } else if (component_type == "camera") {
+                    simdjson::ondemand::object comp_obj;
+                    if (value.get_object().get(comp_obj) == simdjson::SUCCESS) {
+                        auto& camera_comp = entity.AddComponent<CameraComponent>();
+
+                        // TODO: Other camera props
+                        simdjson::ondemand::object clear_color_obj;
+                        if (comp_obj["tint"].get_object().get(clear_color_obj) == simdjson::SUCCESS) {
+                            float r = Helpers::ParseFloat(clear_color_obj, "r", 1.0f);
+                            float g = Helpers::ParseFloat(clear_color_obj, "g", 1.0f);
+                            float b = Helpers::ParseFloat(clear_color_obj, "b", 1.0f);
+                            float a = Helpers::ParseFloat(clear_color_obj, "a", 1.0f);
+                            camera_comp.camera.clear_color = Color{r, g, b, a};
+                        }
+
+                        std::string_view size_view;
+                        if (comp_obj["size"].get_string().get(size_view) == simdjson::SUCCESS) {
+                            float size_val = 0.0f;
+                            std::from_chars(size_view.data(), size_view.data() + size_view.size(), size_val);
+                            camera_comp.camera.size = size_val;
+                        }
+
+                        bool is_primary;
+                        if (comp_obj["primary"].get_bool().get(is_primary) == simdjson::SUCCESS) {
+                            camera_comp.primary = is_primary;
+                        }
+                    }
                 } else if (component_type == "sprite") {
                     simdjson::ondemand::object comp_obj;
                     if (value.get_object().get(comp_obj) == simdjson::SUCCESS) {
@@ -240,6 +267,28 @@ namespace Cobalt
                             Helpers::VecToJsonObject(sb, "scale", transform.scale);
                             sb.append_comma();
                             sb.append_key_value("rotation", std::to_string(transform.rotation));
+                        }
+                        sb.end_object();
+                    }
+
+                    if (entity.HasComponent<CameraComponent>()) {
+                        if (active_components > 0) {
+                            sb.append_comma();
+                        }
+                        active_components++;
+
+                        sb.escape_and_append_with_quotes("camera");
+                        sb.append_colon();
+                        sb.start_object();
+                        {
+                            const auto& comp = entity.GetComponent<CameraComponent>();
+                            Helpers::ColorToJsonObject(sb, "clear_color", comp.camera.clear_color);
+                            sb.append_comma();
+                            sb.append_key_value("size", std::to_string(comp.camera.size));
+                            sb.append_comma();
+                            sb.escape_and_append_with_quotes("primary");
+                            sb.append_colon();
+                            sb.append_raw(comp.primary ? "true" : "false");
                         }
                         sb.end_object();
                     }

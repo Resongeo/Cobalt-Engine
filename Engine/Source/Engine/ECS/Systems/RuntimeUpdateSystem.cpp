@@ -29,22 +29,42 @@ namespace Cobalt
         }
 
         Framebuffer* framebuffer = nullptr;
-        Camera* camera = nullptr;
         Renderer* renderer = nullptr;
 
         if (!registry.ctx().find<Framebuffer*>()) return;
-        if (!registry.ctx().find<Camera*>()) return;
         if (!registry.ctx().find<Renderer*>()) return;
 
         framebuffer = registry.ctx().get<Framebuffer*>();
-        camera = registry.ctx().get<Camera*>();
         renderer = registry.ctx().get<Renderer*>();
+
+        Camera* primary_camera = nullptr;
+        bool first_camera = true;
+        for (const auto entity : registry.view<CameraComponent>()) {
+            const auto transform = registry.get<TransformComponent>(entity);
+            auto& [camera, primary] = registry.get<CameraComponent>(entity);
+
+            camera.position = transform.position;
+            camera.rotation = transform.rotation;
+
+            if (first_camera) {
+                primary_camera = &camera;
+                first_camera = false;
+            }
+
+            if (primary) {
+                primary_camera = &camera;
+            }
+        }
+
+        if (primary_camera == nullptr) {
+            return;
+        }
 
         framebuffer->Bind();
 
         const auto viewport_size = framebuffer->GetSize();
         renderer->SetViewportSize(viewport_size);
-        renderer->BeginFrame(*camera);
+        renderer->BeginFrame(*primary_camera);
 
         for (const auto entity : registry.view<SpriteComponent>()) {
             auto [tint, texture_id] = registry.get<SpriteComponent>(entity);

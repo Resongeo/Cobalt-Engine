@@ -15,7 +15,7 @@ namespace Cobalt
         FRAME_PROFILER_EVENT("Editor Render System");
 
         Framebuffer* framebuffer = nullptr;
-        Camera* camera = nullptr;
+        Camera* editor_camera = nullptr;
         Renderer* renderer = nullptr;
 
         if (!registry.ctx().find<Framebuffer*>()) return;
@@ -23,14 +23,14 @@ namespace Cobalt
         if (!registry.ctx().find<Renderer*>()) return;
 
         framebuffer = registry.ctx().get<Framebuffer*>();
-        camera = registry.ctx().get<Camera*>();
+        editor_camera = registry.ctx().get<Camera*>();
         renderer = registry.ctx().get<Renderer*>();
 
         framebuffer->Bind();
 
         const auto viewport_size = framebuffer->GetSize();
         renderer->SetViewportSize(viewport_size);
-        renderer->BeginFrame(*camera);
+        renderer->BeginFrame(*editor_camera);
 
         for (const auto entity : registry.view<SpriteComponent>()) {
             auto [tint, texture_id] = registry.get<SpriteComponent>(entity);

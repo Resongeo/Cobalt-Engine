@@ -73,6 +73,14 @@ namespace Cobalt
                 dst_comp.rotation = src_comp.rotation;
             }
 
+            if (_registry.any_of<CameraComponent>(src_entity)) {
+                const auto src_comp = _registry.get<CameraComponent>(src_entity);
+                auto& dst_comp = scene->_registry.emplace<CameraComponent>(dst_entity);
+
+                dst_comp.camera = src_comp.camera;
+                dst_comp.primary = src_comp.primary;
+            }
+
             if (_registry.any_of<SpriteComponent>(src_entity)) {
                 const auto src_comp = _registry.get<SpriteComponent>(src_entity);
                 auto& dst_comp = scene->_registry.emplace<SpriteComponent>(dst_entity);

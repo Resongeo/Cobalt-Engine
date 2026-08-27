@@ -21,6 +21,7 @@ namespace Cobalt
 #define ICON_ASSETS      "\xee\x8c\xbf"  // U+E33F
 #define ICON_TAG         "\xee\x85\xbf"  // U+E17F
 #define ICON_TRANSFORM   "\xee\x8b\xa5"  // U+E2E5
+#define ICON_CAMERA      "\xee\x81\xa4"  // U+E064
 #define ICON_SPRITE      "\xee\x83\xb6"  // U+E0F6
 #define ICON_SCRIPT      "\xee\x8b\xad"  // U+E2ED
 #define ICON_REFRESH     "\xee\x90\x91"  // U+E411
