@@ -103,6 +103,10 @@ namespace Cobalt
         DrawAssetsBrowser(state);
     }
 
+    void SceneEditor::OnShutdown() {
+        _renderer.Shutdown();
+    }
+
     auto SceneEditor::DrawViewport(EditorState& state) -> void {
         const auto window_class = GetWindowClass();
         ImGui::SetNextWindowClass(&window_class);

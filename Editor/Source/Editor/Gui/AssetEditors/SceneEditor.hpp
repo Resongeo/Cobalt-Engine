@@ -21,6 +21,7 @@ namespace Cobalt
         auto OnInitLayout(ImGuiID dockspace_id) -> void override;
         auto OnUpdate(EditorState& state) -> void override;
         auto OnDrawPanels(EditorState& state) -> void override;
+        auto OnShutdown() -> void override;
 
     private:
         auto DrawViewport(EditorState& state) -> void;

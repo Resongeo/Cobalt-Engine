@@ -42,6 +42,12 @@ namespace Cobalt
         }
     }
 
+    auto AssetEditorManager::Shutdown() -> void {
+        for (const auto& asset_editor : _editors) {
+            asset_editor->OnShutdown();
+        }
+    }
+
     auto AssetEditorManager::OpenEditor(const UUID asset_uuid) -> void {
         const auto asset_meta = AssetManager::Get().GetRegistry().GetMetadata(asset_uuid);
 

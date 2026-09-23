@@ -32,6 +32,8 @@ namespace Cobalt
         MainLoop();
         OnShutdown();
 
+        Shutdown();
+
         OPTICK_STOP_CAPTURE();
         OPTICK_SAVE_CAPTURE("profile.opt");
         OPTICK_SHUTDOWN();
@@ -60,6 +62,14 @@ namespace Cobalt
         return true;
     }
 
+    auto Application::Shutdown() const -> void {
+        AssetManager::Get().Shutdown();
+        SceneManager::Get().Shutdown();
+        JobSystem::Get().Shutdown();
+        ScriptManager::Get().ShutDown();
+        Window::Get().ShutDown();
+    }
+
     auto Application::MainLoop() -> void {
         while (!_close_requested) {
             OPTICK_FRAME("MainThread");
@@ -78,11 +88,5 @@ namespace Cobalt
 
     auto Application::OnApplicationQuit(const ApplicationQuitEvent& event) -> void {
         _close_requested = true;
-    }
-
-    Application::~Application() {
-        JobSystem::Get().Shutdown();
-        ScriptManager::Get().ShutDown();
-        Window::Get().ShutDown();
     }
 } // namespace Cobalt

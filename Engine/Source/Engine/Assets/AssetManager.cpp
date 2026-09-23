@@ -37,6 +37,11 @@ namespace Cobalt
         _serializers[static_cast<usize>(AssetType::Scene)] = Memory::MakeRc<SceneSerializer>();
     }
 
+    auto AssetManager::Shutdown() -> void {
+        _loaded.clear();
+        _serializers = {};
+    }
+
     auto AssetManager::RegisterAsset(const Filepath& path) -> void {
         auto meta = AssetMetadata{};
 

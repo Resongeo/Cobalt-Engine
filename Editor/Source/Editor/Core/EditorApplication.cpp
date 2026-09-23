@@ -72,6 +72,11 @@ namespace Cobalt
         Gui::EndFrame();
     }
 
+    void EditorApplication::OnShutdown() {
+        Gui::Shutdown();
+        AssetEditorManager::Get().Shutdown();
+    }
+
     auto EditorApplication::DrawMainDockSpace() -> void {
         OPTICK_EVENT();
 

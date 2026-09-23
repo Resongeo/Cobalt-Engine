@@ -13,6 +13,7 @@ namespace Cobalt
     {
     public:
         static auto Init() -> void;
+        static auto Shutdown() -> void;
         static auto SetupStyle() -> void;
         static auto BeginFrame() -> void;
         static auto EndFrame() -> void;

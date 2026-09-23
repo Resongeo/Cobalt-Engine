@@ -19,6 +19,7 @@ namespace Cobalt
     {
     public:
         auto Init(u32 max_quads, const Filepath& base_assets_path) -> void;
+        auto Shutdown() -> void;
         auto BeginFrame(Camera& camera) -> void;
         auto SubmitQuad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void;
         auto SubmitQuad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color) -> void;

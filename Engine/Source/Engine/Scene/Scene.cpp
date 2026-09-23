@@ -8,6 +8,10 @@ namespace Cobalt
 {
     Scene::Scene(const String& name) : _name(name) {}
 
+    auto Scene::Destroy() -> void {
+        _registry.clear();
+    }
+
     auto Scene::GetName() -> String& {
         return _name;
     }

@@ -96,6 +96,14 @@ namespace Cobalt
         delete[] indices;
     }
 
+    auto Renderer::Shutdown() -> void {
+        _default_shader.reset();
+        _vertex_array.reset();
+        _vertex_buffer.reset();
+        _default_texture.reset();
+        _texture_slots = {};
+    }
+
     auto Renderer::BeginFrame(Camera& camera) -> void {
         // TODO: Reset renderer stats
 

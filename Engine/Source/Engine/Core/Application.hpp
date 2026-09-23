@@ -11,7 +11,7 @@ namespace Cobalt
     class Application
     {
     public:
-        virtual ~Application();
+        virtual ~Application() = default;
 
         auto Run(const CommandLineArgs& args) -> void;
 
@@ -22,6 +22,7 @@ namespace Cobalt
 
     private:
         auto Init(const CommandLineArgs& args) -> bool;
+        auto Shutdown() const -> void;
         auto MainLoop() -> void;
         auto OnApplicationQuit(const ApplicationQuitEvent& event) -> void;
 

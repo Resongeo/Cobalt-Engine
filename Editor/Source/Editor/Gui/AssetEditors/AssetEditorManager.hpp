@@ -15,6 +15,7 @@ namespace Cobalt
         auto Init() -> void;
         auto Update(EditorState& state) -> void;
         auto Draw(EditorState& state) -> void;
+        auto Shutdown() -> void;
 
         auto OpenEditor(UUID asset_uuid) -> void;
 

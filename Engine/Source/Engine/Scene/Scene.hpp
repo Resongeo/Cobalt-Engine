@@ -18,6 +18,7 @@ namespace Cobalt
         explicit Scene() = default;
         explicit Scene(const String& name);
 
+        auto Destroy() -> void;
         auto GetName() -> String&;
         auto SetName(const String& name) -> void;
         auto GetRegistry() -> entt::registry&;

@@ -13,6 +13,7 @@ namespace Cobalt
     {
     public:
         ~Texture2D() override;
+        auto Destroy() -> void;
 
         auto LoadFromFile(const Filepath& path) -> bool;
         auto CreateWithSize(u32 width, u32 height) -> bool;

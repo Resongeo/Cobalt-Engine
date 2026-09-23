@@ -26,6 +26,17 @@ namespace Cobalt
         }
     }
 
+    auto SceneManager::Shutdown() -> void {
+        if (_active_scene) {
+            _active_scene->Destroy();
+            _active_scene.reset();
+        }
+
+        _editor_update_systems.clear();
+        _runtime_start_systems.clear();
+        _runtime_update_systems.clear();
+    }
+
     auto SceneManager::GetActiveScene() const -> Rc<Scene> {
         return _active_scene;
     }

@@ -71,6 +71,13 @@ namespace Cobalt
         Textures::sprite.LoadFromFile(editor_asset_path / "Textures" / "Texture.png");
     }
 
+    auto Gui::Shutdown() -> void {
+        Textures::directory.Destroy();
+        Textures::placeholder.Destroy();
+        Textures::script.Destroy();
+        Textures::sprite.Destroy();
+    }
+
     auto Gui::SetupStyle() -> void {
         OPTICK_EVENT();
 

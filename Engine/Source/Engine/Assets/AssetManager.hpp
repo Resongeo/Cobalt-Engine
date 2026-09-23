@@ -17,6 +17,7 @@ namespace Cobalt
     {
     public:
         auto Init() -> void;
+        auto Shutdown() -> void;
 
         auto RegisterAsset(const Filepath& path) -> void;
         auto IsAssetRegistered(UUID uuid) const -> bool;

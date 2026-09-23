@@ -15,6 +15,7 @@ namespace Cobalt
         auto OnBegin() -> void override;
         auto OnUpdate() -> void override;
         auto OnDraw() -> void override;
+        auto OnShutdown() -> void override;
 
     private:
         auto DrawMainDockSpace() -> void;

@@ -21,6 +21,7 @@ namespace Cobalt
         virtual auto OnInitLayout(ImGuiID dockspace_id) -> void {}
         virtual auto OnUpdate(EditorState& state) -> void {}
         virtual auto OnDrawPanels(EditorState& state) -> void {}
+        virtual auto OnShutdown() -> void {}
 
         auto Draw(EditorState& state) -> void;
         auto Focus() -> void;
