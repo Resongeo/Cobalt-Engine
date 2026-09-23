@@ -92,7 +92,7 @@ namespace Cobalt
 
     auto Texture2D::Destroy() -> void {
         if (_renderer_id == 0) return;
-        
+
         CORE_INFO("Graphics::Texture2D Deleting. ID: {}", _renderer_id);
         glDeleteTextures(1, &_renderer_id);
         _renderer_id = 0;
