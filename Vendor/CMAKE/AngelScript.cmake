@@ -1,4 +1,4 @@
-add_subdirectory(ANGELSCRIPT/sdk/angelscript/projects/cmake)
+add_subdirectory(ANGELSCRIPT/sdk/angelscript/projects/cmake EXCLUDE_FROM_ALL SYSTEM)
 file(GLOB ANGELSCRIPT_ADDONS
 	"ANGELSCRIPT/sdk/add_on/scriptstdstring/*.cpp"
 	"ANGELSCRIPT/sdk/add_on/scriptstdstring/*.h"

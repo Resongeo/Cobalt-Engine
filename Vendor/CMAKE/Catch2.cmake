@@ -1,1 +1,1 @@
-add_subdirectory(CATCH2)
+add_subdirectory(CATCH2 EXCLUDE_FROM_ALL SYSTEM)

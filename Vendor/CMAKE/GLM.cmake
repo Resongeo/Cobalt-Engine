@@ -1,1 +1,1 @@
-add_subdirectory(GLM)
+add_subdirectory(GLM EXCLUDE_FROM_ALL SYSTEM)

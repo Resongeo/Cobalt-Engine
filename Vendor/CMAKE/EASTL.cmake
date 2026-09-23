@@ -1,1 +1,1 @@
-add_subdirectory(EASTL)
+add_subdirectory(EASTL EXCLUDE_FROM_ALL SYSTEM)

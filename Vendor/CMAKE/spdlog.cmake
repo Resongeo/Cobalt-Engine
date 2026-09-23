@@ -1,1 +1,1 @@
-add_subdirectory(SPDLOG)
+add_subdirectory(SPDLOG EXCLUDE_FROM_ALL SYSTEM)

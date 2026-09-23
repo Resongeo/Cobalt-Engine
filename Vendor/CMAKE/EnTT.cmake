@@ -1,1 +1,1 @@
-add_subdirectory(ENTT)
+add_subdirectory(ENTT EXCLUDE_FROM_ALL SYSTEM)

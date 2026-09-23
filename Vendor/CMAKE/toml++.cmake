@@ -1,1 +1,1 @@
-add_subdirectory(TOML)
+add_subdirectory(TOML EXCLUDE_FROM_ALL SYSTEM)

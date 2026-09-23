@@ -1,1 +1,1 @@
-add_subdirectory(OPTICK)
+add_subdirectory(OPTICK EXCLUDE_FROM_ALL SYSTEM)

@@ -1,1 +1,1 @@
-add_subdirectory(ENKITS)
+add_subdirectory(ENKITS EXCLUDE_FROM_ALL SYSTEM)
