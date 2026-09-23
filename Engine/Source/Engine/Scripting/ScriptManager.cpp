@@ -18,6 +18,8 @@
 namespace Cobalt
 {
     auto ScriptManager::Init() -> bool {
+        OPTICK_EVENT();
+
         _engine = asCreateScriptEngine();
         if (_engine == nullptr) {
             return false;

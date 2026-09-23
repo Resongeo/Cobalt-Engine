@@ -116,6 +116,7 @@ target_link_libraries(Engine PUBLIC
 	glm::glm
 	EnTT::EnTT
 	SDL3::SDL3
+	SDL3_image::SDL3_image
 	simdjson
 	tomlplusplus::tomlplusplus
 	angelscript
@@ -124,12 +125,12 @@ target_link_libraries(Engine PUBLIC
 	rpmalloc
 	EASTL
 	enkiTS
+	OptickCore
 )
 
 target_include_directories(Engine PUBLIC
 	Source
 	${CMAKE_SOURCE_DIR}/Vendor/GLAD
-	${CMAKE_SOURCE_DIR}/Vendor/STB
 )
 
 target_compile_definitions(Engine PRIVATE

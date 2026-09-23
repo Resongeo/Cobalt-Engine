@@ -13,12 +13,16 @@ namespace Cobalt
     auto AssetEditorManager::Init() -> void {}
 
     auto AssetEditorManager::Update(EditorState& state) -> void {
+        OPTICK_EVENT();
+
         for (const auto& asset_editor : _editors) {
             asset_editor->OnUpdate(state);
         }
     }
 
     auto AssetEditorManager::Draw(EditorState& state) -> void {
+        OPTICK_EVENT();
+
         for (const auto& asset_editor : _editors) {
             auto flags = asset_editor->GetIsDirty() ? ImGuiWindowFlags_UnsavedDocument : 0;
             flags |= ImGuiWindowFlags_NoSavedSettings;

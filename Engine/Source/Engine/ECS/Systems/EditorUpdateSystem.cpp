@@ -12,6 +12,7 @@
 namespace Cobalt
 {
     auto EditorUpdateSystem::Update(entt::registry& registry) -> void {
+        OPTICK_EVENT();
         FRAME_PROFILER_EVENT("Editor Render System");
 
         Framebuffer* framebuffer = nullptr;

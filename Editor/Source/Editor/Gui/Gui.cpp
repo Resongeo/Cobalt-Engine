@@ -20,6 +20,7 @@
 #include <backends/imgui_impl_sdl3.h>
 #include <glad/gl.h>
 #include <imgui.h>
+#include <optick.h>
 
 // IMPORTANT: Include ImGuizmo after imgui.h
 #include <ImGuizmo.h>
@@ -27,6 +28,8 @@
 namespace Cobalt
 {
     auto Gui::Init() -> void {
+        OPTICK_EVENT();
+
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
 
@@ -69,6 +72,8 @@ namespace Cobalt
     }
 
     auto Gui::SetupStyle() -> void {
+        OPTICK_EVENT();
+
         auto& style = ImGui::GetStyle();
 
         // Default ImGui style values

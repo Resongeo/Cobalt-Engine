@@ -25,6 +25,8 @@
 namespace Cobalt
 {
     auto EditorApplication::OnBegin() -> void {
+        OPTICK_EVENT();
+
         AssetEditorManager::Get().Init();
         Gui::Init();
         Gui::SetupStyle();
@@ -43,6 +45,8 @@ namespace Cobalt
     }
 
     auto EditorApplication::OnUpdate() -> void {
+        OPTICK_EVENT();
+
         auto& scene_manager = SceneManager::Get();
         _state.active_scene = scene_manager.GetActiveScene();
 
@@ -52,6 +56,8 @@ namespace Cobalt
     }
 
     void EditorApplication::OnDraw() {
+        OPTICK_EVENT();
+
         Gui::BeginFrame();
         {
             DrawMainDockSpace();
@@ -67,6 +73,8 @@ namespace Cobalt
     }
 
     auto EditorApplication::DrawMainDockSpace() -> void {
+        OPTICK_EVENT();
+
         _state.main_dockspace_window_class.ClassId = ImGui::GetID("MainDockSpace_DockSpace");
         _state.main_dockspace_window_class.DockingAllowUnclassed = false;
 
@@ -77,6 +85,8 @@ namespace Cobalt
     }
 
     auto EditorApplication::DrawMainMenuBar() -> void {
+        OPTICK_EVENT();
+
         auto& scene_manager = SceneManager::Get();
 
         ImGui::BeginMainMenuBar();

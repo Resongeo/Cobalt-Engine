@@ -6,10 +6,13 @@
 
 #define TOML_EXCEPTIONS 0
 #include <toml++/toml.hpp>
+#include <optick.h>
 
 namespace Cobalt
 {
     auto Project::Init(const CommandLineArgs& cli_args) -> void {
+        OPTICK_EVENT();
+
         _args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
 
         _name = "No Project";

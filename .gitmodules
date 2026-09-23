@@ -41,3 +41,9 @@
 [submodule "Vendor/ENKITS"]
 	path = Vendor/ENKITS
 	url = https://github.com/dougbinks/enkiTS
+[submodule "Vendor/OPTICK"]
+	path = Vendor/OPTICK
+	url = https://github.com/bombomby/optick
+[submodule "Vendor/SDL-IMAGE"]
+	path = Vendor/SDL-IMAGE
+	url = https://github.com/libsdl-org/SDL_image

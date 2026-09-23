@@ -1,11 +1,18 @@
+set(SDLIMAGE_AVIF OFF CACHE BOOL "" FORCE) # Removes libaom / libavif (Perl dependency)
+set(SDLIMAGE_JXL  OFF CACHE BOOL "" FORCE) # Removes JPEG XL (NASM dependency)
+set(SDLIMAGE_TIF  OFF CACHE BOOL "" FORCE) # Removes libtiff
+set(SDLIMAGE_BACKEND_STB ON CACHE BOOL "" FORCE)
+
 add_subdirectory(TOML)
 add_subdirectory(CATCH2)
 add_subdirectory(ENTT)
 add_subdirectory(GLM)
 add_subdirectory(SDL)
+add_subdirectory(SDL-IMAGE)
 add_subdirectory(SPDLOG)
 add_subdirectory(EASTL)
 add_subdirectory(ENKITS)
+add_subdirectory(OPTICK)
 
 file(GLOB IMGUI_SOURCES
 	"IMGUI/*.cpp"

@@ -21,6 +21,8 @@ namespace Cobalt
     SDL_GLContext gl_context = nullptr;
 
     auto Window::Init() -> bool {
+        OPTICK_EVENT();
+
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
             CORE_CRITICAL("Platform: Failed to initialize SDL3: {}", SDL_GetError());
             return false;
@@ -102,6 +104,8 @@ namespace Cobalt
     }
 
     auto Window::PollEvents() const -> void {
+        OPTICK_EVENT();
+
         static SDL_Event sdl_event;
 
         while (SDL_PollEvent(&sdl_event)) {
@@ -212,6 +216,7 @@ namespace Cobalt
     }
 
     auto Window::SwapBuffers() const -> void {
+        OPTICK_EVENT();
         SDL_GL_SwapWindow(_handle);
     }
 

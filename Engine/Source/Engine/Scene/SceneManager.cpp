@@ -10,6 +10,8 @@
 namespace Cobalt
 {
     auto SceneManager::Init() -> void {
+        OPTICK_EVENT();
+
         const auto startup_scene_uuid = Project::Get().GetStartupSceneUUID();
         if (AssetManager::Get().IsAssetRegistered(startup_scene_uuid)) {
             _active_scene = AssetManager::Get().GetAsset<Scene>(startup_scene_uuid);
@@ -49,6 +51,8 @@ namespace Cobalt
     }
 
     auto SceneManager::Update() -> void {
+        OPTICK_EVENT();
+
         const auto active_scene = GetActiveScene();
 
         if (active_scene == nullptr) {

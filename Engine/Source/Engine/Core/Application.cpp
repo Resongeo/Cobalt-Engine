@@ -15,10 +15,14 @@
 
 #include <SDL3/SDL.h>
 #include <rpmalloc.h>
+#include <optick.h>
+#include <optick.config.h>
 
 namespace Cobalt
 {
     auto Application::Run(const CommandLineArgs& args) -> void {
+        OPTICK_START_CAPTURE();
+
         if (!Init(args)) {
             CORE_CRITICAL("Application: Initialization failed! Exiting program...");
             return;
@@ -27,9 +31,15 @@ namespace Cobalt
         OnBegin();
         MainLoop();
         OnShutdown();
+
+        OPTICK_STOP_CAPTURE();
+        OPTICK_SAVE_CAPTURE("profile.opt");
+        OPTICK_SHUTDOWN();
     }
 
     auto Application::Init(const CommandLineArgs& args) -> bool {
+        OPTICK_EVENT();
+
         // TODO: Have proper error types and TRY macro
         Memory::Init();
         Log::Init();
@@ -52,6 +62,7 @@ namespace Cobalt
 
     auto Application::MainLoop() -> void {
         while (!_close_requested) {
+            OPTICK_FRAME("MainThread");
             FRAME_PROFILER_BEGIN();
 
             Window::Get().PollEvents();

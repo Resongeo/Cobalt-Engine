@@ -6,10 +6,13 @@
 #include "Engine/Core/Log.hpp"
 
 #include <rpmalloc.h>
+#include <optick.h>
 
 namespace Cobalt
 {
     auto JobSystem::Init() -> void {
+        OPTICK_EVENT();
+
         const auto thread_count = std::max(enki::GetNumHardwareThreads() - 2, 1u);
 
         auto config = enki::TaskSchedulerConfig{};

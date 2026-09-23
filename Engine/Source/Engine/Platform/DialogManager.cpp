@@ -4,10 +4,13 @@
 #include "Engine/Platform/DialogManager.hpp"
 
 #include <SDL3/SDL_dialog.h>
+#include <optick.h>
 
 namespace Cobalt
 {
     auto DialogManager::Init() -> void {
+        OPTICK_EVENT();
+
         _window_handle = Window::Get().GetHandle();
     }
 

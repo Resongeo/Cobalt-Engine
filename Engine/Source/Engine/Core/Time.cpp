@@ -4,15 +4,20 @@
 #include "Engine/Core/Time.hpp"
 
 #include <SDL3/SDL.h>
+#include <optick.h>
 
 namespace Cobalt
 {
     auto Time::Init() -> void {
+        OPTICK_EVENT();
+
         _current_time = SDL_GetTicks();
         _last_time = _current_time;
     }
 
     auto Time::Update() -> void {
+        OPTICK_EVENT();
+
         _current_time = SDL_GetTicks();
         _delta_time = static_cast<f32>(_current_time - _last_time) / 1000.0f;
         _last_time = _current_time;

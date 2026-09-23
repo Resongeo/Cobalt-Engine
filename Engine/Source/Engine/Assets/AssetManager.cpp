@@ -20,6 +20,8 @@
 namespace Cobalt
 {
     auto AssetManager::Init() -> void {
+        OPTICK_EVENT();
+
         _assets_dir = Project::Get().GetProjectAssetsPath();
 
         if (!File::Exists(_assets_dir)) {
