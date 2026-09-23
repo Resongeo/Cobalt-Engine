@@ -2,7 +2,7 @@
 .idea/
 
 # Build system
-cmake*/
+cmake-*/
 build*/
 .cache/
 compile_commands.json*
