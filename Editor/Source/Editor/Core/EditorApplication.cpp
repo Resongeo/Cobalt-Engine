@@ -21,12 +21,11 @@
 
 #include <SDL3/SDL.h>
 #include <imgui.h>
+#include <optick.h>
 
 namespace Cobalt
 {
     auto EditorApplication::OnBegin() -> void {
-        OPTICK_EVENT();
-
         AssetEditorManager::Get().Init();
         Gui::Init();
         Gui::SetupStyle();

@@ -11,6 +11,7 @@
 #include <string_view>
 #include <unordered_map>
 #include <vector>
+#include <expected>
 
 #include <EASTL/array.h>
 #include <EASTL/hash_map.h>
@@ -41,6 +42,11 @@ namespace Cobalt
     template <typename T>
     using Optional = std::optional<T>;
     inline constexpr auto None = std::nullopt;
+
+    template <typename T, typename E>
+    using Result = std::expected<T, E>;
+    template <typename E>
+    using Err = std::unexpected<E>;
 } // namespace Cobalt
 
 // std::filesystem::path hashing needed for eastl::hash_map

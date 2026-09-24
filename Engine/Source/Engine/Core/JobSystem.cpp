@@ -10,9 +10,7 @@
 
 namespace Cobalt
 {
-    auto JobSystem::Init() -> void {
-        OPTICK_EVENT();
-
+    auto JobSystem::Init() -> Result<bool, CoreInitError> {
         const auto thread_count = std::max(enki::GetNumHardwareThreads() - 2, 1u);
 
         auto config = enki::TaskSchedulerConfig{};
@@ -27,6 +25,8 @@ namespace Cobalt
         _scheduler.Initialize(config);
 
         CORE_INFO("Job System initialized with {} threads", thread_count);
+
+        return true;
     }
 
     auto JobSystem::Shutdown() -> void {

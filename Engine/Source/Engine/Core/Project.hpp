@@ -6,13 +6,14 @@
 #include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/UUID.hpp"
+#include "Engine/Core/Error.hpp"
 
 namespace Cobalt
 {
     class Project final
     {
     public:
-        auto Init(const CommandLineArgs& cli_args) -> void;
+        auto Init(const CommandLineArgs& cli_args) -> Result<bool, CoreInitError>;
         auto GetName() -> String&;
         auto GetVersion() -> String&;
         auto GetEditorAssetsPath() const -> Filepath;

@@ -8,10 +8,9 @@
 
 namespace Cobalt
 {
-    auto DialogManager::Init() -> void {
-        OPTICK_EVENT();
-
+    auto DialogManager::Init() -> Result<bool, CoreInitError> {
         _window_handle = Window::Get().GetHandle();
+        return true;
     }
 
     auto DialogManager::ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const

@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Fwd.hpp"
+#include "Engine/Core/Error.hpp"
 #include "Engine/Core/Types/Math.hpp"
 #include "Engine/Platform/Fwd.hpp"
 
@@ -14,7 +15,7 @@ namespace Cobalt
     class Window final
     {
     public:
-        auto Init() -> bool;
+        auto Init() -> Result<bool, CoreInitError>;
 
         auto PollEvents() const -> void;
         auto SwapBuffers() const -> void;

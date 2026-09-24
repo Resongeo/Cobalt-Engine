@@ -6,13 +6,10 @@
 
 #define TOML_EXCEPTIONS 0
 #include <toml++/toml.hpp>
-#include <optick.h>
 
 namespace Cobalt
 {
-    auto Project::Init(const CommandLineArgs& cli_args) -> void {
-        OPTICK_EVENT();
-
+    auto Project::Init(const CommandLineArgs& cli_args) -> Result<bool, CoreInitError> {
         _args = Vector<String>(cli_args.args, cli_args.args + cli_args.count);
 
         _name = "No Project";
@@ -22,12 +19,12 @@ namespace Cobalt
 
         if (_args.size() < 2) {
             CORE_WARN("Project: No file is provided. Please provide a valid path to a .cbproj file");
-            return;
+            return true;
         }
 
         if (!std::filesystem::exists(_args[1].c_str())) {
             CORE_ERROR("Project: File path does not exists: {}", _args[1]);
-            return;
+            return Err(CoreInitError::ProjectFileDoesntExists);
         }
 
         auto valid_file = true;
@@ -44,13 +41,12 @@ namespace Cobalt
             auto error_msg = std::ostringstream();
             error_msg << result.error();
             CORE_ERROR("Project: Could not parse {}: {}", project_file_path.string(), error_msg.str());
-            valid_file = false;
+            return Err(CoreInitError::ProjectFileCantParse);
         }
 
         if (!valid_file) {
             CORE_ERROR("Project: {} is not a valid project file", project_file_path.string());
-
-            return;
+            return Err(CoreInitError::ProjectFileNotValid);
         }
 
         auto table = result.table();
@@ -59,6 +55,8 @@ namespace Cobalt
         _startup_scene = UUID(table["project"]["startup_scene"].value_or<u64>(0));
 
         CORE_INFO("Project: Loading. Name: {}. Version: {}", _name, _version);
+
+        return true;
     }
 
     auto Project::GetName() -> String& {

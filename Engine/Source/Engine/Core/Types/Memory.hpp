@@ -3,10 +3,11 @@
 
 #pragma once
 
+#include "Engine/Core/Error.hpp"
+
 #include <EASTL/unique_ptr.h>
 #include <EASTL/shared_ptr.h>
 #include <rpmalloc.h>
-#include <optick.h>
 
 namespace Cobalt
 {
@@ -19,7 +20,6 @@ namespace Cobalt
     namespace Memory
     {
         inline auto Init() -> void {
-            OPTICK_EVENT();
             rpmalloc_linker_reference();
         }
 

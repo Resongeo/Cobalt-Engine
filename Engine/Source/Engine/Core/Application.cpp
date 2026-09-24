@@ -3,10 +3,10 @@
 
 #include "Engine/Core/Application.hpp"
 #include "Engine/Assets/AssetManager.hpp"
-#include "Engine/Core/Log.hpp"
+#include "Engine/Core/Error.hpp"
+#include "Engine/Core/JobSystem.hpp"
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Time.hpp"
-#include "Engine/Core/JobSystem.hpp"
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Platform/Window.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
@@ -14,47 +14,37 @@
 #include "Engine/Scripting/ScriptManager.hpp"
 
 #include <SDL3/SDL.h>
-#include <rpmalloc.h>
-#include <optick.h>
 #include <optick.config.h>
+#include <optick.h>
+#include <rpmalloc.h>
 
 namespace Cobalt
 {
     auto Application::Run(const CommandLineArgs& args) -> void {
-        OPTICK_START_CAPTURE();
-
-        if (!Init(args)) {
-            CORE_CRITICAL("Application: Initialization failed! Exiting program...");
+        if (const auto result = Init(args); !result) {
+            CORE_CRITICAL("Application: Initialization failed! Error: {}\n Exiting program...",
+                          CoreInitErrorStr[static_cast<usize>(result.error())]);
             return;
         }
 
         OnBegin();
         MainLoop();
         OnShutdown();
-
         Shutdown();
-
-        OPTICK_STOP_CAPTURE();
-        OPTICK_SAVE_CAPTURE("profile.opt");
-        OPTICK_SHUTDOWN();
     }
 
-    auto Application::Init(const CommandLineArgs& args) -> bool {
-        OPTICK_EVENT();
-
-        // TODO: Have proper error types and TRY macro
+    auto Application::Init(const CommandLineArgs& args) -> Result<bool, CoreInitError> {
         Memory::Init();
         Log::Init();
 
-        JobSystem::Get().Init();
-        Project::Get().Init(args);
-        AssetManager::Get().Init();
-        SceneManager::Get().Init();
+        TRY(JobSystem::Get().Init());
+        TRY(Project::Get().Init(args));
+        TRY(AssetManager::Get().Init());
+        TRY(SceneManager::Get().Init());
+        TRY(Window::Get().Init());
+        TRY(ScriptManager::Get().Init());
+        TRY(DialogManager::Get().Init());
 
-        if (!Window::Get().Init()) return false;
-        if (!ScriptManager::Get().Init()) return false;
-
-        DialogManager::Get().Init();
         Time::Init();
 
         EventBus::Subscribe<ApplicationQuitEvent, &Application::OnApplicationQuit>(this);
@@ -71,6 +61,8 @@ namespace Cobalt
     }
 
     auto Application::MainLoop() -> void {
+        OPTICK_START_CAPTURE();
+
         while (!_close_requested) {
             OPTICK_FRAME("MainThread");
             FRAME_PROFILER_BEGIN();
@@ -84,6 +76,10 @@ namespace Cobalt
 
             FRAME_PROFILER_END();
         }
+
+        OPTICK_STOP_CAPTURE();
+        OPTICK_SAVE_CAPTURE("profile.opt");
+        OPTICK_SHUTDOWN();
     }
 
     auto Application::OnApplicationQuit(const ApplicationQuitEvent& event) -> void {

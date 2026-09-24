@@ -7,6 +7,7 @@
 #include "Engine/Assets/AssetManager.hpp"
 
 #include <imgui_internal.h>
+#include <optick.h>
 
 namespace Cobalt
 {

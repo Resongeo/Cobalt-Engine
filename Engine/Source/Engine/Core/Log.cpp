@@ -7,7 +7,6 @@
 
 #include <spdlog/sinks/callback_sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <optick.h>
 #include <memory>
 
 namespace Cobalt
@@ -24,8 +23,6 @@ namespace Cobalt
     static Vector<PendingLogEntry> pending_logs;
 
     auto Log::Init() -> void {
-        OPTICK_EVENT();
-
         auto callback_sink = std::make_shared<spdlog::sinks::callback_sink_mt>([&](const spdlog::details::log_msg& msg) {
             std::lock_guard lock(log_queue_mutex);
             pending_logs.push_back({msg.level, String(msg.payload.data(), msg.payload.size())});
@@ -35,8 +32,6 @@ namespace Cobalt
     }
 
     auto Log::FlushEvents() -> void {
-        OPTICK_EVENT();
-
         static Vector<PendingLogEntry> logs_to_process = {};
 
         {

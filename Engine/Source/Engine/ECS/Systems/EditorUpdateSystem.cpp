@@ -9,6 +9,8 @@
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
 
+#include <optick.h>
+
 namespace Cobalt
 {
     auto EditorUpdateSystem::Update(entt::registry& registry) -> void {

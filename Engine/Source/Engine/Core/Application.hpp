@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/Core/Error.hpp"
 #include "Engine/Core/CommandLineArgs.hpp"
 #include "Engine/Events/ApplicationEvents.hpp"
 
@@ -21,7 +22,7 @@ namespace Cobalt
         virtual auto OnShutdown() -> void {}
 
     private:
-        auto Init(const CommandLineArgs& args) -> bool;
+        auto Init(const CommandLineArgs& args) -> Result<bool, CoreInitError>;
         auto Shutdown() const -> void;
         auto MainLoop() -> void;
         auto OnApplicationQuit(const ApplicationQuitEvent& event) -> void;

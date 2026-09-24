@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Engine/Core/Types/Containers.hpp"
+#include "Engine/Core/Error.hpp"
 #include "Engine/Platform/Window.hpp"
 
 namespace Cobalt
@@ -19,7 +20,7 @@ namespace Cobalt
     class DialogManager final
     {
     public:
-        auto Init() -> void;
+        auto Init() -> Result<bool, CoreInitError>;
         auto ShowSaveDialog(const String& default_path, Span<DialogFileFilter> filters, DialogCallback&& on_complete) const -> void;
 
         static auto Get() -> DialogManager&;

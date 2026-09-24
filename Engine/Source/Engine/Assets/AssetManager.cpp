@@ -19,9 +19,7 @@
 
 namespace Cobalt
 {
-    auto AssetManager::Init() -> void {
-        OPTICK_EVENT();
-
+    auto AssetManager::Init() -> Result<bool, CoreInitError> {
         _assets_dir = Project::Get().GetProjectAssetsPath();
 
         if (!File::Exists(_assets_dir)) {
@@ -35,6 +33,8 @@ namespace Cobalt
         _serializers[static_cast<usize>(AssetType::Texture)] = Memory::MakeRc<Texture2DSerializer>();
         _serializers[static_cast<usize>(AssetType::Script)] = Memory::MakeRc<ScriptSerializer>();
         _serializers[static_cast<usize>(AssetType::Scene)] = Memory::MakeRc<SceneSerializer>();
+
+        return true;
     }
 
     auto AssetManager::Shutdown() -> void {

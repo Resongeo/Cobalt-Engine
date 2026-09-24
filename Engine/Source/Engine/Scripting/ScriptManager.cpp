@@ -17,23 +17,21 @@
 
 namespace Cobalt
 {
-    auto ScriptManager::Init() -> bool {
-        OPTICK_EVENT();
-
+    auto ScriptManager::Init() -> Result<bool, CoreInitError> {
         _engine = asCreateScriptEngine();
         if (_engine == nullptr) {
-            return false;
+            return Err(CoreInitError::ScriptCreateEngine);
         }
 
         _context = _engine->CreateContext();
         if (_context == nullptr) {
-            return false;
+            return Err(CoreInitError::ScriptCreateContext);
         }
 
         auto result = 0;
         result = _engine->SetMessageCallback(asMETHOD(ScriptManager, MessageCallback), this, asCALL_THISCALL);
         if (result < 0) {
-            return false;
+            return Err(CoreInitError::ScriptSetMessageCallback);
         }
 
         RegisterStdString(_engine);
@@ -43,7 +41,7 @@ namespace Cobalt
 
         result = _engine->RegisterInterface("IEntity");
         if (result < 0) {
-            return false;
+            return Err(CoreInitError::ScriptRegisterInterface);
         }
 
         ScriptGlue::RegisterTypes(_engine);

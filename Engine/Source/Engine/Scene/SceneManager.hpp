@@ -17,7 +17,7 @@ namespace Cobalt
     public:
         ~SceneManager() = default;
 
-        auto Init() -> void;
+        auto Init() -> Result<bool, CoreInitError>;
         auto Shutdown() -> void;
 
         auto GetActiveScene() const -> Rc<Scene>;

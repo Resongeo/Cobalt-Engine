@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Engine/Core/Error.hpp"
 #include <TaskScheduler.h>
 
 namespace Cobalt
@@ -10,7 +11,7 @@ namespace Cobalt
     class JobSystem final
     {
     public:
-        auto Init() -> void;
+        auto Init() -> Result<bool, CoreInitError>;
         auto Shutdown() -> void;
         auto GetScheduler() -> enki::TaskScheduler&;
 

@@ -101,6 +101,7 @@ set(ENGINE_SOURCES
 	Source/Engine/Core/JobSystem.cpp
 	Source/Engine/Core/JobSystem.hpp
 	Source/Engine/ECS/Components/CameraComponent.hpp
+	Source/Engine/Core/Error.hpp
 )
 
 # -- Platform specific source files --

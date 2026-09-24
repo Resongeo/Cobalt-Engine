@@ -12,6 +12,7 @@
 #include "Engine/Events/EventBus.hpp"
 
 #include <SDL3/SDL.h>
+#include <optick.h>
 
 #define GLAD_GL_IMPLEMENTATION
 #include <glad/gl.h>
@@ -20,12 +21,10 @@ namespace Cobalt
 {
     SDL_GLContext gl_context = nullptr;
 
-    auto Window::Init() -> bool {
-        OPTICK_EVENT();
-
+    auto Window::Init() -> Result<bool, CoreInitError> {
         if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD)) {
             CORE_CRITICAL("Platform: Failed to initialize SDL3: {}", SDL_GetError());
-            return false;
+            return Err(CoreInitError::PlatformSDL3Init);
         }
         CORE_INFO("Platform: SDL3 initialized.");
 
@@ -43,13 +42,13 @@ namespace Cobalt
                                     static_cast<int>(display_mode->h * 0.8), window_flags);
         if (_handle == nullptr) {
             CORE_CRITICAL("Platform: Failed to create window: {}", SDL_GetError());
-            return false;
+            return Err(CoreInitError::PlatformCreateWindow);
         }
 
         gl_context = SDL_GL_CreateContext(_handle);
         if (gl_context == nullptr) {
             CORE_CRITICAL("Platform: Failed to create OpenGL context: {}", SDL_GetError());
-            return false;
+            return Err(CoreInitError::PlatformCreateOpenGLContext);
         }
 
         SDL_GL_MakeCurrent(_handle, gl_context);

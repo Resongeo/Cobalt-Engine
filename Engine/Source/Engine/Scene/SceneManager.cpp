@@ -7,12 +7,13 @@
 #include "Engine/Assets/AssetManager.hpp"
 #include "Engine/ECS/Components/SpriteComponent.hpp"
 
+#include <optick.h>
+
 namespace Cobalt
 {
-    auto SceneManager::Init() -> void {
-        OPTICK_EVENT();
-
+    auto SceneManager::Init() -> Result<bool, CoreInitError> {
         const auto startup_scene_uuid = Project::Get().GetStartupSceneUUID();
+
         if (AssetManager::Get().IsAssetRegistered(startup_scene_uuid)) {
             _active_scene = AssetManager::Get().GetAsset<Scene>(startup_scene_uuid);
             _active_scene_uuid = startup_scene_uuid;
@@ -24,6 +25,8 @@ namespace Cobalt
                 _active_scene->SetName("Empty");
             }
         }
+
+        return true;
     }
 
     auto SceneManager::Shutdown() -> void {
