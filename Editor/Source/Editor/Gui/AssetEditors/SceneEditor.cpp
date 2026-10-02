@@ -12,6 +12,7 @@
 #include "Engine/Graphics/Texture2D.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 
+#include <backends/imgui_impl_sdlgpu3.h>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/matrix_decompose.hpp>
 #include <imgui.h>
@@ -44,18 +45,12 @@ namespace Cobalt
         SetName("Scene Editor");
         SetIcon(ICON_SCENE);
 
-        _assets_base_dir = Project::Get().GetProjectAssetsPath();
+        _assets_base_dir = Project::GetProjectAssetsPath();
         _current_dir = _assets_base_dir;
 
-        _renderer.Init(10000, Project::Get().GetEditorAssetsPath());
-
-        _viewport_framebuffer.Create(Vector{FramebufferAttachmentType::RGBA8}, Vec2(1600, 900), 1);
-        _viewport_framebuffer.Unbind();
-
         auto& registry = SceneManager::Get().GetActiveScene()->GetRegistry();
-        registry.ctx().emplace<Renderer*>(&_renderer);
-        registry.ctx().emplace<Framebuffer*>(&_viewport_framebuffer);
         registry.ctx().emplace<Camera*>(&_editor_camera);
+        registry.ctx().emplace<RenderTarget*>(&_viewport_render_target);
     }
 
     void SceneEditor::OnInitLayout(const ImGuiID dockspace_id) {
@@ -103,9 +98,7 @@ namespace Cobalt
         DrawAssetsBrowser(state);
     }
 
-    void SceneEditor::OnShutdown() {
-        _renderer.Shutdown();
-    }
+    void SceneEditor::OnShutdown() {}
 
     auto SceneEditor::DrawViewport(EditorState& state) -> void {
         const auto window_class = GetWindowClass();
@@ -137,10 +130,25 @@ namespace Cobalt
             static auto toolbar_pos = ImVec2();
             toolbar_pos = ImGui::GetCursorScreenPos();
 
-            if (const auto color_id = _viewport_framebuffer.GetColorAttachmentID(0); color_id >= 0) {
-                const auto viewport_size = ImGui::GetContentRegionAvail();
-                _viewport_framebuffer.Resize(viewport_size.x, viewport_size.y);
-                ImGui::Image(color_id, viewport_size, {0, 1}, {1, 0});
+            const auto viewport_panel_size = ImGui::GetContentRegionAvail();
+
+            if (viewport_panel_size.x > 0 && viewport_panel_size.y > 0) {
+                u32 new_w = static_cast<u32>(viewport_panel_size.x);
+                u32 new_h = static_cast<u32>(viewport_panel_size.y);
+
+                if (new_w != _viewport_render_target.width || new_h != _viewport_render_target.height || !_viewport_render_target.texture) {
+                    _viewport_render_target.width = new_w;
+                    _viewport_render_target.height = new_h;
+
+                    RHI::DestroyTexture(_viewport_render_target.texture);
+                    _viewport_render_target.texture = RHI::CreateTexture(_viewport_render_target.width, _viewport_render_target.height,
+                                                                         RHI::GetSwapchainTextureFormat(),
+                                                                         SDL_GPU_TEXTUREUSAGE_COLOR_TARGET | SDL_GPU_TEXTUREUSAGE_SAMPLER);
+                }
+            }
+
+            if (_viewport_render_target.texture) {
+                ImGui::Image(_viewport_render_target.texture, viewport_panel_size);
             }
 
             ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {0, 0});
@@ -189,10 +197,11 @@ namespace Cobalt
                     snap_amount = 0.0f;
                 }
 
-                ImGuizmo::Manipulate(glm::value_ptr(_editor_camera.GetView()),
-                                     glm::value_ptr(_editor_camera.GetProjection(_viewport_framebuffer.GetSize())),
-                                     GizmoOperationToImGuizmo(state.gizmo_operation), mode, glm::value_ptr(transform_matrix), nullptr,
-                                     should_snap ? &snap_amount : nullptr);
+                ImGuizmo::Manipulate(
+                        glm::value_ptr(_editor_camera.GetView()),
+                        glm::value_ptr(_editor_camera.GetProjection({_viewport_render_target.width, _viewport_render_target.height})),
+                        GizmoOperationToImGuizmo(state.gizmo_operation), mode, glm::value_ptr(transform_matrix), nullptr,
+                        should_snap ? &snap_amount : nullptr);
 
                 if (ImGuizmo::IsUsing()) {
                     Vec3 scale;
@@ -432,7 +441,9 @@ namespace Cobalt
                         const auto text_y_offset = rect_height * 0.5f - text_line_height * 0.5f;
                         if (texture) {
                             ImGui::SetCursorScreenPos(cursor_pos + ImVec2{thumbnail_padding, thumbnail_padding});
-                            ImGui::Image(texture->GetRendererID(), thumbnail_size, {0, 1}, {1, 0});
+                            if (auto id = texture->GetGPUTexture(); id) {
+                                ImGui::Image(id, thumbnail_size, {0, 1}, {1, 0});
+                            }
 
                             ImGui::SetCursorScreenPos(cursor_pos + ImVec2{thumbnail_size.x + thumbnail_padding * 2, text_y_offset});
                             const auto meta = AssetManager::Get().GetRegistry().GetMetadata(uuid).value();
@@ -588,7 +599,9 @@ namespace Cobalt
                 }
 
                 ImGui::SetCursorScreenPos(cursor_pos);
-                ImGui::ImageWithBg(texture->GetRendererID(), {thumbnail_size, thumbnail_size}, {0, 1}, {1, 0}, {0, 0, 0, 0}, tint_col);
+                if (const auto id = texture->GetGPUTexture(); id) {
+                    ImGui::ImageWithBg(id, {thumbnail_size, thumbnail_size}, {0, 1}, {1, 0}, {0, 0, 0, 0}, tint_col);
+                }
                 ImGui::TextWrapped("%s", filename_string.c_str());
 
                 ImGui::NextColumn();

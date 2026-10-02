@@ -2,80 +2,111 @@
 // Copyright (c) 2026 Somogyvári Benedek
 
 #include "Engine/Graphics/Texture2D.hpp"
+#include "Engine/Rendering/RHI.hpp"
 #include "Engine/Core/Log.hpp"
 
-#include <glad/gl.h>
 #include <SDL3_image/SDL_image.h>
 
 namespace Cobalt
 {
     auto Texture2D::LoadFromFile(const Filepath& path) -> bool {
-        const auto path_str = path.string();
-        const auto surface = IMG_Load(path_str.c_str());
-        SDL_FlipSurface(surface, SDL_FLIP_VERTICAL);
-
-        _width = surface->w;
-        _height = surface->h;
-
-        CORE_INFO("Graphics::Texture2D: Loading from file: {} Size: {}x{}", path_str, _width, _height);
-
-        GLenum internal_format = {};
-        GLenum data_format = {};
-
-        if (surface->format == SDL_PIXELFORMAT_RGBA32) {
-            internal_format = GL_RGBA8;
-            data_format = GL_RGBA;
-        } else if (surface->format == SDL_PIXELFORMAT_RGB24) {
-            internal_format = GL_RGB8;
-            data_format = GL_RGB;
+        SDL_Surface* surface = IMG_Load(path.string().c_str());
+        if (!surface) {
+            CORE_ERROR("Failed to load image from path: {}. Error: {}", path.string(), SDL_GetError());
+            return false;
         }
 
-        glCreateTextures(GL_TEXTURE_2D, 1, &_renderer_id);
-        glTextureStorage2D(_renderer_id, 1, internal_format, _width, _height);
-
-        glTextureParameteri(_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTextureSubImage2D(_renderer_id, 0, 0, 0, _width, _height, data_format, GL_UNSIGNED_BYTE, surface->pixels);
-
+        SDL_FlipSurface(surface, SDL_FLIP_VERTICAL);
+        SDL_Surface* formatted_surface = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_RGBA32);
         SDL_DestroySurface(surface);
+
+        if (!formatted_surface) {
+            CORE_ERROR("Failed to convert surface to RGBA32 for path: {}", path.string());
+            return false;
+        }
+
+        _width = static_cast<u32>(formatted_surface->w);
+        _height = static_cast<u32>(formatted_surface->h);
+
+        auto* device = RHI::GetDevice();
+
+        SDL_GPUTextureCreateInfo texture_info = {};
+        texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+        texture_info.format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
+        texture_info.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
+        texture_info.width = _width;
+        texture_info.height = _height;
+        texture_info.layer_count_or_depth = 1;
+        texture_info.num_levels = 1;
+
+        _texture = SDL_CreateGPUTexture(device, &texture_info);
+        if (!_texture) {
+            CORE_ERROR("Failed to create GPU texture for path: {}", path.string());
+            SDL_DestroySurface(formatted_surface);
+            return false;
+        }
+
+        u32 image_size = _width * _height * 4;
+        SDL_GPUTransferBufferCreateInfo transfer_info = {};
+        transfer_info.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+        transfer_info.size = image_size;
+
+        SDL_GPUTransferBuffer* transfer_buffer = SDL_CreateGPUTransferBuffer(device, &transfer_info);
+        if (!transfer_buffer) {
+            CORE_ERROR("Failed to create transfer buffer for texture upload.");
+            SDL_DestroySurface(formatted_surface);
+            return false;
+        }
+
+        void* map = SDL_MapGPUTransferBuffer(device, transfer_buffer, false);
+        SDL_memcpy(map, formatted_surface->pixels, image_size);
+        SDL_UnmapGPUTransferBuffer(device, transfer_buffer);
+
+        SDL_GPUCommandBuffer* cmd_buf = SDL_AcquireGPUCommandBuffer(device);
+        SDL_GPUCopyPass* copy_pass = SDL_BeginGPUCopyPass(cmd_buf);
+
+        SDL_GPUTextureTransferInfo transfer_info_src = {};
+        transfer_info_src.transfer_buffer = transfer_buffer;
+        transfer_info_src.offset = 0;
+        transfer_info_src.pixels_per_row = _width;
+        transfer_info_src.rows_per_layer = _height;
+
+        SDL_GPUTextureRegion dst_region = {};
+        dst_region.texture = _texture;
+        dst_region.w = _width;
+        dst_region.h = _height;
+        dst_region.d = 1;
+
+        SDL_UploadToGPUTexture(copy_pass, &transfer_info_src, &dst_region, false);
+        SDL_EndGPUCopyPass(copy_pass);
+
+        SDL_SubmitGPUCommandBuffer(cmd_buf);
+        SDL_WaitForGPUIdle(device);
+
+        SDL_ReleaseGPUTransferBuffer(device, transfer_buffer);
+        SDL_DestroySurface(formatted_surface);
+
+        CORE_INFO("Loaded Texture: {}", path.string());
 
         return true;
     }
 
     auto Texture2D::CreateWithSize(const u32 width, const u32 height) -> bool {
-        constexpr auto internal_format = GL_RGBA8;
-        constexpr auto data_format = GL_RGBA;
-
         _width = width;
         _height = height;
 
-        CORE_INFO("Graphics::Texture2D: Creating. Size: {}x{}", _width, _height);
+        auto* device = RHI::GetDevice();
+        SDL_GPUTextureCreateInfo texture_info = {};
+        texture_info.type = SDL_GPU_TEXTURETYPE_2D;
+        texture_info.format = SDL_GPU_TEXTUREFORMAT_R8G8B8A8_UNORM;
+        texture_info.usage = SDL_GPU_TEXTUREUSAGE_COLOR_TARGET | SDL_GPU_TEXTUREUSAGE_SAMPLER;
+        texture_info.width = _width;
+        texture_info.height = _height;
+        texture_info.layer_count_or_depth = 1;
+        texture_info.num_levels = 1;
 
-        auto temp_buffer = Vector<unsigned char>{};
-        temp_buffer.resize(_width * _height * 4, 255);
-
-        glCreateTextures(GL_TEXTURE_2D, 1, &_renderer_id);
-        glTextureStorage2D(_renderer_id, 1, internal_format, _width, _height);
-
-        glTextureParameteri(_renderer_id, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(_renderer_id, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glGenerateMipmap(GL_TEXTURE_2D);
-
-        glTextureSubImage2D(_renderer_id, 0, 0, 0, _width, _height, data_format, GL_UNSIGNED_BYTE,
-                            temp_buffer.data());
-
-        return true;
-    }
-
-    auto Texture2D::BindSlot(const u32 slot) const -> void {
-        glActiveTexture(GL_TEXTURE0 + slot);
-        glBindTexture(GL_TEXTURE_2D, _renderer_id);
+        _texture = SDL_CreateGPUTexture(device, &texture_info);
+        return _texture != nullptr;
     }
 
     auto Texture2D::GetWidth() const -> u32 {
@@ -86,16 +117,15 @@ namespace Cobalt
         return _height;
     }
 
-    auto Texture2D::GetRendererID() const -> u32 {
-        return _renderer_id;
+    auto Texture2D::GetGPUTexture() const -> SDL_GPUTexture* {
+        return _texture;
     }
 
     auto Texture2D::Destroy() -> void {
-        if (_renderer_id == 0) return;
+        if (!_texture) return;
 
-        CORE_INFO("Graphics::Texture2D Deleting. ID: {}", _renderer_id);
-        glDeleteTextures(1, &_renderer_id);
-        _renderer_id = 0;
+        CORE_INFO("Graphics::Texture2D Deleting GPU Texture.");
+        RHI::DestroyTexture(_texture);
     }
 
     Texture2D::~Texture2D() {

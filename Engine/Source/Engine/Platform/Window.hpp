@@ -3,35 +3,31 @@
 
 #pragma once
 
-#include "Engine/Core/Fwd.hpp"
 #include "Engine/Core/Error.hpp"
 #include "Engine/Core/Types/Math.hpp"
-#include "Engine/Platform/Fwd.hpp"
+
+struct SDL_Window;
 
 namespace Cobalt
 {
+    enum class WindowInitError
+    {
+        SDLInit,
+        WindowCreate,
+    };
+
     using NativeEventCallback = std::function<void(void*)>;
 
-    class Window final
+    namespace Window
     {
-    public:
-        auto Init() -> Result<bool, CoreInitError>;
+        auto Initialize() -> Result<void, WindowInitError>;
+        auto Shutdown() -> void;
+        auto PollEvents() -> void;
 
-        auto PollEvents() const -> void;
-        auto SwapBuffers() const -> void;
-        auto ShutDown() const -> void;
+        auto GetHandle() -> SDL_Window*;
+        auto GetSize() -> Vec<2, i32>;
 
+        auto SetTitle(const String& title) -> void;
         auto SetNativeEventCallback(NativeEventCallback callback) -> void;
-        auto SetVSyncEnabled(bool enabled) const -> void;
-        auto GetVSyncEnabled() const -> bool;
-        auto GetHandle() const -> SDL_Window*;
-        auto GetGLContext() const -> SDL_GLContextState*;
-        auto GetSize() const -> Vec<2, i32>;
-
-        static auto Get() -> Window&;
-
-    private:
-        SDL_Window* _handle = nullptr;
-        NativeEventCallback _native_event_hook = nullptr;
-    };
+    }; // namespace Window
 } // namespace Cobalt

@@ -9,7 +9,7 @@
 namespace Cobalt
 {
     auto DialogManager::Init() -> Result<bool, CoreInitError> {
-        _window_handle = Window::Get().GetHandle();
+        _window_handle = Window::GetHandle();
         return true;
     }
 

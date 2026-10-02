@@ -5,6 +5,7 @@
 
 #include "Editor/Gui/AssetEditors/AssetEditor.hpp"
 #include "Engine/Graphics/Camera.hpp"
+#include "Engine/Graphics/RenderTarget.hpp"
 #include "Engine/Graphics/Framebuffer.hpp"
 #include "Engine/Graphics/Renderer.hpp"
 
@@ -36,8 +37,7 @@ namespace Cobalt
         Filepath _current_dir = {};
         HashMap<Filepath, Color> _directory_colors = {};
         Camera _editor_camera = {};
-        Framebuffer _viewport_framebuffer = {};
-        Renderer _renderer = {};
+        RenderTarget _viewport_render_target;
         bool _directory_changed = false;
     };
 }

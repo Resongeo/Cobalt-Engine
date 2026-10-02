@@ -6,7 +6,6 @@
 #include "Engine/Scripting/Script.hpp"
 #include "Engine/Core/Types/Memory.hpp"
 #include "Engine/Core/Types/Base.hpp"
-#include "Engine/Core/Fwd.hpp"
 
 #include <angelscript.h>
 #include <entt/entity/entity.hpp>

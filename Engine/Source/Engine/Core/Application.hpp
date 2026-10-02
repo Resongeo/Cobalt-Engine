@@ -22,7 +22,7 @@ namespace Cobalt
         virtual auto OnShutdown() -> void {}
 
     private:
-        auto Init(const CommandLineArgs& args) -> Result<bool, CoreInitError>;
+        auto Init(const CommandLineArgs& args) -> bool;
         auto Shutdown() const -> void;
         auto MainLoop() -> void;
         auto OnApplicationQuit(const ApplicationQuitEvent& event) -> void;

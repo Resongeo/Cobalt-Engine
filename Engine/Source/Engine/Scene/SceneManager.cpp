@@ -12,7 +12,7 @@
 namespace Cobalt
 {
     auto SceneManager::Init() -> Result<bool, CoreInitError> {
-        const auto startup_scene_uuid = Project::Get().GetStartupSceneUUID();
+        const auto startup_scene_uuid = Project::GetStartupSceneUUID();
 
         if (AssetManager::Get().IsAssetRegistered(startup_scene_uuid)) {
             _active_scene = AssetManager::Get().GetAsset<Scene>(startup_scene_uuid);

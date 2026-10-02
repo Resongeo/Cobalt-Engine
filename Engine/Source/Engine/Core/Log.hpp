@@ -4,8 +4,6 @@
 #pragma once
 
 #include "Engine/Core/Types/Memory.hpp"
-#include "Engine/Core/Fwd.hpp"
-
 #include <spdlog/spdlog.h>
 
 namespace Cobalt
@@ -24,6 +22,7 @@ namespace Cobalt
     };
 } // namespace Cobalt
 
+#define CORE_TRACE(...)    ::Cobalt::Log::CoreLogger()->trace(__VA_ARGS__)
 #define CORE_INFO(...)     ::Cobalt::Log::CoreLogger()->info(__VA_ARGS__)
 #define CORE_WARN(...)     ::Cobalt::Log::CoreLogger()->warn(__VA_ARGS__)
 #define CORE_ERROR(...)    ::Cobalt::Log::CoreLogger()->error(__VA_ARGS__)

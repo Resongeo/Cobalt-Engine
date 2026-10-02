@@ -1,0 +1,1 @@
+add_subdirectory(MAGICENUM EXCLUDE_FROM_ALL SYSTEM)

@@ -8,8 +8,10 @@
 #include "Engine/Core/Project.hpp"
 #include "Engine/Core/Time.hpp"
 #include "Engine/Events/EventBus.hpp"
+#include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Platform/Window.hpp"
 #include "Engine/Profiling/FrameProfiler.hpp"
+#include "Engine/Rendering/RHI.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 #include "Engine/Scripting/ScriptManager.hpp"
 
@@ -22,8 +24,7 @@ namespace Cobalt
 {
     auto Application::Run(const CommandLineArgs& args) -> void {
         if (const auto result = Init(args); !result) {
-            CORE_CRITICAL("Application: Initialization failed! Error: {}\n Exiting program...",
-                          CoreInitErrorStr[static_cast<usize>(result.error())]);
+            CORE_CRITICAL("Application: Initialization failed! Error: Exiting program...");
             return;
         }
 
@@ -33,17 +34,20 @@ namespace Cobalt
         Shutdown();
     }
 
-    auto Application::Init(const CommandLineArgs& args) -> Result<bool, CoreInitError> {
+    auto Application::Init(const CommandLineArgs& args) -> bool {
         Memory::Init();
         Log::Init();
 
-        TRY(JobSystem::Get().Init());
-        TRY(Project::Get().Init(args));
-        TRY(AssetManager::Get().Init());
-        TRY(SceneManager::Get().Init());
-        TRY(Window::Get().Init());
-        TRY(ScriptManager::Get().Init());
-        TRY(DialogManager::Get().Init());
+        TRY_CRITICAL(Project::Initialize(args));
+        TRY_CRITICAL(Window::Initialize());
+        TRY_CRITICAL(RHI::Initialize());
+        TRY_CRITICAL(Renderer::Initialize());
+
+        TRY_CRITICAL(JobSystem::Get().Init());
+        TRY_CRITICAL(AssetManager::Get().Init());
+        TRY_CRITICAL(SceneManager::Get().Init());
+        TRY_CRITICAL(ScriptManager::Get().Init());
+        TRY_CRITICAL(DialogManager::Get().Init());
 
         Time::Init();
 
@@ -57,7 +61,9 @@ namespace Cobalt
         SceneManager::Get().Shutdown();
         JobSystem::Get().Shutdown();
         ScriptManager::Get().ShutDown();
-        Window::Get().ShutDown();
+        Renderer::Shutdown();
+        RHI::Shutdown();
+        Window::Shutdown();
     }
 
     auto Application::MainLoop() -> void {
@@ -67,12 +73,11 @@ namespace Cobalt
             OPTICK_FRAME("MainThread");
             FRAME_PROFILER_BEGIN();
 
-            Window::Get().PollEvents();
+            Window::PollEvents();
             Time::Update();
             Log::FlushEvents();
             OnUpdate();
             OnDraw();
-            Window::Get().SwapBuffers();
 
             FRAME_PROFILER_END();
         }

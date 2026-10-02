@@ -17,6 +17,7 @@
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Events/EventBus.hpp"
 #include "Engine/Events/KeyboardEvents.hpp"
+#include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Scene/SceneManager.hpp"
 
 #include <SDL3/SDL.h>
@@ -35,7 +36,7 @@ namespace Cobalt
         scene_manager.AddSystem<RuntimeStartSystem>(Schedule::RuntimeStart);
         scene_manager.AddSystem<RuntimeUpdateSystem>(Schedule::RuntimeUpdate);
 
-        Window::Get().SetNativeEventCallback([](void* event) {
+        Window::SetNativeEventCallback([](void* event) {
             const auto* sdl_event = static_cast<SDL_Event*>(event);
             Gui::ProcessEvent(sdl_event);
         });
@@ -46,28 +47,26 @@ namespace Cobalt
     auto EditorApplication::OnUpdate() -> void {
         OPTICK_EVENT();
 
-        auto& scene_manager = SceneManager::Get();
-        _state.active_scene = scene_manager.GetActiveScene();
-
-        scene_manager.Update();
-
+        _state.active_scene = SceneManager::Get().GetActiveScene();
         AssetEditorManager::Get().Update(_state);
     }
 
     void EditorApplication::OnDraw() {
         OPTICK_EVENT();
 
+        Renderer::BeginFrame();
         Gui::BeginFrame();
-        {
-            DrawMainDockSpace();
-            DrawMainMenuBar();
 
-            AssetEditorManager::Get().Draw(_state);
+        DrawMainDockSpace();
+        DrawMainMenuBar();
 
-            if (_show_metrics_window) {
-                ImGui::ShowMetricsWindow(&_show_metrics_window);
-            }
-        }
+        AssetEditorManager::Get().Draw(_state);
+
+        SceneManager::Get().Update();
+
+        Renderer::ExecutePasses();
+        Renderer::EndFrame();
+
         Gui::EndFrame();
     }
 

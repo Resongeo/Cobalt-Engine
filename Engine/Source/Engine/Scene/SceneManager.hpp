@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Engine/Core/Types/Memory.hpp"
-#include "Engine/Core/Fwd.hpp"
 #include "Engine/ECS/Systems/ISystem.hpp"
 #include "Engine/ECS/Systems/Schedule.hpp"
 #include "Engine/Scene/Scene.hpp"

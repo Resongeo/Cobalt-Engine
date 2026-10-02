@@ -10,24 +10,21 @@
 
 namespace Cobalt
 {
-    class Project final
+    enum class ProjectInitError
     {
-    public:
-        auto Init(const CommandLineArgs& cli_args) -> Result<bool, CoreInitError>;
+        NoArgument,
+        ProjectFileDoesntExists,
+        ProjectFileCantParse,
+        ProjectFileNotValid,
+    };
+
+    namespace Project
+    {
+        auto Initialize(const CommandLineArgs& cli_args) -> Result<void, ProjectInitError>;
         auto GetName() -> String&;
         auto GetVersion() -> String&;
-        auto GetEditorAssetsPath() const -> Filepath;
-        auto GetProjectAssetsPath() const -> Filepath;
-        auto GetStartupSceneUUID() const -> UUID;
-
-        static auto Get() -> Project&;
-
-    private:
-        Vector<String> _args = {};
-        Filepath _project_path = {};
-        Filepath _editor_path = {};
-        String _name = {};
-        String _version = {};
-        UUID _startup_scene;
+        auto GetEditorAssetsPath() -> Filepath&;
+        auto GetProjectAssetsPath() -> Filepath&;
+        auto GetStartupSceneUUID() -> UUID;
     };
 } // namespace Cobalt

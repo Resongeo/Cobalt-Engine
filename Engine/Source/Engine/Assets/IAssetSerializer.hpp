@@ -6,7 +6,6 @@
 #include "Engine/Assets/AssetMetadata.hpp"
 #include "Engine/Assets/IAsset.hpp"
 #include "Engine/Core/Types/Memory.hpp"
-#include "Engine/Core/Fwd.hpp"
 
 namespace Cobalt
 {

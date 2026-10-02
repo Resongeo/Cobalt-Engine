@@ -5,8 +5,6 @@ set(ENGINE_SOURCES
 	Source/Engine/Core/Log.cpp
 	Source/Engine/Core/Defines.hpp
 	Source/Engine/Platform/Window.hpp
-	Source/Engine/Platform/Platform.cpp
-	Source/Engine/Platform/Platform.hpp
 	Source/Engine/Scene/SceneManager.cpp
 	Source/Engine/Scene/SceneManager.hpp
 	Source/Engine/Scene/Scene.hpp
@@ -44,7 +42,6 @@ set(ENGINE_SOURCES
 	Source/Engine/ECS/Systems/RuntimeUpdateSystem.hpp
 	Source/Engine/ECS/Systems/Schedule.hpp
 	Source/Engine/Scene/SceneState.hpp
-	Source/Engine/Core/Fwd.hpp
 	Source/Engine/Graphics/Fwd.hpp
 	Source/Engine/ECS/Components/SpriteComponent.hpp
 	Source/Engine/ECS/Components/TransformComponent.hpp
@@ -102,14 +99,18 @@ set(ENGINE_SOURCES
 	Source/Engine/Core/JobSystem.hpp
 	Source/Engine/ECS/Components/CameraComponent.hpp
 	Source/Engine/Core/Error.hpp
+	Source/Engine/Platform/Window.cpp
+	Source/Engine/Rendering/RHI.cpp
+	Source/Engine/Rendering/RHI.hpp
+	Source/Engine/Graphics/RenderTarget.hpp
 )
 
 # -- Platform specific source files --
-if(WIN32)
-	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Windows/WindowsWindow.cpp)
-elseif(UNIX AND NOT APPLE)
-	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Linux/LinuxWindow.cpp)
-endif()
+#if(WIN32)
+#	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Windows/WindowsWindow.cpp)
+#elseif(UNIX AND NOT APPLE)
+#	list(APPEND ENGINE_SOURCES Source/Engine/Platform/Linux/LinuxWindow.cpp)
+#endif()
 
 add_library(Engine STATIC ${ENGINE_SOURCES})
 
@@ -118,6 +119,7 @@ target_link_libraries(Engine PUBLIC
 	EnTT::EnTT
 	SDL3::SDL3
 	SDL3_image::SDL3_image
+	SDL3_shadercross::SDL3_shadercross-static
 	simdjson
 	tomlplusplus::tomlplusplus
 	angelscript
@@ -127,11 +129,11 @@ target_link_libraries(Engine PUBLIC
 	EASTL
 	enkiTS
 	OptickCore
+	magic_enum::magic_enum
 )
 
 target_include_directories(Engine PUBLIC
 	Source
-	${CMAKE_SOURCE_DIR}/Vendor/GLAD
 )
 
 target_compile_definitions(Engine PRIVATE

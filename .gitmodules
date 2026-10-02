@@ -47,3 +47,9 @@
 [submodule "Vendor/SDL-IMAGE"]
 	path = Vendor/SDL-IMAGE
 	url = https://github.com/libsdl-org/SDL_image
+[submodule "Vendor/MAGICENUM"]
+	path = Vendor/MAGICENUM
+	url = https://github.com/Neargye/magic_enum
+[submodule "Vendor/SDL-SHADERCROSS"]
+	path = Vendor/SDL-SHADERCROSS
+	url = https://github.com/libsdl-org/SDL_shadercross

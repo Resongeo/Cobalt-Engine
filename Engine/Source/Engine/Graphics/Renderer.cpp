@@ -3,246 +3,179 @@
 
 #include "Engine/Graphics/Renderer.hpp"
 #include "Engine/Core/Log.hpp"
-
-#include <glad/gl.h>
+#include "Engine/Core/File.hpp"
+#include "Engine/Core/Project.hpp"
+#include "Engine/Core/Types/Math.hpp"
 
 namespace Cobalt
 {
-    constexpr Vec4 VERTEX_POSITIONS[4] = {
-        {-0.5, -0.5, 0.0, 1.0},
-        {0.5, -0.5, 0.0, 1.0},
-        {0.5, 0.5, 0.0, 1.0},
-        {-0.5, 0.5, 0.0, 1.0},
+    constexpr Uint32 MAX_SPRITES = 8192;
+
+    struct RendererState
+    {
+        SDL_GPUGraphicsPipeline* pipeline = nullptr;
+        SDL_GPUSampler* default_sampler = nullptr;
+        SDL_GPUBuffer* storage_buffer = nullptr;
+        SDL_GPUTransferBuffer* transfer_buffer = nullptr;
+
+        SDL_GPUCommandBuffer* current_cmd_buf = nullptr;
+        SDL_GPUTexture* swapchain_texture = nullptr;
+
+        std::vector<RenderPass> pass_queue;
     };
 
-    constexpr Vec2 TEXTURE_COORDS[4] = {
-        { 0.0f, 0.0f },
-        { 1.0f, 0.0f },
-        { 1.0f, 1.0f },
-        { 0.0f, 1.0f },
-    };
+    static RendererState state;
 
-    auto Renderer::Init(const u32 max_quads, const Filepath& base_assets_path) -> void {
-        _max_quads = max_quads;
+    auto Renderer::Initialize() -> Result<void, RendererError> {
+        auto vert_path = Project::GetEditorAssetsPath() / "Shaders" / "DefaultQuad.vert.hlsl";
+        auto frag_path = Project::GetEditorAssetsPath() / "Shaders" / "DefaultQuad.frag.hlsl";
 
-        _default_shader = Memory::MakeRc<Shader>();
-        const auto shaders_path = base_assets_path / "Shaders";
-        const auto vertex_path = shaders_path / "DefaultQuad.vert";
-        const auto fragment_path = shaders_path / "DefaultQuad.frag";
-        const auto vertex_path_str = vertex_path.string();
-        const auto fragment_path_str = fragment_path.string();
-        if (auto result = _default_shader->CreateFromFile(vertex_path_str.c_str(), fragment_path_str.c_str());
-            !result) {
-            CORE_ERROR("Graphics::Shader: Failed to Create default quad shader!");
-            result = _default_shader->CreateFallback();
-            if (!result) {
-            CORE_ERROR("Graphics::Shader: Failed to Create fallback quad shader!");
-                std::exit(1);
-            }
-        }
+        auto vert_src = File::Read(vert_path);
+        auto frag_src = File::Read(frag_path);
 
-        const auto max_vertices = _max_quads * 4;
-        const auto max_indices = _max_quads * 6;
+        auto* device = RHI::GetDevice();
+        auto* vertShader = RHI::CreateShader(SDL_SHADERCROSS_SHADERSTAGE_VERTEX, vert_src.c_str(), "main", 0, 1, 0, 1);
+        auto* fragShader = RHI::CreateShader(SDL_SHADERCROSS_SHADERSTAGE_FRAGMENT, frag_src.c_str(), "main", 1, 0, 0, 0);
 
-        _vertex_buffer_base = new QuadVertexData[max_vertices];
+        if (!vertShader || !fragShader) return Err(RendererError::DefaultShaderCreation);
 
-        const auto indices = new u32[max_indices];
+        SDL_GPUVertexBufferDescription vbo_desc = {};
+        vbo_desc.slot = 0;
+        vbo_desc.input_rate = SDL_GPU_VERTEXINPUTRATE_VERTEX;
+        vbo_desc.pitch = sizeof(SpriteInstance);
 
-        u32 offset = 0;
-        for (usize i = 0; i < max_indices; i += 6) {
-            indices[i + 0] = offset + 0;
-            indices[i + 1] = offset + 1;
-            indices[i + 2] = offset + 2;
+        SDL_GPURasterizerState rasterizer_state = {};
+        rasterizer_state.fill_mode = SDL_GPU_FILLMODE_FILL;
+        rasterizer_state.cull_mode = SDL_GPU_CULLMODE_NONE;
+        rasterizer_state.front_face = SDL_GPU_FRONTFACE_COUNTER_CLOCKWISE;
 
-            indices[i + 3] = offset + 2;
-            indices[i + 4] = offset + 3;
-            indices[i + 5] = offset + 0;
+        SDL_GPUMultisampleState multisample_state = {};
+        multisample_state.sample_count = SDL_GPU_SAMPLECOUNT_1;
 
-            offset += 4;
-        }
+        SDL_GPUDepthStencilState depth_stencil_state = {};
+        depth_stencil_state.enable_depth_test = false;
+        depth_stencil_state.enable_depth_write = false;
 
-        _vertex_array = Memory::MakeRc<VertexArray>();
-        _vertex_buffer = Memory::MakeRc<VertexBuffer>();
-        const auto index_buffer = Memory::MakeRc<IndexBuffer>();
+        SDL_GPUColorTargetBlendState blend_state = {};
+        blend_state.enable_blend = true;
+        blend_state.src_color_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA;
+        blend_state.dst_color_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
+        blend_state.color_blend_op = SDL_GPU_BLENDOP_ADD;
+        blend_state.src_alpha_blendfactor = SDL_GPU_BLENDFACTOR_SRC_ALPHA;
+        blend_state.dst_alpha_blendfactor = SDL_GPU_BLENDFACTOR_ONE_MINUS_SRC_ALPHA;
+        blend_state.alpha_blend_op = SDL_GPU_BLENDOP_ADD;
+        blend_state.color_write_mask =
+                SDL_GPU_COLORCOMPONENT_R | SDL_GPU_COLORCOMPONENT_G | SDL_GPU_COLORCOMPONENT_B | SDL_GPU_COLORCOMPONENT_A;
 
-        _vertex_array->Create();
-        _vertex_buffer->CreateDynamic(max_vertices * sizeof(QuadVertexData));
-        index_buffer->Create(max_indices, indices);
+        SDL_GPUColorTargetDescription color_desc = {};
+        color_desc.format = RHI::GetSwapchainTextureFormat();
+        color_desc.blend_state = blend_state;
 
-        auto attribute_layout = AttributeLayout();
-        attribute_layout.Create({
-                AttributeDataType::Float2, // a_Position
-                AttributeDataType::Float2, // a_TexCoords
-                AttributeDataType::Float4, // a_Color
-                AttributeDataType::Float,  // a_TexIndex
-        });
+        SDL_GPUGraphicsPipelineCreateInfo pipelineInfo = {};
+        pipelineInfo.vertex_shader = vertShader;
+        pipelineInfo.fragment_shader = fragShader;
+        pipelineInfo.primitive_type = SDL_GPU_PRIMITIVETYPE_TRIANGLELIST;
+        pipelineInfo.rasterizer_state = rasterizer_state;
+        pipelineInfo.multisample_state = multisample_state;
+        pipelineInfo.depth_stencil_state = depth_stencil_state;
+        pipelineInfo.target_info.num_color_targets = 1;
+        pipelineInfo.target_info.color_target_descriptions = &color_desc;
 
-        _vertex_buffer->SetAttributeLayout(attribute_layout);
-        _vertex_array->AddVertexBuffer(_vertex_buffer);
-        _vertex_array->SetIndexBuffer(index_buffer);
+        state.pipeline = SDL_CreateGPUGraphicsPipeline(device, &pipelineInfo);
+        if (!state.pipeline) return Err(RendererError::CreateGraphicsPipeline);
 
-        auto texture_samplers = Array<i32, MAX_TEXTURES>{};
-        for (auto i = 0; i < MAX_TEXTURES; i++) {
-            texture_samplers[i] = i;
-        }
+        SDL_ReleaseGPUShader(device, vertShader);
+        SDL_ReleaseGPUShader(device, fragShader);
 
-        _default_shader->Bind();
-        _default_shader->SetIntArray("u_TextureSlots", texture_samplers.data(), texture_samplers.size());
+        state.default_sampler = RHI::CreateSampler(SDL_GPU_FILTER_NEAREST);
+        state.storage_buffer = RHI::CreateBuffer(MAX_SPRITES * sizeof(SpriteInstance), SDL_GPU_BUFFERUSAGE_GRAPHICS_STORAGE_READ);
+        state.transfer_buffer = RHI::CreateTransferBuffer(MAX_SPRITES * sizeof(SpriteInstance), SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD);
 
-        _default_texture = Memory::MakeRc<Texture2D>();
-        _default_texture->CreateWithSize(1, 1);
-        _texture_slots[0] = _default_texture;
+        state.pass_queue.reserve(16);
 
-        delete[] indices;
+        return {};
     }
 
     auto Renderer::Shutdown() -> void {
-        _default_shader.reset();
-        _vertex_array.reset();
-        _vertex_buffer.reset();
-        _default_texture.reset();
-        _texture_slots = {};
+        auto* device = RHI::GetDevice();
+        SDL_ReleaseGPUGraphicsPipeline(device, state.pipeline);
+        SDL_ReleaseGPUSampler(device, state.default_sampler);
+        SDL_ReleaseGPUBuffer(device, state.storage_buffer);
+        SDL_ReleaseGPUTransferBuffer(device, state.transfer_buffer);
     }
 
-    auto Renderer::BeginFrame(Camera& camera) -> void {
-        // TODO: Reset renderer stats
-
-        const auto col = camera.clear_color;
-        const auto view_proj = camera.GetViewProjection(_viewport_size);
-
-        _default_shader->Bind();
-        _default_shader->SetMat4("u_ViewProjection", view_proj);
-
-        glViewport(0, 0, _viewport_size.x, _viewport_size.y);
-        glClearColor(col.r, col.g, col.b, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-
-        StartBatch();
+    auto Renderer::BeginFrame() -> void {
+        state.current_cmd_buf = SDL_AcquireGPUCommandBuffer(RHI::GetDevice());
+        SDL_WaitAndAcquireGPUSwapchainTexture(state.current_cmd_buf, RHI::GetWindow(), &state.swapchain_texture, nullptr, nullptr);
+        state.pass_queue.clear();
     }
 
-    auto Renderer::SubmitQuad(const Vec3& pos, const Vec2& scale, const Vec4& color) -> void {
-        if (IsBatchFull()) {
-            FlushBatch();
-            StartBatch();
-        }
-
-        const Vec2 offset{scale.x * 0.5f, scale.y * 0.5f};
-
-        _vertex_buffer_ptr->position = {pos.x - offset.x, pos.y - offset.y};
-        _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[0];
-        _vertex_buffer_ptr->color = color;
-        _vertex_buffer_ptr->tex_index = 0.0f;
-        _vertex_buffer_ptr++;
-
-        _vertex_buffer_ptr->position = {pos.x + offset.x, pos.y - offset.y};
-        _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[1];
-        _vertex_buffer_ptr->color = color;
-        _vertex_buffer_ptr->tex_index = 0.0f;
-        _vertex_buffer_ptr++;
-
-        _vertex_buffer_ptr->position = {pos.x + offset.x, pos.y + offset.y};
-        _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[2];
-        _vertex_buffer_ptr->color = color;
-        _vertex_buffer_ptr->tex_index = 0.0f;
-        _vertex_buffer_ptr++;
-
-        _vertex_buffer_ptr->position = {pos.x - offset.x, pos.y + offset.y};
-        _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[3];
-        _vertex_buffer_ptr->color = color;
-        _vertex_buffer_ptr->tex_index = 0.0f;
-        _vertex_buffer_ptr++;
-
-        _quad_index_count += 6;
+    auto Renderer::SubmitPass(const RenderPass& pass) -> void {
+        state.pass_queue.push_back(pass);
     }
 
-    auto Renderer::SubmitQuad(const Vec3& pos, const Vec2& scale, const f32 rotation, const Vec4& color) -> void {
-        if (IsBatchFull()) {
-            FlushBatch();
-            StartBatch();
-        }
+    auto Renderer::ExecutePasses() -> void {
+        if (state.pass_queue.empty() || !state.current_cmd_buf) return;
 
-        const auto transform = glm::translate(Mat4(1), pos) * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1}) *
-                glm::scale(Mat4(1), {scale.x, scale.y, 1});
+        int window_w = 0, window_h = 0;
+        SDL_GetWindowSizeInPixels(RHI::GetWindow(), &window_w, &window_h);
 
-        for (auto i = 0; i < 4; i++) {
-            _vertex_buffer_ptr->position = transform * VERTEX_POSITIONS[i];
-            _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[i];
-            _vertex_buffer_ptr->color = color;
-            _vertex_buffer_ptr->tex_index = 0.0f;
-            _vertex_buffer_ptr++;
-        }
+        for (const auto& pass : state.pass_queue) {
+            if (pass.batches.empty()) continue;
 
-        _quad_index_count += 6;
-    }
+            const u32 target_width = pass.width ? pass.width : static_cast<u32>(window_w);
+            const u32 target_height = pass.height ? pass.height : static_cast<u32>(window_h);
 
-    auto Renderer::SubmitQuad(const Vec3& pos, const Vec2& scale, f32 rotation, const Vec4& color,
-                               const Rc<Texture2D>& texture) -> void {
-        if (IsBatchFull()) {
-            FlushBatch();
-            StartBatch();
-        }
+            const auto projection = pass.camera->GetProjection({target_width, target_height});
 
-        auto index = 0;
+            bool is_first_batch = true;
+            for (const auto& batch : pass.batches) {
+                if (batch.sprites.empty() || !batch.texture) continue;
 
-        if (texture) {
-            for (auto i = 0; i < _texture_index; i++) {
-                if (_texture_slots[i]->GetRendererID() == texture->GetRendererID()) {
-                    index = i;
-                    break;
-                }
-            }
+                const auto count = static_cast<u32>(batch.sprites.size());
+                const auto data_size = static_cast<u32>(count * sizeof(SpriteInstance));
 
-            if (index == 0) {
-                _texture_slots[_texture_index] = texture;
-                index = _texture_index;
-                _texture_index++;
+                const auto mapped = SDL_MapGPUTransferBuffer(RHI::GetDevice(), state.transfer_buffer, true);
+                SDL_memcpy(mapped, batch.sprites.data(), data_size);
+                SDL_UnmapGPUTransferBuffer(RHI::GetDevice(), state.transfer_buffer);
+
+                const auto copy_pass = SDL_BeginGPUCopyPass(state.current_cmd_buf);
+                const auto src_loc = SDL_GPUTransferBufferLocation{state.transfer_buffer, 0};
+                const auto dst_region = SDL_GPUBufferRegion{state.storage_buffer, 0, data_size};
+                SDL_UploadToGPUBuffer(copy_pass, &src_loc, &dst_region, true);
+                SDL_EndGPUCopyPass(copy_pass);
+
+                SDL_GPUColorTargetInfo color_info = {};
+                color_info.texture = pass.render_target ? pass.render_target : state.swapchain_texture;
+                color_info.load_op = (is_first_batch && pass.clear) ? SDL_GPU_LOADOP_CLEAR : SDL_GPU_LOADOP_LOAD;
+                color_info.store_op = SDL_GPU_STOREOP_STORE;
+                color_info.clear_color =
+                        SDL_FColor{pass.camera->clear_color.r, pass.camera->clear_color.g, pass.camera->clear_color.b, 1.0};
+
+                auto* render_pass = SDL_BeginGPURenderPass(state.current_cmd_buf, &color_info, 1, nullptr);
+                SDL_BindGPUGraphicsPipeline(render_pass, state.pipeline);
+
+                SDL_PushGPUVertexUniformData(state.current_cmd_buf, 0, &projection, sizeof(Mat4));
+
+                SDL_BindGPUVertexStorageBuffers(render_pass, 0, &state.storage_buffer, 1);
+
+                const auto binding = SDL_GPUTextureSamplerBinding{batch.texture, state.default_sampler};
+                SDL_BindGPUFragmentSamplers(render_pass, 0, &binding, 1);
+
+                SDL_DrawGPUPrimitives(render_pass, count * 6, 1, 0, 0);
+
+                SDL_EndGPURenderPass(render_pass);
+
+                is_first_batch = false;
             }
         }
 
-        const auto transform = glm::translate(Mat4(1), pos) * glm::rotate(Mat4(1), glm::radians(rotation), {0, 0, 1}) *
-                glm::scale(Mat4(1), {scale.x, scale.y, 1});
-
-        for (auto i = 0; i < 4; i++) {
-            _vertex_buffer_ptr->position = transform * VERTEX_POSITIONS[i];
-            _vertex_buffer_ptr->tex_coords = TEXTURE_COORDS[i];
-            _vertex_buffer_ptr->color = color;
-            _vertex_buffer_ptr->tex_index = static_cast<f32>(index);
-            _vertex_buffer_ptr++;
-        }
-
-        _quad_index_count += 6;
+        state.pass_queue.clear();
     }
 
-    auto Renderer::EndFrame() const -> void {
-        FlushBatch();
-    }
-
-    auto Renderer::SetViewportSize(const Vec<2, i32>& size) -> void {
-        _viewport_size = size;
-    }
-
-    auto Renderer::FlushBatch() const -> void {
-        const u32 data_size =
-                reinterpret_cast<uint8_t*>(_vertex_buffer_ptr) - reinterpret_cast<uint8_t*>(_vertex_buffer_base);
-        _vertex_buffer->CopyData(data_size, _vertex_buffer_base);
-
-        for (auto i = 0; i < _texture_index; i++) {
-            _texture_slots[i]->BindSlot(i);
-        }
-
-        const u32 count = _quad_index_count == 0 ? _vertex_array->GetIndexBuffer()->GetCount() : _quad_index_count;
-
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
-
-    auto Renderer::IsBatchFull() const -> bool {
-        return _quad_index_count >= _max_quads * 6 || _texture_index >= MAX_TEXTURES;
-    }
-
-    auto Renderer::StartBatch() -> void {
-        _quad_index_count = 0;
-        _vertex_buffer_ptr = _vertex_buffer_base;
-        _texture_index = 1;
+    auto Renderer::EndFrame() -> void {
+        ExecutePasses();
+        SDL_SubmitGPUCommandBuffer(state.current_cmd_buf);
+        state.current_cmd_buf = nullptr;
     }
 } // namespace Cobalt

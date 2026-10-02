@@ -5,8 +5,27 @@
 
 #include "Engine/Core/Defines.hpp"
 #include "Engine/Core/Log.hpp"
-#include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Base.hpp"
+#include "Engine/Core/Types/Containers.hpp"
+
+#include <format>
+#include <magic_enum/magic_enum.hpp>
+#include <type_traits>
+#include <spdlog/fmt/fmt.h>
+
+template <typename T>
+requires std::is_enum_v<T>
+struct fmt::formatter<T>
+{
+    constexpr auto parse(const format_parse_context& ctx) const {
+        return ctx.begin();
+    }
+
+    auto format(T err, const format_context& ctx) const {
+        auto name = magic_enum::enum_name(err);
+        return format_to(ctx.out(), "{}", string_view(name.data(), name.size()));
+    }
+};
 
 namespace Cobalt
 {
@@ -23,19 +42,6 @@ namespace Cobalt
         ScriptSetMessageCallback,
         ScriptRegisterInterface,
         SIZE,
-    };
-
-    static inline Array<String, static_cast<usize>(CoreInitError::SIZE)> CoreInitErrorStr = {
-        "ProjectFileDoesntExists",
-        "ProjectFileCantParse",
-        "ProjectFileNotValid",
-        "PlatformSDL3Init",
-        "PlatformCreateWindow",
-        "PlatformCreateOpenGLContext",
-        "ScriptCreateEngine",
-        "ScriptCreateContext",
-        "ScriptSetMessageCallback",
-        "ScriptRegisterInterface",
     };
 
 #if defined(_MSC_VER)
@@ -61,9 +67,12 @@ namespace Cobalt
 #define CORE_ASSERT(condition, ...) ((void)0)
 #endif
 
-#define TRY(expr)                                                                                                                          \
+#define TRY_CRITICAL(expr)                                                                                                                 \
     do {                                                                                                                                   \
         auto _res = (expr);                                                                                                                \
-        if (!_res) return Err(_res.error());                                                                                               \
+        if (!_res) {                                                                                                                       \
+            CORE_CRITICAL("'{}' failed: {}", #expr, _res.error());                                                                         \
+            return false;                                                                                                                  \
+        }                                                                                                                                  \
     } while (false)
 } // namespace Cobalt

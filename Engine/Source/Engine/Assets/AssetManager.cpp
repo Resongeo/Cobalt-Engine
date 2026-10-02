@@ -20,7 +20,7 @@
 namespace Cobalt
 {
     auto AssetManager::Init() -> Result<bool, CoreInitError> {
-        _assets_dir = Project::Get().GetProjectAssetsPath();
+        _assets_dir = Project::GetProjectAssetsPath();
 
         if (!File::Exists(_assets_dir)) {
             std::filesystem::create_directories(_assets_dir);
@@ -120,7 +120,7 @@ namespace Cobalt
             auto sync_data = Memory::MakeRc<DialogSync>();
 
             static auto filter = AssetTypeToFilters(meta.type);
-            const auto default_path = Project::Get().GetProjectAssetsPath().string();
+            const auto default_path = Project::GetProjectAssetsPath().string();
 
             DialogManager::Get().ShowSaveDialog(default_path.c_str(), filter, [sync_data](const Filepath& chosen_path) {
                 sync_data->path = chosen_path;

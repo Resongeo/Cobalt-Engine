@@ -6,6 +6,7 @@
 #include "Engine/Assets/IAsset.hpp"
 #include "Engine/Core/Types/Base.hpp"
 #include "Engine/Core/Types/Containers.hpp"
+#include <SDL3/SDL.h>
 
 namespace Cobalt
 {
@@ -17,14 +18,13 @@ namespace Cobalt
 
         auto LoadFromFile(const Filepath& path) -> bool;
         auto CreateWithSize(u32 width, u32 height) -> bool;
-        auto BindSlot(u32 slot) const -> void;
 
         auto GetWidth() const -> u32;
         auto GetHeight() const -> u32;
-        auto GetRendererID() const -> u32;
+        auto GetGPUTexture() const -> SDL_GPUTexture*;
 
     private:
-        u32 _renderer_id = 0;
+        SDL_GPUTexture* _texture = nullptr;
         u32 _width = 0;
         u32 _height = 0;
     };

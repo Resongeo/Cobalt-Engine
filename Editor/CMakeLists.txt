@@ -51,16 +51,14 @@ add_custom_command(TARGET Editor POST_BUILD
 	"${CMAKE_BINARY_DIR}/Editor/Assets"
 )
 
-# -- Copy SDL3 dynamic library to Editor build output --
+# -- Copy libraries to Editor build output --
 add_custom_command(TARGET Editor POST_BUILD
-	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	$<TARGET_FILE:SDL3::SDL3>
-	$<TARGET_FILE_DIR:Editor>
-)
+	COMMAND ${CMAKE_COMMAND} -E echo
+	"Copying runtime DLLs to $<TARGET_FILE_DIR:Editor>"
 
-# -- Copy OptickCore dynamic library to Editor build output --
-add_custom_command(TARGET Editor POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
-	$<TARGET_FILE:OptickCore>
+	$<TARGET_RUNTIME_DLLS:Editor>
 	$<TARGET_FILE_DIR:Editor>
+
+	COMMAND_EXPAND_LISTS
 )

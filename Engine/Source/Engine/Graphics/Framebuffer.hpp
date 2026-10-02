@@ -7,41 +7,27 @@
 #include "Engine/Core/Types/Containers.hpp"
 #include "Engine/Core/Types/Math.hpp"
 
+#include <SDL3/SDL.h>
+
 namespace Cobalt
 {
-    enum class FramebufferAttachmentType : u8
-    {
-        None = 0,
-        RGBA8,
-        RedInteger,
-    };
-
-    class Framebuffer final
-    {
+    class Framebuffer {
     public:
         Framebuffer() = default;
+        Framebuffer(u32 width, u32 height, SDL_GPUTextureFormat color_format);
+        ~Framebuffer();
 
-        auto Bind() -> void;
-        auto Unbind() const -> void;
+        void Resize(u32 width, u32 height);
+        void Release();
 
-        auto Create(const Vector<FramebufferAttachmentType>& types, const Vec<2, u32> size, const u32 samples) -> void;
-        auto Resize(u32 width, u32 height) -> void;
-        auto ClearAttachment(u32 index, i32 value) const -> void;
-        auto GetSize() const -> Vec<2, u32>;
-        auto GetColorAttachmentID(u32 index) const -> i32;
-        auto GetIntegerAt(u32 index, u32 x, u32 y) const -> i32;
+        SDL_GPUTexture* GetColorTexture() const { return _color_texture; }
+        Vec2 GetSize() const { return { (float)_width, (float)_height }; }
 
     private:
-        auto ReCreate() -> void;
-        auto Clear() -> void;
-        auto ReallocateTextures() const -> void;
+        void Invalidate();
 
-    private:
-        Vector<FramebufferAttachmentType> _attachment_types = {};
-        Vector<u32> _attachment_ids = {};
-        Vec<2, u32> _size = {};
-        u32 _renderer_id = 0;
-        u32 _samples = 0;
-        bool _is_resized = false;
+        u32 _width = 0, _height = 0;
+        SDL_GPUTexture* _color_texture = nullptr;
+        SDL_GPUTextureFormat _color_format;
     };
 } // namespace Cobalt
