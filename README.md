@@ -6,11 +6,11 @@
 
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](LICENSE)
 [![C++](https://img.shields.io/badge/C++-23-blue)](https://github.com/Resongeo/Cobalt-Engine)
-[![Graphics](https://img.shields.io/badge/Graphics-OpenGL-blue)](https://www.opengl.org/)
+[![Graphics](https://img.shields.io/badge/Graphics-SDL_GPU-blue)](https://wiki.libsdl.org/SDL3/CategoryGPU)
 
 </div>
 
-Cobalt Engine is a simple 2D game engine written in C++, using OpenGL as its graphics API.
+Cobalt Engine is a 2D game engine written in C++ using SDL3 and SDL3 GPU. It is a personal long-term hobby project for learning and experimentation rather than a commercial engine.
 
 > [!NOTE]
 > The engine is currently in an early stage and not yet capable of making games.
@@ -22,7 +22,7 @@ Cobalt Engine is a simple 2D game engine written in C++, using OpenGL as its gra
 > [!NOTE]
 > Only tested on Fedora Workstation 44 and CachyOS
 
-## 0.1 Roadmap
+## Roadmap
 The primary goal for version 0.1 is to make the engine capable of creating a simple game through its editor.
 - [ ] Asset management
 - [ ] Input
@@ -91,3 +91,9 @@ cmake --build cmake-min-size-release
 - [spdlog](https://github.com/gabime/spdlog) - Fast C++ logging library
 - [stb](https://github.com/nothings/stb) - Single-file public domain libraries
 - [Toml++](https://github.com/marzer/tomlplusplus) - TOML config parser and serializer
+
+## AI Usage
+
+AI tools are used as a support aid for research, build system setup, and
+library recommendation. They are not used for code generation, agentic development
+workflows, or code completion. **All code in this project is written by hand.**
